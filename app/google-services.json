@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "863975743457",
+    "firebase_url": "https://yavalath-8c314.firebaseio.com",
+    "project_id": "yavalath-8c314",
+    "storage_bucket": "yavalath-8c314.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:863975743457:android:e4f66d301b5e3a84",
+        "android_client_info": {
+          "package_name": "nl.whitedove.yavalath"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "863975743457-3l93oqhucmvolrah9b9eu80g7r4v29mo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "nl.whitedove.yavalath",
+            "certificate_hash": "52bc204d3516435b20fe4b54459c44f01d51322c"
+          }
+        },
+        {
+          "client_id": "863975743457-5kc7a1565utfkrpot9s9v9v4rhjq8r9s.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAn3vf1Q8iKGGDuBz7jhPrb670A7cvH388"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "863975743457-5kc7a1565utfkrpot9s9v9v4rhjq8r9s.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
