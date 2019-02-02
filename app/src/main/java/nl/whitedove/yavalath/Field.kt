@@ -1,8 +1,12 @@
 package nl.whitedove.yavalath
 
-internal class Field {
+internal class Field(nr: Int) {
+    var nr: Int
+    var fieldState: FieldState
 
-    var nr: Int = 0
-    var fieldState: FieldState = FieldState.Empty
+    init {
+        this.nr = nr
+        this.fieldState = FieldState.Empty
+    }
 }
 

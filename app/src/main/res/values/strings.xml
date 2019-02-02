@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Yavalath</string>
+    <string name="NoInternet">No internet connection</string>
+    <string name="fa_bolt">&#xf0e7;</string>
+    <string name="fa_circle">&#xf111;</string>
+    <string name="fa_check">&#xf058;</string>
+    <string name="fa_nok">&#xf057;</string>
 </resources>
+
