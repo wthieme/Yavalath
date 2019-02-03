@@ -1,9 +1,36 @@
 <resources>
     <string name="app_name">Yavalath</string>
     <string name="NoInternet">No internet connection</string>
+    <string name="app_makers">By Wilhelm Thieme</string>
+    <string name="enter_name">Enter name</string>
+    <string name="enter">Enter</string>
+    <string name="loginterms">By tapping Login you agree to The Vampires\' <u>Terms &amp; Conditions</u> and <u>Privacy Policy.</u></string>
+    <string name="terms">Terms &amp; Conditions</string>
+    <string name="privacy">Privacy Policy</string>
+    <string name="privacy_title">Privacy statement</string>
+    <string name="terms_title">Terms &amp; Conditions</string>
+    <string name="error_loading_privacy">Error loading Privacy statement</string>
+    <string name="error_loading_terms">Error loading Terms &amp; Conditions</string>
+    <string name="momentAgo">a moment ago</string>
+    <string name="minuteAgo">1 minute ago</string>
+    <string name="minutesAgo">%s minutes ago</string>
+    <string name="Rules">Rules</string>
+    <string name="About">About</string>
+    <string name="ok">OK</string>
+    <string name="fa_sign_in_alt">&#xf2f6;</string>
     <string name="fa_bolt">&#xf0e7;</string>
     <string name="fa_circle">&#xf111;</string>
     <string name="fa_check">&#xf058;</string>
     <string name="fa_nok">&#xf057;</string>
+    <string name="fa_bars">&#xf0c9;</string>
+    <string name="fa_sync">&#xf021;</string>
+    <string name="fa_arrow_left">&#xf060;</string>
+    <string name="CountryUnknown">Unknown</string>
+    <string name="NameMustNotBeEmpty">Name must not be empty</string>
+    <string name="back">Back</string>
+    <string name="no_players_found">No players</string>
+    <string name="Inviting">Inviting</string>
+    <string name="InviteTimeOut">Player %s did not respond</string>
+    <string name="active_time">00:00</string>
 </resources>
 

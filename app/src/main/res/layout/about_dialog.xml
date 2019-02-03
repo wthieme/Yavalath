@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    android:layout_centerInParent="true"
+    android:background="@color/colorBackground"
+    android:orientation="vertical">
+
+    <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/ivVampire"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginEnd="25dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="10dp"
+        android:adjustViewBounds="true"
+        android:padding="0dp"
+        android:scaleType="centerCrop"
+        app:srcCompat="@drawable/vampire_m3" />
+
+    <TextView
+        android:id="@+id/tvAboutTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/ivVampire"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="10dp"
+        android:text="@string/app_name"
+        android:textColor="@color/colorPrimary"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:id="@+id/llVersion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvAboutTitle"
+        android:layout_centerHorizontal="true">
+
+        <TextView
+            android:id="@+id/tvVersion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_margin="0dp"
+            android:text="@string/Version"
+            android:textColor="@color/colorPrimary"
+            android:textSize="20sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvVersionNr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:layout_marginBottom="0dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="0dp"
+            android:text="@string/VersionNr"
+            android:textColor="@color/colorPrimary"
+            android:textSize="18sp" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tvUsing"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/llVersion"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="10dp"
+        android:text="@string/about_terms"
+        android:textColor="@color/colorPrimary"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/tvMaker"
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvUsing"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="10dp"
+        android:text="@string/about_copyright"
+        android:textColor="@color/colorPrimary"
+        android:textSize="14sp" />
+
+    <Button
+        android:id="@+id/btOk"
+        android:layout_width="100dp"
+        android:layout_height="30dp"
+        android:layout_below="@+id/tvMaker"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="10dp"
+        android:background="@color/colorButtonBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:text="@string/OK"
+        android:textAllCaps="false"
+        android:textColor="@color/colorPrimary"
+        android:textSize="14sp"
+        android:textStyle="bold" />
+
+</RelativeLayout>

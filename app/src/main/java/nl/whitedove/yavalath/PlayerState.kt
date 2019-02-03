@@ -3,20 +3,20 @@ package nl.whitedove.yavalath
 import android.annotation.SuppressLint
 import java.util.HashMap
 
-enum class GameState(val value: Int) {
-    Unknown(1), Lobby(2), InPropress(3), Finished(4);
+enum class PlayerState(val value: Int) {
+    Unknown(1), InLobby(2), InGame(3);
 
     companion object {
         @SuppressLint("UseSparseArrays")
-        private val map = HashMap<Int, GameState>()
+        private val map = HashMap<Int, PlayerState>()
 
         init {
-            for (state in GameState.values()) {
+            for (state in PlayerState.values()) {
                 map[state.value] = state
             }
         }
 
-        fun valueOf(state: Int): GameState {
+        fun valueOf(state: Int): PlayerState {
             return map[state] ?: Unknown
         }
     }

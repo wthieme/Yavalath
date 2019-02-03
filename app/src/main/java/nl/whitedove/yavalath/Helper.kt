@@ -5,6 +5,7 @@ import android.animation.AnimatorListenerAdapter
 import android.app.Dialog
 import android.content.BroadcastReceiver
 import android.content.Context
+import android.location.Location
 import android.net.ConnectivityManager
 import android.os.Build
 import android.preference.PreferenceManager
@@ -16,6 +17,9 @@ import android.widget.Toast
 internal object Helper {
 
     private val DEBUG = false
+    var mCurrentBestLocation: Location? = null
+    const val ONE_MINUTE = 1000L * 60L
+    const val ONE_KM = 1000F
 
     fun log(log: String) {
         if (Helper.DEBUG) {
@@ -52,22 +56,12 @@ internal object Helper {
         toast.show()
     }
 
-    fun SetGameNull(context: Context) {
-        // Back in the game list, were not host anymore
-        Helper.SaveGame(context, null)
-        Helper.SetHostToken(context, "")
-    }
-
-    fun SaveGame(context: Context, game: GameInfo?) {
-        Database.mGame = game
-    }
-
-    fun GetFcmToken(cxt: Context): String? {
+    fun getFcmToken(cxt: Context): String {
         val preferences = PreferenceManager.getDefaultSharedPreferences(cxt)
         return preferences.getString(FcmNames.FcmToken, "")
     }
 
-    fun SetFcmToken(cxt: Context, token: String) {
+    fun setFcmToken(cxt: Context, token: String) {
         val preferences = PreferenceManager.getDefaultSharedPreferences(cxt)
         val editor = preferences.edit()
         editor.putString(FcmNames.FcmToken, token)
@@ -75,12 +69,12 @@ internal object Helper {
         FcmSender.mFcmToken = token
     }
 
-    fun GetHostToken(cxt: Context): String? {
+    fun getHostToken(cxt: Context): String? {
         val preferences = PreferenceManager.getDefaultSharedPreferences(cxt)
         return preferences.getString(FcmNames.HostToken, "")
     }
 
-    fun SetHostToken(cxt: Context, token: String) {
+    fun setHostToken(cxt: Context, token: String) {
         val preferences = PreferenceManager.getDefaultSharedPreferences(cxt)
         val editor = preferences.edit()
         editor.putString(FcmNames.HostToken, token)
@@ -88,19 +82,19 @@ internal object Helper {
         FcmSender.mHostToken = token
     }
 
-    fun GetName(cxt: Context): String? {
+    fun getName(cxt: Context): String? {
         val preferences = PreferenceManager.getDefaultSharedPreferences(cxt)
         return preferences.getString("nick", "")
     }
 
-    fun SetName(cxt: Context, nick: String) {
+    fun setName(cxt: Context, nick: String) {
         val preferences = PreferenceManager.getDefaultSharedPreferences(cxt)
         val editor = preferences.edit()
         editor.putString("nick", nick)
         editor.apply()
     }
 
-    fun ShowMessage(cxt: Context, melding: String, isLong: Boolean) {
+    fun showMessage(cxt: Context, melding: String, isLong: Boolean) {
         Helper.log(melding)
         val duration = if (isLong) Toast.LENGTH_LONG else Toast.LENGTH_SHORT
         val toast = Toast.makeText(cxt, melding, duration)
@@ -108,15 +102,15 @@ internal object Helper {
     }
 
 
-    fun Alert(cxt: Context, melding: String) {
-        Helper.ShowMessage(cxt, melding, true)
+    fun alert(cxt: Context, melding: String) {
+        Helper.showMessage(cxt, melding, true)
     }
 
-    fun GetAppVersion(): String {
+    fun getAppVersion(): String {
         return BuildConfig.VERSION_NAME
     }
 
-    fun UnRegisterReceiver(context: Context, receiver: BroadcastReceiver?) {
+    fun unRegisterReceiver(context: Context, receiver: BroadcastReceiver?) {
         if (receiver != null) {
             try {
                 context.unregisterReceiver(receiver)
@@ -126,19 +120,19 @@ internal object Helper {
         }
     }
 
-    fun GetAndroidVersion(): String {
+    fun getAndroidVersion(): String {
         return "Android " + Build.VERSION.RELEASE
     }
 
-    fun ShowDialog(d: Dialog) {
-        ShowDialog(d, true, false)
+    fun showDialog(d: Dialog) {
+        showDialog(d, true, false)
     }
 
-    fun ShowDialog(d: Dialog, maximize: Boolean?) {
-        ShowDialog(d, maximize!!, false)
+    fun showDialog(d: Dialog, maximize: Boolean?) {
+        showDialog(d, maximize!!, false)
     }
 
-    fun ShowDialog(d: Dialog, maximize: Boolean, forceKeyboard: Boolean?) {
+    fun showDialog(d: Dialog, maximize: Boolean, forceKeyboard: Boolean?) {
         val lp = WindowManager.LayoutParams()
         lp.copyFrom(d.window!!.attributes)
         if (maximize) {
@@ -159,7 +153,7 @@ internal object Helper {
         }
     }
 
-    fun FcmActive(context: Context, tvFcmBolt: TextView) {
+    fun fcmActive(context: Context, tvFcmBolt: TextView) {
         val iconFont = FontManager.GetTypeface(context, FontManager.FONTAWESOME_SOLID)
         FontManager.MarkAsIconContainer(tvFcmBolt, iconFont)
         tvFcmBolt.animate().alpha(1.0f).setDuration(50)

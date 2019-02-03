@@ -1,73 +1,42 @@
 package nl.whitedove.yavalath
 
-import android.util.Pair
-
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.gms.tasks.Task
-import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.FirebaseFirestoreException
-import com.google.firebase.firestore.QuerySnapshot
-
 import org.joda.time.DateTime
-import org.json.JSONArray
-import org.json.JSONException
-import org.json.JSONObject
-
-import java.text.Collator
-import java.util.ArrayList
-import java.util.Collections
-import java.util.Comparator
-import java.util.HashMap
-import java.util.Random
+import java.util.*
+import kotlin.collections.ArrayList
 
 internal object Database {
 
-    var mGames: ArrayList<GameInfo> = ArrayList()
-    var mGame: GameInfo? = null
-    var mOffset: Long? = null
-    var mDiscussionEndTime = DateTime.now()
+    var mPlayers: ArrayList<PlayerInfo> = ArrayList()
+    var mPlayer: PlayerInfo? = null
     val PrivacyUrl = "http://wjthieme.com/vampires/privacy"
     val TermsUrl = "http://wjthieme.com/vampires/terms"
     val RulesUrl = "http://wjthieme.com/vampires/rules"
-    val MAX_PLAYERS = 5
-    val TIMEOUT = 10
-    private var mImgNum = 0
-    private val mRandom = Random()
+    var TIMEOUT = 60
 
     internal object Names {
-        val HostedGame = "hostedGame"
-        val Games = "games"
-        val GameName = "gameName"
-        val HostToken = "hostToken"
-        val NumPlayersString = "numPlayersString"
-        val PasswordProtected = "passwordProtected"
+        val players = "players"
+        val playerName = "playerName"
+        val playerToken = "playerToken"
+        val country = "country"
     }
 
-    fun RandomNr(): Int {
-        if (mImgNum == 0) mImgNum = mRandom.nextInt(4) + 1
-        return mImgNum
-    }
-
-    fun GetGames(callback: Runnable) {
-        val games = ArrayList<GameInfo>()
+    fun getPlayers(callback: Runnable) {
+        val players = ArrayList<PlayerInfo>()
         val db = FirebaseFirestore.getInstance()
-        db.collection(Database.Names.Games)
+        db.collection(Database.Names.players)
                 .get()
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         for (document in task.result!!) {
                             val doc = document.data
-                            val naam = doc[Database.Names.GameName] as String?
-                            val token = doc[Database.Names.HostToken] as String?
-                            val numPlayers = doc[Database.Names.NumPlayersString] as String?
-                            val isPassword = doc[Database.Names.PasswordProtected] as Boolean?
-
-                            if (naam != null && token != null)
-                                games.add(GameInfo(naam, token))
+                            val naam = doc[Database.Names.playerName] as String
+                            val token = doc[Database.Names.playerToken] as String
+                            val country = doc[Database.Names.country] as String
+                            players.add(PlayerInfo(naam, token, country))
                         }
-                        mGames = games
+                        mPlayers = players
+                        RemoveInActivePlayers()
                         callback.run()
                     }
                 }
@@ -75,16 +44,40 @@ internal object Database {
 
     fun SetListener(callback: Runnable) {
         val db = FirebaseFirestore.getInstance()
-        db.collection(Database.Names.Games)
+        db.collection(Database.Names.players)
                 .addSnapshotListener { value, e -> callback.run() }
     }
 
-    fun CreateGame(name: String, passcode: String) {
+    fun CreateOrUpdatePlayer(name: String, country: String) {
         val token = FcmSender.mFcmToken
         val db = FirebaseFirestore.getInstance()
         val doc = HashMap<String, Any>()
-        doc[Names.GameName] = name
-        doc[Names.HostToken] = token
-        db.collection(Database.Names.Games).document(token).set(doc)
+        doc[Names.playerName] = name
+        doc[Names.playerToken] = token
+        doc[Names.country] = country
+        db.collection(Database.Names.players).document(token).set(doc)
+        mPlayer = PlayerInfo(name, token, country)
+    }
+
+    fun RemoveInActivePlayers() {
+        val playersToRemove: ArrayList<PlayerInfo> = ArrayList()
+        for (player in mPlayers) {
+            if (player.lastActive.isBefore(DateTime.now().minusMinutes(15)))
+                playersToRemove.add(player)
+        }
+        for (toRemove in playersToRemove) {
+            mPlayers.remove(toRemove)
+            DeletePlayer(toRemove.fcmToken)
+        }
+    }
+
+    fun DeletePlayer(token: String) {
+        val db = FirebaseFirestore.getInstance()
+        db.collection(Database.Names.players).document(token)
+                .delete()
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                    }
+                }
     }
 }
