@@ -4,7 +4,7 @@
     <string name="app_makers">By Wilhelm Thieme</string>
     <string name="enter_name">Enter name</string>
     <string name="enter">Enter</string>
-    <string name="loginterms">By tapping Login you agree to The Vampires\' <u>Terms &amp; Conditions</u> and <u>Privacy Policy.</u></string>
+    <string name="loginterms">By tapping Enter you agree to The Yavalath <u>Terms &amp; Conditions</u> and <u>Privacy Policy.</u></string>
     <string name="terms">Terms &amp; Conditions</string>
     <string name="privacy">Privacy Policy</string>
     <string name="privacy_title">Privacy statement</string>
@@ -14,9 +14,7 @@
     <string name="momentAgo">a moment ago</string>
     <string name="minuteAgo">1 minute ago</string>
     <string name="minutesAgo">%s minutes ago</string>
-    <string name="Rules">Rules</string>
     <string name="About">About</string>
-    <string name="ok">OK</string>
     <string name="fa_sign_in_alt">&#xf2f6;</string>
     <string name="fa_bolt">&#xf0e7;</string>
     <string name="fa_circle">&#xf111;</string>
@@ -32,5 +30,13 @@
     <string name="Inviting">Inviting</string>
     <string name="InviteTimeOut">Player %s did not respond</string>
     <string name="active_time">00:00</string>
+    <string name="Version">Version</string>
+    <string name="VersionNr">V1.0</string>
+    <string name="about_terms">By using this app you agree to The Yavalath Terms &amp; Conditions and Privacy Policy.</string>
+    <string name="about_copyright">Copyright &#169; 2018 Wilhelm Thieme Sr. All rights reserved.</string>
+    <string name="OK">OK</string>
+    <string name="Rules">Rules</string>
+    <string name="RulesTitle">The Rules Of The Game</string>
+    <string name="players_ready_for_a_game_of_yavalath">Players ready for a game of Yavalath</string>
 </resources>
 

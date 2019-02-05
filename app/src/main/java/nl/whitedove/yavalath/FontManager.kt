@@ -19,23 +19,23 @@ internal object FontManager {
         return Typeface.createFromAsset(context.assets, font)
     }
 
-    fun MarkAsIconContainer(v: View, typeface: Typeface) {
+    fun markAsIconContainer(v: View, typeface: Typeface) {
         if (v is ViewGroup) {
             for (i in 0 until v.childCount) {
                 val child = v.getChildAt(i)
-                MarkAsIconContainer(child, typeface)
+                markAsIconContainer(child, typeface)
             }
         } else if (v is TextView) {
             v.typeface = typeface
         }
     }
 
-    fun SetIconAndText(v: View, typefaceIcon: Typeface, icon: String, iconColor: Int, typefaceText: Typeface, text: String, textColor: Int) {
-        val ss = SpannableString("$icon $text")
+    fun setIconAndText(v: View, typefaceIcon: Typeface, icon: String, iconColor: Int, typefaceText: Typeface, text: String, textColor: Int) {
+        val ss = SpannableString("$icon  $text")
         ss.setSpan(CustomTypefaceSpan(typefaceIcon), 0, icon.length, Spanned.SPAN_EXCLUSIVE_INCLUSIVE)
         ss.setSpan(ForegroundColorSpan(iconColor), 0, icon.length, Spanned.SPAN_EXCLUSIVE_INCLUSIVE)
-        ss.setSpan(CustomTypefaceSpan(typefaceText), icon.length + 1, text.length + icon.length + 1, Spanned.SPAN_EXCLUSIVE_INCLUSIVE)
-        ss.setSpan(ForegroundColorSpan(textColor), icon.length + 1, text.length + icon.length + 1, Spanned.SPAN_EXCLUSIVE_INCLUSIVE)
+        ss.setSpan(CustomTypefaceSpan(typefaceText), icon.length + 2, text.length + icon.length + 2, Spanned.SPAN_EXCLUSIVE_INCLUSIVE)
+        ss.setSpan(ForegroundColorSpan(textColor), icon.length + 2, text.length + icon.length + 2, Spanned.SPAN_EXCLUSIVE_INCLUSIVE)
         if (v is TextView) {
             v.text = ss
         }

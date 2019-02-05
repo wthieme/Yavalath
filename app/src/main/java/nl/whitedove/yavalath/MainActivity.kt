@@ -37,7 +37,7 @@ class MainActivity : AppCompatActivity() {
 
         val iconFont = FontManager.GetTypeface(this, FontManager.FONTAWESOME_SOLID)
 
-        FontManager.SetIconAndText(btnEnter,
+        FontManager.setIconAndText(btnEnter,
                 iconFont,
                 getString(R.string.fa_sign_in_alt),
                 ContextCompat.getColor(this, R.color.colorIcon),
@@ -86,7 +86,7 @@ class MainActivity : AppCompatActivity() {
         val i2 = loginterms.indexOf(privacy)
         sp.setSpan(cs2, i2, i2 + privacy.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
 
-        FontManager.MarkAsIconContainer(tvMenu, iconFont)
+        FontManager.markAsIconContainer(tvMenu, iconFont)
         tvMenu.setOnClickListener { view -> menuClick(view) }
     }
 
@@ -113,13 +113,20 @@ class MainActivity : AppCompatActivity() {
     private fun enter() {
         if (!checkName(this)) return
         if (!Helper.testInternet(this)) return
-
+        createPlayer()
         fcmActive()
-        val intent = Intent(this, GameListActivity::class.java)
+        val intent = Intent(this, PlayerListActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
         this.startActivity(intent)
         this.overridePendingTransition(R.anim.slide_in, R.anim.slide_out)
         this.finish()
+    }
+
+    private fun createPlayer()
+    {
+        val name = Helper.getName(mContext)
+        val country = LocationHelper.getCountry(mContext)
+        Database.createOrUpdatePlayer(name, country)
     }
 
     private fun fcmActive() {

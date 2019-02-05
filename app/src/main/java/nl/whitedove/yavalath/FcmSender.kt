@@ -35,8 +35,8 @@ internal object FcmSender {
         val jsonData = JSONObject(data)
         jsonData.put(FcmNames.Sender, mFcmToken)
         jsonData.put(FcmNames.Type, responseType.EnumToString())
-        jsonData.put(FcmNames.Environment, Helper.GetAndroidVersion())
-        jsonData.put(FcmNames.AppVersion, Helper.GetAppVersion())
+        jsonData.put(FcmNames.Environment, Helper.getAndroidVersion())
+        jsonData.put(FcmNames.AppVersion, Helper.getAppVersion())
         json.put(FcmNames.Data, jsonData)
 
         val js = json.toString()

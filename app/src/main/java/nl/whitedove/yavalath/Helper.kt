@@ -82,9 +82,12 @@ internal object Helper {
         FcmSender.mHostToken = token
     }
 
-    fun getName(cxt: Context): String? {
+    fun getName(cxt: Context): String {
         val preferences = PreferenceManager.getDefaultSharedPreferences(cxt)
-        return preferences.getString("nick", "")
+        val nick =  preferences.getString("nick", "")
+        if (nick==null)
+            return ""
+        return nick
     }
 
     fun setName(cxt: Context, nick: String) {
@@ -155,7 +158,7 @@ internal object Helper {
 
     fun fcmActive(context: Context, tvFcmBolt: TextView) {
         val iconFont = FontManager.GetTypeface(context, FontManager.FONTAWESOME_SOLID)
-        FontManager.MarkAsIconContainer(tvFcmBolt, iconFont)
+        FontManager.markAsIconContainer(tvFcmBolt, iconFont)
         tvFcmBolt.animate().alpha(1.0f).setDuration(50)
                 .setListener(object : AnimatorListenerAdapter() {
                     override fun onAnimationEnd(animation: Animator) {

@@ -12,7 +12,7 @@ class FcmReceiver : FirebaseMessagingService() {
 
     override fun onNewToken(s: String?) {
         super.onNewToken(s)
-        if (s!=null) Helper.SetFcmToken(this, s)
+        if (s!=null) Helper.setFcmToken(this, s)
     }
 
     override fun onMessageReceived(message: RemoteMessage?) {

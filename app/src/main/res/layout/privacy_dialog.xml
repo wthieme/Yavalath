@@ -42,7 +42,7 @@ _    <TextView
         android:background="@color/colorButtonBackground"
         android:clickable="true"
         android:focusable="true"
-        android:text="@string/ok"
+        android:text="@string/OK"
         android:textColor="@color/colorPrimary"
         android:textSize="14sp"
         android:textStyle="bold" />

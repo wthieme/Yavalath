@@ -2,7 +2,7 @@ package nl.whitedove.yavalath
 
 import org.joda.time.DateTime
 
-internal class PlayerInfo(name: String, fcmToken: String, country: String) {
+internal class PlayerInfo(name: String, fcmToken: String, country: String, lastActive : DateTime) {
     var lastActive: DateTime
     var playerState: PlayerState
     var name: String
@@ -10,7 +10,7 @@ internal class PlayerInfo(name: String, fcmToken: String, country: String) {
     var country: String
 
     init {
-        this.lastActive = DateTime.now()
+        this.lastActive = lastActive
         this.playerState = PlayerState.Unknown
         this.name = name
         this.fcmToken = fcmToken

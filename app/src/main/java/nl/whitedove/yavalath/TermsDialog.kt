@@ -24,7 +24,7 @@ internal class TermsDialog(private val mContext: Context) : Dialog(mContext), Vi
     }
 
     private fun GetTermsTxt() {
-        if (!Helper.TestInternet(mContext)) return
+        if (!Helper.testInternet(mContext)) return
         val wvTerms = findViewById<WebView>(R.id.wvTerms)
         wvTerms.loadUrl(Database.TermsUrl)
     }

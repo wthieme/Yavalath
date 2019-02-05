@@ -19,6 +19,7 @@ internal object Database {
         val playerName = "playerName"
         val playerToken = "playerToken"
         val country = "country"
+        val lastActive = "lastactive"
     }
 
     fun getPlayers(callback: Runnable) {
@@ -33,33 +34,35 @@ internal object Database {
                             val naam = doc[Database.Names.playerName] as String
                             val token = doc[Database.Names.playerToken] as String
                             val country = doc[Database.Names.country] as String
-                            players.add(PlayerInfo(naam, token, country))
+                            val lastActive = DateTime(doc[Database.Names.lastActive] as Long)
+                            players.add(PlayerInfo(naam, token, country, lastActive))
                         }
                         mPlayers = players
-                        RemoveInActivePlayers()
+                        removeInActivePlayers()
                         callback.run()
                     }
                 }
     }
 
-    fun SetListener(callback: Runnable) {
+    fun setListener(callback: Runnable) {
         val db = FirebaseFirestore.getInstance()
         db.collection(Database.Names.players)
                 .addSnapshotListener { value, e -> callback.run() }
     }
 
-    fun CreateOrUpdatePlayer(name: String, country: String) {
+    fun createOrUpdatePlayer(name: String, country: String) {
         val token = FcmSender.mFcmToken
         val db = FirebaseFirestore.getInstance()
         val doc = HashMap<String, Any>()
         doc[Names.playerName] = name
         doc[Names.playerToken] = token
         doc[Names.country] = country
+        doc[Names.lastActive] = DateTime.now().millis
         db.collection(Database.Names.players).document(token).set(doc)
-        mPlayer = PlayerInfo(name, token, country)
+        mPlayer = PlayerInfo(name, token, country, DateTime.now())
     }
 
-    fun RemoveInActivePlayers() {
+    fun removeInActivePlayers() {
         val playersToRemove: ArrayList<PlayerInfo> = ArrayList()
         for (player in mPlayers) {
             if (player.lastActive.isBefore(DateTime.now().minusMinutes(15)))
@@ -67,11 +70,11 @@ internal object Database {
         }
         for (toRemove in playersToRemove) {
             mPlayers.remove(toRemove)
-            DeletePlayer(toRemove.fcmToken)
+            deletePlayer(toRemove.fcmToken)
         }
     }
 
-    fun DeletePlayer(token: String) {
+    fun deletePlayer(token: String) {
         val db = FirebaseFirestore.getInstance()
         db.collection(Database.Names.players).document(token)
                 .delete()
