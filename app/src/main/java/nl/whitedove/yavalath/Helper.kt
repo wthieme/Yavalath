@@ -43,17 +43,6 @@ internal object Helper {
         } catch (e: NumberFormatException) {
             false
         }
-
-    }
-
-    fun showMessage(cxt: Context, melding: String) {
-        Helper.log(melding)
-        val duration = Toast.LENGTH_SHORT
-        val toast = Toast.makeText(cxt, melding, duration)
-        toast.view.setBackgroundColor(ContextCompat.getColor(cxt, R.color.colorPrimary))
-        val text = toast.view.findViewById(android.R.id.message) as TextView
-        text.setTextColor(ContextCompat.getColor(cxt, R.color.colorAccent))
-        toast.show()
     }
 
     fun getFcmToken(cxt: Context): String {
@@ -67,19 +56,6 @@ internal object Helper {
         editor.putString(FcmNames.FcmToken, token)
         editor.apply()
         FcmSender.mFcmToken = token
-    }
-
-    fun getHostToken(cxt: Context): String? {
-        val preferences = PreferenceManager.getDefaultSharedPreferences(cxt)
-        return preferences.getString(FcmNames.HostToken, "")
-    }
-
-    fun setHostToken(cxt: Context, token: String) {
-        val preferences = PreferenceManager.getDefaultSharedPreferences(cxt)
-        val editor = preferences.edit()
-        editor.putString(FcmNames.HostToken, token)
-        editor.apply()
-        FcmSender.mHostToken = token
     }
 
     fun getName(cxt: Context): String {
@@ -97,16 +73,14 @@ internal object Helper {
         editor.apply()
     }
 
-    fun showMessage(cxt: Context, melding: String, isLong: Boolean) {
+    fun showMessage(cxt: Context, melding: String) {
         Helper.log(melding)
-        val duration = if (isLong) Toast.LENGTH_LONG else Toast.LENGTH_SHORT
+        val duration = Toast.LENGTH_SHORT
         val toast = Toast.makeText(cxt, melding, duration)
+        toast.view.setBackgroundColor(ContextCompat.getColor(cxt, R.color.colorDisabled))
+        val text = toast.view.findViewById(android.R.id.message) as TextView
+        text.setTextColor(ContextCompat.getColor(cxt, R.color.colorWhite))
         toast.show()
-    }
-
-
-    fun alert(cxt: Context, melding: String) {
-        Helper.showMessage(cxt, melding, true)
     }
 
     fun getAppVersion(): String {
@@ -127,15 +101,7 @@ internal object Helper {
         return "Android " + Build.VERSION.RELEASE
     }
 
-    fun showDialog(d: Dialog) {
-        showDialog(d, true, false)
-    }
-
-    fun showDialog(d: Dialog, maximize: Boolean?) {
-        showDialog(d, maximize!!, false)
-    }
-
-    fun showDialog(d: Dialog, maximize: Boolean, forceKeyboard: Boolean?) {
+    fun showDialog(d: Dialog, maximize: Boolean) {
         val lp = WindowManager.LayoutParams()
         lp.copyFrom(d.window!!.attributes)
         if (maximize) {
@@ -147,13 +113,6 @@ internal object Helper {
         }
         d.show()
         d.window!!.attributes = lp
-
-        if (forceKeyboard!!) {
-            val dialogWindow = d.window
-            dialogWindow!!.attributes = lp
-            dialogWindow.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE or WindowManager.LayoutParams.FLAG_ALT_FOCUSABLE_IM)
-            dialogWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE)
-        }
     }
 
     fun fcmActive(context: Context, tvFcmBolt: TextView) {

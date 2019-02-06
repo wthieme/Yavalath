@@ -92,17 +92,17 @@ class MainActivity : AppCompatActivity() {
 
     private fun showPrivacyDialog() {
         val pd = PrivacyDialog(this)
-        Helper.showDialog(pd)
+        Helper.showDialog(pd, true)
     }
 
     private fun showTermsDialog() {
         val td = TermsDialog(this)
-        Helper.showDialog(td)
+        Helper.showDialog(td, true)
     }
 
     private fun showRulesDialog() {
         val rd = RulesDialog(this)
-        Helper.showDialog(rd)
+        Helper.showDialog(rd, true)
     }
 
     private fun showAboutDialog() {
@@ -136,7 +136,7 @@ class MainActivity : AppCompatActivity() {
     private fun checkName(cxt: Context): Boolean {
         val nick = Helper.getName(cxt)
         if (nick == null || nick.isEmpty()) {
-            Helper.showMessage(cxt, getString(R.string.NameMustNotBeEmpty), false)
+            Helper.showMessage(cxt, getString(R.string.NameMustNotBeEmpty))
             return false
         }
         return true
@@ -219,7 +219,7 @@ class MainActivity : AppCompatActivity() {
                 if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     initLocation()
                 } else {
-                    Helper.showMessage(this, "Without location permission the country will be unknown in the player list", true)
+                    Helper.showMessage(this, "Without location permission the country will be unknown in the player list")
                 }
             }
         }

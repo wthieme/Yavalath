@@ -1,29 +1,16 @@
 package nl.whitedove.yavalath
 
-import android.os.AsyncTask
-import android.util.Pair
-
-import org.joda.time.DateTime
+import okhttp3.*
 import org.json.JSONException
 import org.json.JSONObject
-
 import java.io.IOException
-import java.util.ArrayList
-import java.util.HashMap
-import java.util.UUID
-
-import okhttp3.FormBody
-import okhttp3.MediaType
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.RequestBody
+import java.util.*
 
 internal object FcmSender {
 
-    private val mUrl = "https://fcm.googleapis.com/fcm/send"
-    private val mFcmKey = "key=AAAAySj3n-E:APA91bG7nqxcjHqa-VWxDXjafXYd9LW6EhNXn23Ztc6gCXyFTBW7LPBKoOXuDPSeP5flxRC9tYOT6Z_g6mvWT6pBNpNoY2QmlEVMLOKEJDEzt6XUIE83Cm0U2eZSNjvoAzXgMSJeckeP"
+    private const val mUrl = "https://fcm.googleapis.com/fcm/send"
+    private const val mFcmKey = "key=AAAAySj3n-E:APA91bG7nqxcjHqa-VWxDXjafXYd9LW6EhNXn23Ztc6gCXyFTBW7LPBKoOXuDPSeP5flxRC9tYOT6Z_g6mvWT6pBNpNoY2QmlEVMLOKEJDEzt6XUIE83Cm0U2eZSNjvoAzXgMSJeckeP"
     private val JSON = MediaType.parse("application/json; charset=utf-8")
-    var mLastSend = DateTime.now()
     var mHostToken = ""
     var mFcmToken = ""
 
@@ -44,16 +31,10 @@ internal object FcmSender {
         return FormBody.create(JSON, js)
     }
 
-    fun SendMessageToHost(responseType: FcmNames.ResponseType, data: HashMap<*, *>) {
-        SendMessage(responseType, data, null)
-    }
-
-    fun SendMessage(responseType: FcmNames.ResponseType, data: HashMap<*, *>, toToken: String?) {
-
-        val serverToken = toToken ?: mHostToken
+    private fun sendMessage(responseType: FcmNames.ResponseType, data: HashMap<*, *>, toToken: String) {
         var body: RequestBody? = null
         try {
-            body = makePayLoad(serverToken, responseType, data)
+            body = makePayLoad(toToken, responseType, data)
         } catch (ignored: JSONException) {
         }
 
@@ -67,7 +48,6 @@ internal object FcmSender {
                     .post(body!!)
                     .build()
 
-
             client.newCall(request).execute()
 
         } catch (ignored: IOException) {
@@ -75,31 +55,36 @@ internal object FcmSender {
 
     }
 
-    internal class SendSyncPing : AsyncTask<String, Void, Void>() {
-        override fun doInBackground(vararg params: String): Void? {
-            val toToken = params[0]
-            val data = HashMap<String, String>()
-            FcmSender.SendMessage(FcmNames.ResponseType.Ping, data, toToken)
-            return null
-        }
-    }
-
-    fun SendOk(guid: String, ToToken: String) {
+    fun sendPing(guid: String, toToken: String) {
         val data = HashMap<String, String>()
         data[FcmNames.UUID] = guid
-        FcmSender.SendMessage(FcmNames.ResponseType.Ok, data, ToToken)
+        FcmSender.sendMessage(FcmNames.ResponseType.Ping, data, toToken)
     }
 
-    fun SendPong(toToken: String, pongData: String) {
+    fun sendInvite(guid: String, toToken: String, name: String) {
+        val data = HashMap<String, String>()
+        data[FcmNames.UUID] = guid
+        data[FcmNames.Name] = name
+        data[FcmNames.FcmToken] = mFcmToken
+        FcmSender.sendMessage(FcmNames.ResponseType.Invite, data, toToken)
+    }
+
+    fun sendOk(guid: String, ToToken: String) {
+        val data = HashMap<String, String>()
+        data[FcmNames.UUID] = guid
+        FcmSender.sendMessage(FcmNames.ResponseType.Ok, data, ToToken)
+    }
+
+    fun sendPong(toToken: String, pongData: String) {
         val data = HashMap<String, String>()
         data[FcmNames.UUID] = pongData
-        FcmSender.SendMessage(FcmNames.ResponseType.Pong, data, toToken)
+        FcmSender.sendMessage(FcmNames.ResponseType.Pong, data, toToken)
     }
 
-    fun SendNok(guid: String, result: String, toToken: String) {
+    fun sendNok(guid: String, result: String, toToken: String) {
         val data = HashMap<String, String>()
         data[FcmNames.UUID] = guid
         data[FcmNames.Error] = result
-        FcmSender.SendMessage(FcmNames.ResponseType.Nok, data, toToken)
+        FcmSender.sendMessage(FcmNames.ResponseType.Nok, data, toToken)
     }
 }

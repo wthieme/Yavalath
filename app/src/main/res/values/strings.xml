@@ -27,8 +27,8 @@
     <string name="NameMustNotBeEmpty">Name must not be empty</string>
     <string name="back">Back</string>
     <string name="no_players_found">No players</string>
-    <string name="Inviting">Inviting</string>
-    <string name="InviteTimeOut">Player %s did not respond</string>
+    <string name="Inviting">Inviting %s for a game of Yavalath</string>
+    <string name="InviteTimeOut">%s did not respond</string>
     <string name="active_time">00:00</string>
     <string name="Version">Version</string>
     <string name="VersionNr">V1.0</string>
@@ -38,5 +38,11 @@
     <string name="Rules">Rules</string>
     <string name="RulesTitle">The Rules Of The Game</string>
     <string name="players_ready_for_a_game_of_yavalath">Players ready for a game of Yavalath</string>
+    <string name="Title">YesNoTitle</string>
+    <string name="Yes">Yes</string>
+    <string name="No">No</string>
+    <string name="InviteText">Do you accept the invitation from %s to play a game of Yavalath?</string>
+    <string name="invite_not_accepted">%s declined your invitation</string>
+    <string name="cant_play_self">You can\'t play Yavalath with yourself</string>
 </resources>
 

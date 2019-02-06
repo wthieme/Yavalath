@@ -5,32 +5,40 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.graphics.Typeface
+import android.os.AsyncTask
 import android.os.Bundle
 import android.os.Handler
 import android.support.v4.content.ContextCompat
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.TextView
 import kotlinx.android.synthetic.main.player_list_activity.*
 import java.util.*
 
+
 class PlayerListActivity : AppCompatActivity() {
+    private var mReceiverInvite: BroadcastReceiver? = null
     private var mReceiverNOk: BroadcastReceiver? = null
     private var mReceiverOk: BroadcastReceiver? = null
     private var mHandler: Handler? = null
     private var mContext: Context = this
     private var mInviteCount: Int = 0
+    private var mInvited: String = ""
+    private var mInviteTimeout: String = ""
+    private var mTimer: Timer? = null
 
     private val runnableInviting: Runnable = Runnable {
         fcmActive()
-        val invite = String.format(getString(R.string.Inviting), "INVITE")
-        tvInviting.text = invite
+        val aantal = Database.TIMEOUT - mInviteCount
+        val s = aantal.toString()
+        tvInviting.text = String.format(mInvited + " %s", s)
     }
 
     private val runnableTimeOut: Runnable = Runnable {
-        tvInviting.text = getString(R.string.InviteTimeOut)
+        tvInviting.text = mInviteTimeout
         tvInviting.setTextColor(ContextCompat.getColor(mContext, R.color.colorTint))
-        mJoinGuid = null
+        mInviteCount = 0
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,7 +66,7 @@ class PlayerListActivity : AppCompatActivity() {
         goback()
     }
 
-   private fun goback() {
+    private fun goback() {
         val intent = Intent(this, MainActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
         this.startActivity(intent)
@@ -91,41 +99,93 @@ class PlayerListActivity : AppCompatActivity() {
         Database.getPlayers(Runnable { toonPlayerList(Database.mPlayers) })
     }
 
+    private fun gotoGame() {}
+
+    private fun showYesNoDialog(player: String) {
+        val title = String.format(getString(R.string.InviteText), player)
+        val builder = AlertDialog.Builder(this)
+        builder.setMessage(title)
+                .setCancelable(false)
+                .setPositiveButton(getString(R.string.Yes), { dialog, id -> answerYes() })
+                .setNegativeButton(getString(R.string.No), { dialog, id -> answerNo() })
+        val alert = builder.create()
+        alert.show()
+    }
+
+    private fun answerYes() {
+        okInBackground()
+        gotoGame()
+    }
+
+    private fun answerOk() {
+        getPlayers()
+    }
+
+    private fun answerNo() {
+        val notAccepted = String.format(getString(R.string.invite_not_accepted), Helper.getName(this))
+        nokInBackground(notAccepted)
+    }
+
     private fun initReceivers() {
-        if (mReceiverNOk == null) {
-            mReceiverNOk = object : BroadcastReceiver() {
+        if (mReceiverInvite == null) {
+            mReceiverInvite = object : BroadcastReceiver() {
                 override fun onReceive(context: Context, intent: Intent) {
                     fcmActive()
-                    tvInviting.text = ""
-                    val err = intent.getStringExtra(FcmNames.Error)
-                    Helper.alert(context, err)
-                    getPlayers()
+                    val playername = intent.getStringExtra(FcmNames.Name)
+                    showYesNoDialog(playername)
                 }
             }
-            registerReceiver(mReceiverNOk, IntentFilter(FcmNames.ResponseType.Nok.EnumToString()))
+            registerReceiver(mReceiverInvite, IntentFilter(FcmNames.ResponseType.Invite.EnumToString()))
         }
 
         if (mReceiverOk == null) {
             mReceiverOk = object : BroadcastReceiver() {
                 override fun onReceive(context: Context, intent: Intent) {
                     fcmActive()
+                    tvInviting.text = ""
+                    val timer = mTimer
+                    if (timer != null) {
+                        timer.cancel()
+                        mInviteCount = 0
+                    }
                     gotoGame()
                 }
             }
             registerReceiver(mReceiverOk, IntentFilter(FcmNames.ResponseType.Ok.EnumToString()))
         }
-    }
 
-    private fun gotoGame()
-    {
+        if (mReceiverNOk == null) {
+            mReceiverNOk = object : BroadcastReceiver() {
+                override fun onReceive(context: Context, intent: Intent) {
+                    fcmActive()
+                    tvInviting.text = ""
+                    val timer = mTimer
+                    if (timer != null) {
+                        timer.cancel()
+                        mInviteCount = 0
+                    }
 
+                    val err = intent.getStringExtra(FcmNames.Error)
+                    val builder = AlertDialog.Builder(mContext)
+                    builder.setMessage(err)
+                            .setCancelable(false)
+                            .setPositiveButton(getString(R.string.OK), { dialog, id -> answerOk() })
+
+                    val alert = builder.create()
+                    alert.show()
+                }
+            }
+            registerReceiver(mReceiverNOk, IntentFilter(FcmNames.ResponseType.Nok.EnumToString()))
+        }
     }
 
     private fun unregBroadcastReceivers() {
-        Helper.unRegisterReceiver(mContext, mReceiverNOk)
+        Helper.unRegisterReceiver(mContext, mReceiverInvite)
         Helper.unRegisterReceiver(mContext, mReceiverOk)
-        mReceiverNOk = null
+        Helper.unRegisterReceiver(mContext, mReceiverNOk)
+        mReceiverInvite = null
         mReceiverOk = null
+        mReceiverNOk = null
     }
 
     private fun toonPlayerList(players: ArrayList<PlayerInfo>) {
@@ -145,22 +205,36 @@ class PlayerListActivity : AppCompatActivity() {
     }
 
     private fun invitePlayer(player: PlayerInfo) {
+        if (mInviteCount != 0) return
         if (!Helper.testInternet(mContext)) return
-        Helper.setHostToken(mContext, player.fcmToken)
+        if (player.fcmToken == FcmSender.mFcmToken) {
+            val builder = AlertDialog.Builder(this)
+            builder.setMessage(getString(R.string.cant_play_self))
+                    .setCancelable(false)
+                    .setPositiveButton(getString(R.string.OK), { dialog, id -> answerOk() })
+            val alert = builder.create()
+            alert.show()
+            return
+        }
+
+        FcmSender.mHostToken = player.fcmToken
         fcmActive()
-        showInviteText()
+        showInviteText(player.name)
+        inviteInBackground(Helper.getName(mContext))
     }
 
-    private fun showInviteText() {
-
-        tvInviting.text = getString(R.string.Inviting)
+    private fun showInviteText(name: String) {
+        mInvited = String.format(getString(R.string.Inviting), name)
+        tvInviting.text = mInvited
+        mInviteTimeout = String.format(getString(R.string.InviteTimeOut), name)
         tvInviting.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary))
 
         mHandler = Handler()
         mInviteCount = 0
 
-        val myTimer = Timer()
-        myTimer.schedule(object : TimerTask() {
+        mTimer = Timer()
+        val timer = mTimer
+        timer!!.schedule(object : TimerTask() {
             override fun run() {
                 mInviteCount++
                 updateGUI()
@@ -180,8 +254,50 @@ class PlayerListActivity : AppCompatActivity() {
         mHandler!!.post(runnableTimeOut)
     }
 
+    private fun inviteInBackground(playerName: String) {
+        AsyncInviteInBackgroundTask().execute(playerName)
+    }
+
+    private class AsyncInviteInBackgroundTask internal constructor() : AsyncTask<String, Void, Void>() {
+
+        override fun doInBackground(vararg params: String): Void? {
+            val playerName = params[0]
+            val guid = UUID.randomUUID().toString()
+            mGuid = guid
+            FcmSender.sendInvite(guid, FcmSender.mHostToken, playerName)
+            return null
+        }
+    }
+
+    private fun okInBackground() {
+        AsyncOkInBackgroundTask().execute()
+    }
+
+    private class AsyncOkInBackgroundTask internal constructor() : AsyncTask<Void, Void, Void>() {
+
+        override fun doInBackground(vararg params: Void): Void? {
+            val guid = mGuid
+            FcmSender.sendOk(guid, FcmSender.mHostToken)
+            return null
+        }
+    }
+
+    private fun nokInBackground(notAccepted: String) {
+        AsyncNokInBackgroundTask().execute(notAccepted)
+    }
+
+    private class AsyncNokInBackgroundTask internal constructor() : AsyncTask<String, Void, Void>() {
+
+        override fun doInBackground(vararg params: String): Void? {
+            val result = params[0]
+            val guid = mGuid
+            FcmSender.sendNok(guid, result, FcmSender.mHostToken)
+            return null
+        }
+    }
+
     companion object {
-        private var mJoinGuid: String? = null
+        private var mGuid: String = ""
     }
 }
 

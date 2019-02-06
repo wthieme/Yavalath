@@ -12,7 +12,7 @@ internal object Database {
     val PrivacyUrl = "http://wjthieme.com/vampires/privacy"
     val TermsUrl = "http://wjthieme.com/vampires/terms"
     val RulesUrl = "http://wjthieme.com/vampires/rules"
-    var TIMEOUT = 60
+    var TIMEOUT = 30
 
     internal object Names {
         val players = "players"
