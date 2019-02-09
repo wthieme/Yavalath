@@ -61,6 +61,11 @@ internal object FcmSender {
         FcmSender.sendMessage(FcmNames.ResponseType.Ping, data, toToken)
     }
 
+    fun sendAbandon(toToken: String) {
+        val data = HashMap<String, String>()
+        FcmSender.sendMessage(FcmNames.ResponseType.Abandon, data, toToken)
+    }
+
     fun sendInvite(guid: String, toToken: String, name: String) {
         val data = HashMap<String, String>()
         data[FcmNames.UUID] = guid

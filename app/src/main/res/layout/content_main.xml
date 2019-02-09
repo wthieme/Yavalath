@@ -6,6 +6,7 @@
     android:background="@color/colorBackground"
     android:clipChildren="false"
     android:orientation="vertical"
+    android:keepScreenOn="true"
     android:paddingTop="5dp">
 
     <TextView

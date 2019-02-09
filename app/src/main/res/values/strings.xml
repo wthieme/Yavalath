@@ -51,5 +51,10 @@
     <string name="vs">vs</string>
     <string name="to_move">%s to move</string>
     <string name="cant_play_same_name">You can\'t play against a player with the same name as you</string>
+    <string name="AbandonText">Do you want to quit this game?</string>
+    <string name="left_game">%s has left the game</string>
+    <string name="OfflineText">%s is offline, what do you want to do?</string>
+    <string name="Wait">Wait</string>
+    <string name="Quit">Quit</string>
 </resources>
 

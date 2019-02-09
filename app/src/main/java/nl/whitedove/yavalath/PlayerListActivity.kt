@@ -100,15 +100,8 @@ class PlayerListActivity : AppCompatActivity() {
         Database.getPlayers(Runnable { toonPlayerList(Database.mPlayers) })
     }
 
-    private fun gotoGame(playerName: String) {
+    private fun gotoGame(playerName: String, playesWhite : String) {
         fcmActive()
-        val rnr = Helper.RandomNrInRange(0, 1)
-        var playesWhite = ""
-        if (rnr == 0)
-            playesWhite = FcmSender.mMyFcmToken
-        else
-            playesWhite = FcmSender.mHisFcmToken
-
         GameHelper.createGame(this, playerName, playesWhite)
         Database.deletePlayer(FcmSender.mMyFcmToken)
         val intent = Intent(this, GameActivity::class.java)
@@ -131,7 +124,7 @@ class PlayerListActivity : AppCompatActivity() {
 
     private fun answerYes(playerName: String) {
         okInBackground()
-        gotoGame(playerName)
+        gotoGame(playerName, FcmSender.mHisFcmToken)
     }
 
     private fun answerOk() {
@@ -165,7 +158,7 @@ class PlayerListActivity : AppCompatActivity() {
                         timer.cancel()
                         mInviteCount = 0
                     }
-                    gotoGame(mInvitedName)
+                    gotoGame(mInvitedName, FcmSender.mMyFcmToken)
                 }
             }
             registerReceiver(mReceiverOk, IntentFilter(FcmNames.ResponseType.Ok.EnumToString()))
@@ -186,7 +179,7 @@ class PlayerListActivity : AppCompatActivity() {
                     val builder = AlertDialog.Builder(mContext)
                     builder.setMessage(err)
                             .setCancelable(false)
-                            .setPositiveButton(getString(R.string.OK), { dialog, id -> answerOk() })
+                            .setPositiveButton(getString(R.string.OK)) { dialog, id -> answerOk() }
 
                     val alert = builder.create()
                     alert.show()
@@ -228,7 +221,7 @@ class PlayerListActivity : AppCompatActivity() {
             val builder = AlertDialog.Builder(this)
             builder.setMessage(getString(R.string.cant_play_self))
                     .setCancelable(false)
-                    .setPositiveButton(getString(R.string.OK)) { dialog, id -> answerOk() }
+                    .setPositiveButton(getString(R.string.OK)) { _, _ -> answerOk() }
             val alert = builder.create()
             alert.show()
             return
@@ -239,7 +232,7 @@ class PlayerListActivity : AppCompatActivity() {
             val builder = AlertDialog.Builder(this)
             builder.setMessage(getString(R.string.cant_play_same_name))
                     .setCancelable(false)
-                    .setPositiveButton(getString(R.string.OK)) { dialog, id -> answerOk() }
+                    .setPositiveButton(getString(R.string.OK)) { _, _ -> answerOk() }
             val alert = builder.create()
             alert.show()
             return

@@ -16,12 +16,10 @@ internal object FcmNames {
     val AppVersion = "appVersion"
     val Error = "error"
     val Name = "name"
-    val State = "state"
     val FcmToken = "fcmToken"
-    val HostToken = "hostToken"
 
     internal enum class ResponseType private constructor(private val value: String) {
-        Ping("ping?"), Pong("ping!"), Ok("OK"), Nok("notOK"), Invite("invite");
+        Ping("ping"), Pong("pong"), Ok("OK"), Nok("notOK"), Invite("invite"), Abandon("abandon");
 
         fun EnumToString(): String {
             return value

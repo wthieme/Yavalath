@@ -36,9 +36,9 @@ class FcmReceiver : FirebaseMessagingService() {
         }
 
         if (rt === FcmNames.ResponseType.Ping) {
-            val pongData = data[FcmNames.UUID]
+            val guid = data[FcmNames.UUID]
             val toToken = data[FcmNames.Sender]
-            FcmSender.sendPong(toToken!!, pongData!!)
+            FcmSender.sendPong(toToken!!, guid!!)
             return
         }
 
@@ -53,6 +53,13 @@ class FcmReceiver : FirebaseMessagingService() {
             receiveOk(guid)
             return
         }
+
+        if (rt === FcmNames.ResponseType.Abandon) {
+            val guid = data[FcmNames.UUID]
+            receiveAbandon(guid)
+            return
+        }
+
     }
 
     private fun checkMessage(data: Map<String, String>?): Boolean {
@@ -90,6 +97,11 @@ class FcmReceiver : FirebaseMessagingService() {
     private fun receiveOk(guid: String?) {
         val intent = Intent(FcmNames.ResponseType.Ok.EnumToString())
         intent.putExtra(FcmNames.UUID, guid)
+        sendBroadcast(intent)
+    }
+
+    private fun receiveAbandon(fromToken: String?) {
+        val intent = Intent(FcmNames.ResponseType.Abandon.EnumToString())
         sendBroadcast(intent)
     }
 }
