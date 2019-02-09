@@ -1,6 +1,6 @@
 package nl.whitedove.yavalath
 
-internal class Field(nr: Int) {
+class Field(nr: Int) {
     var nr: Int
     var fieldState: FieldState
 

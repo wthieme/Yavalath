@@ -2,7 +2,7 @@ package nl.whitedove.yavalath
 
 import org.joda.time.DateTime
 
-internal class GameInfo(myName: String, myFcmToken: String) {
+class GameInfo(myName: String, myFcmToken: String, hisName: String, hisToken: String, playesWhite: String) {
     var created: DateTime
     var started: DateTime?
     var gameState: GameState
@@ -11,21 +11,21 @@ internal class GameInfo(myName: String, myFcmToken: String) {
     var hisName: String
     var myFcmToken: String
     var hisFcmToken: String
+    var playesWhite: String
 
     init {
         this.created = DateTime.now()
         this.started = null
         this.gameState = GameState.Unknown
-        this.fields = ArrayList<Field>()
+        this.fields = ArrayList()
+        this.myName = myName
+        this.myFcmToken = myFcmToken
+        this.hisName = hisName
+        this.hisFcmToken = hisToken
+        this.playesWhite = playesWhite
         for (i in 0..60) {
             this.fields.add(Field(i))
         }
-        this.myName = myName
-        this.myFcmToken = myFcmToken
-        this.hisName = ""
-        this.hisFcmToken = ""
-        this.hisName = ""
-        this.hisFcmToken = ""
     }
 
     fun get3(): List<List<Int>> {
@@ -80,6 +80,15 @@ internal class GameInfo(myName: String, myFcmToken: String) {
                 listOf(29, 37, 44, 50), listOf(30, 38, 45, 51), listOf(31, 39, 46, 52), listOf(32, 40, 47, 53), listOf(33, 41, 48, 54), listOf(34, 42, 49, 55),
                 listOf(38, 45, 51, 56), listOf(39, 46, 52, 57), listOf(40, 47, 53, 58), listOf(41, 48, 54, 59), listOf(42, 49, 55, 60)
         )
+    }
+
+    fun movesPlayed(): Int {
+        var nr = 0
+        for (f in fields) {
+            if (f.fieldState == FieldState.White || f.fieldState == FieldState.Black)
+                nr++
+        }
+        return nr
     }
 
     fun testWinner(): List<Int> {

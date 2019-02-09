@@ -51,7 +51,7 @@ internal object Database {
     }
 
     fun createOrUpdatePlayer(name: String, country: String) {
-        val token = FcmSender.mFcmToken
+        val token = FcmSender.mMyFcmToken
         val db = FirebaseFirestore.getInstance()
         val doc = HashMap<String, Any>()
         doc[Names.playerName] = name

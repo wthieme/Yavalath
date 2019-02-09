@@ -1,18 +1,14 @@
 package nl.whitedove.yavalath
 
 import android.content.Intent
-import android.util.Log
-
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-
-import org.joda.time.DateTime
 
 class FcmReceiver : FirebaseMessagingService() {
 
     override fun onNewToken(s: String?) {
         super.onNewToken(s)
-        if (s!=null) Helper.setFcmToken(this, s)
+        if (s != null) Helper.setFcmToken(this, s)
     }
 
     override fun onMessageReceived(message: RemoteMessage?) {
@@ -26,12 +22,13 @@ class FcmReceiver : FirebaseMessagingService() {
         if (rt === FcmNames.ResponseType.Invite) {
             val toToken = data[FcmNames.Sender]
             val playerName = data[FcmNames.Name]
-            FcmSender.mHostToken = toToken!!
+            FcmSender.mHisFcmToken = toToken!!
             receiveInvite(playerName)
             return
         }
 
         if (!checkSender(data)) return
+
         if (rt === FcmNames.ResponseType.Pong) {
             val fromToken = data[FcmNames.Sender]
             receivePong(fromToken)
@@ -69,7 +66,7 @@ class FcmReceiver : FirebaseMessagingService() {
         val messageOk: Boolean
         if (data == null || data.size == 0 || data.isEmpty()) return false
         val from = data[FcmNames.Sender]
-        messageOk = from == FcmSender.mHostToken
+        messageOk = from == FcmSender.mHisFcmToken
         return messageOk
     }
 

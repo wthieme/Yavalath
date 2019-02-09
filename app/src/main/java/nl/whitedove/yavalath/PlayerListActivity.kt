@@ -25,6 +25,7 @@ class PlayerListActivity : AppCompatActivity() {
     private var mContext: Context = this
     private var mInviteCount: Int = 0
     private var mInvited: String = ""
+    private var mInvitedName: String = ""
     private var mInviteTimeout: String = ""
     private var mTimer: Timer? = null
 
@@ -99,22 +100,38 @@ class PlayerListActivity : AppCompatActivity() {
         Database.getPlayers(Runnable { toonPlayerList(Database.mPlayers) })
     }
 
-    private fun gotoGame() {}
+    private fun gotoGame(playerName: String) {
+        fcmActive()
+        val rnr = Helper.RandomNrInRange(0, 1)
+        var playesWhite = ""
+        if (rnr == 0)
+            playesWhite = FcmSender.mMyFcmToken
+        else
+            playesWhite = FcmSender.mHisFcmToken
 
-    private fun showYesNoDialog(player: String) {
-        val title = String.format(getString(R.string.InviteText), player)
+        GameHelper.createGame(this, playerName, playesWhite)
+        Database.deletePlayer(FcmSender.mMyFcmToken)
+        val intent = Intent(this, GameActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+        this.startActivity(intent)
+        this.overridePendingTransition(R.anim.slide_in, R.anim.slide_out)
+        this.finish()
+    }
+
+    private fun showYesNoDialog(playerName: String) {
+        val title = String.format(getString(R.string.InviteText), playerName)
         val builder = AlertDialog.Builder(this)
         builder.setMessage(title)
                 .setCancelable(false)
-                .setPositiveButton(getString(R.string.Yes), { dialog, id -> answerYes() })
+                .setPositiveButton(getString(R.string.Yes), { dialog, id -> answerYes(playerName) })
                 .setNegativeButton(getString(R.string.No), { dialog, id -> answerNo() })
         val alert = builder.create()
         alert.show()
     }
 
-    private fun answerYes() {
+    private fun answerYes(playerName: String) {
         okInBackground()
-        gotoGame()
+        gotoGame(playerName)
     }
 
     private fun answerOk() {
@@ -148,7 +165,7 @@ class PlayerListActivity : AppCompatActivity() {
                         timer.cancel()
                         mInviteCount = 0
                     }
-                    gotoGame()
+                    gotoGame(mInvitedName)
                 }
             }
             registerReceiver(mReceiverOk, IntentFilter(FcmNames.ResponseType.Ok.EnumToString()))
@@ -207,17 +224,28 @@ class PlayerListActivity : AppCompatActivity() {
     private fun invitePlayer(player: PlayerInfo) {
         if (mInviteCount != 0) return
         if (!Helper.testInternet(mContext)) return
-        if (player.fcmToken == FcmSender.mFcmToken) {
+        if (player.fcmToken == FcmSender.mMyFcmToken) {
             val builder = AlertDialog.Builder(this)
             builder.setMessage(getString(R.string.cant_play_self))
                     .setCancelable(false)
-                    .setPositiveButton(getString(R.string.OK), { dialog, id -> answerOk() })
+                    .setPositiveButton(getString(R.string.OK)) { dialog, id -> answerOk() }
             val alert = builder.create()
             alert.show()
             return
         }
 
-        FcmSender.mHostToken = player.fcmToken
+        val myName = Helper.getName(this)
+        if (player.name == myName) {
+            val builder = AlertDialog.Builder(this)
+            builder.setMessage(getString(R.string.cant_play_same_name))
+                    .setCancelable(false)
+                    .setPositiveButton(getString(R.string.OK)) { dialog, id -> answerOk() }
+            val alert = builder.create()
+            alert.show()
+            return
+        }
+
+        FcmSender.mHisFcmToken = player.fcmToken
         fcmActive()
         showInviteText(player.name)
         inviteInBackground(Helper.getName(mContext))
@@ -225,6 +253,7 @@ class PlayerListActivity : AppCompatActivity() {
 
     private fun showInviteText(name: String) {
         mInvited = String.format(getString(R.string.Inviting), name)
+        mInvitedName = name
         tvInviting.text = mInvited
         mInviteTimeout = String.format(getString(R.string.InviteTimeOut), name)
         tvInviting.setTextColor(ContextCompat.getColor(mContext, R.color.colorPrimary))
@@ -264,7 +293,7 @@ class PlayerListActivity : AppCompatActivity() {
             val playerName = params[0]
             val guid = UUID.randomUUID().toString()
             mGuid = guid
-            FcmSender.sendInvite(guid, FcmSender.mHostToken, playerName)
+            FcmSender.sendInvite(guid, FcmSender.mHisFcmToken, playerName)
             return null
         }
     }
@@ -277,7 +306,7 @@ class PlayerListActivity : AppCompatActivity() {
 
         override fun doInBackground(vararg params: Void): Void? {
             val guid = mGuid
-            FcmSender.sendOk(guid, FcmSender.mHostToken)
+            FcmSender.sendOk(guid, FcmSender.mHisFcmToken)
             return null
         }
     }
@@ -291,7 +320,7 @@ class PlayerListActivity : AppCompatActivity() {
         override fun doInBackground(vararg params: String): Void? {
             val result = params[0]
             val guid = mGuid
-            FcmSender.sendNok(guid, result, FcmSender.mHostToken)
+            FcmSender.sendNok(guid, result, FcmSender.mHisFcmToken)
             return null
         }
     }

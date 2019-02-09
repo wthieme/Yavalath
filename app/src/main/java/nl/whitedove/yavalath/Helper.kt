@@ -13,10 +13,12 @@ import android.support.v4.content.ContextCompat
 import android.view.WindowManager
 import android.widget.TextView
 import android.widget.Toast
+import java.util.*
 
 internal object Helper {
 
     private val DEBUG = false
+    private val mRandom = Random()
     var mCurrentBestLocation: Location? = null
     const val ONE_MINUTE = 1000L * 60L
     const val ONE_KM = 1000F
@@ -34,6 +36,10 @@ internal object Helper {
         result = netInfo != null && netInfo.isConnected
         if (!result) Helper.showMessage(ctx, ctx.getString(R.string.NoInternet))
         return result
+    }
+
+    fun RandomNrInRange(lower: Int, upper: Int): Int {
+        return mRandom.nextInt(lower + upper + 1) + lower
     }
 
     fun tryParseInt(value: String): Boolean {
@@ -55,13 +61,13 @@ internal object Helper {
         val editor = preferences.edit()
         editor.putString(FcmNames.FcmToken, token)
         editor.apply()
-        FcmSender.mFcmToken = token
+        FcmSender.mMyFcmToken = token
     }
 
     fun getName(cxt: Context): String {
         val preferences = PreferenceManager.getDefaultSharedPreferences(cxt)
-        val nick =  preferences.getString("nick", "")
-        if (nick==null)
+        val nick = preferences.getString("nick", "")
+        if (nick == null)
             return ""
         return nick
     }

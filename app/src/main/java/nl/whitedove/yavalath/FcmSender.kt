@@ -11,8 +11,8 @@ internal object FcmSender {
     private const val mUrl = "https://fcm.googleapis.com/fcm/send"
     private const val mFcmKey = "key=AAAAySj3n-E:APA91bG7nqxcjHqa-VWxDXjafXYd9LW6EhNXn23Ztc6gCXyFTBW7LPBKoOXuDPSeP5flxRC9tYOT6Z_g6mvWT6pBNpNoY2QmlEVMLOKEJDEzt6XUIE83Cm0U2eZSNjvoAzXgMSJeckeP"
     private val JSON = MediaType.parse("application/json; charset=utf-8")
-    var mHostToken = ""
-    var mFcmToken = ""
+    var mHisFcmToken = ""
+    var mMyFcmToken = ""
 
     @Throws(JSONException::class)
     private fun makePayLoad(serverToken: String, responseType: FcmNames.ResponseType, data: HashMap<*, *>?): RequestBody {
@@ -20,7 +20,7 @@ internal object FcmSender {
         json.put(FcmNames.To, serverToken)
         json.put(FcmNames.Priority, FcmNames.High)
         val jsonData = JSONObject(data)
-        jsonData.put(FcmNames.Sender, mFcmToken)
+        jsonData.put(FcmNames.Sender, mMyFcmToken)
         jsonData.put(FcmNames.Type, responseType.EnumToString())
         jsonData.put(FcmNames.Environment, Helper.getAndroidVersion())
         jsonData.put(FcmNames.AppVersion, Helper.getAppVersion())
@@ -65,7 +65,7 @@ internal object FcmSender {
         val data = HashMap<String, String>()
         data[FcmNames.UUID] = guid
         data[FcmNames.Name] = name
-        data[FcmNames.FcmToken] = mFcmToken
+        data[FcmNames.FcmToken] = mMyFcmToken
         FcmSender.sendMessage(FcmNames.ResponseType.Invite, data, toToken)
     }
 
