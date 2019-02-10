@@ -4,7 +4,6 @@ import org.joda.time.DateTime
 
 class GameInfo(myName: String, myFcmToken: String, hisName: String, hisToken: String, playesWhite: String) {
     var created: DateTime
-    var started: DateTime?
     var gameState: GameState
     var fields: ArrayList<Field>
     var myName: String
@@ -12,10 +11,14 @@ class GameInfo(myName: String, myFcmToken: String, hisName: String, hisToken: St
     var myFcmToken: String
     var hisFcmToken: String
     var playesWhite: String
+    var playerWhite: String
+    var playerBlack: String
+    var playerToMove: String
+    var winningFields: List<Int> = listOf(0)
+    var winner: String
 
     init {
         this.created = DateTime.now()
-        this.started = null
         this.gameState = GameState.Unknown
         this.fields = ArrayList()
         this.myName = myName
@@ -26,9 +29,19 @@ class GameInfo(myName: String, myFcmToken: String, hisName: String, hisToken: St
         for (i in 0..60) {
             this.fields.add(Field(i))
         }
+        if (playesWhite == myFcmToken) {
+            this.playerWhite = myName
+            this.playerBlack = hisName
+            this.playerToMove = myName
+        } else {
+            this.playerWhite = hisName
+            this.playerBlack = myName
+            this.playerToMove = hisName
+        }
+        this.winner = ""
     }
 
-    fun get3(): List<List<Int>> {
+    private fun get3(): List<List<Int>> {
         return listOf(
                 listOf(0, 1, 2), listOf(1, 2, 3), listOf(2, 3, 4),
                 listOf(5, 6, 7), listOf(6, 7, 8), listOf(7, 8, 9), listOf(8, 9, 10),
@@ -56,7 +69,7 @@ class GameInfo(myName: String, myFcmToken: String, hisName: String, hisToken: St
         )
     }
 
-    fun get4(): List<List<Int>> {
+    private fun get4(): List<List<Int>> {
         return listOf(
                 listOf(0, 1, 2, 3), listOf(1, 2, 3, 4),
                 listOf(5, 6, 7, 8), listOf(6, 7, 8, 9), listOf(7, 8, 9, 10),
@@ -91,7 +104,37 @@ class GameInfo(myName: String, myFcmToken: String, hisName: String, hisToken: St
         return nr
     }
 
-    fun testWinner(): List<Int> {
+    fun move(nr: Int, playedByToken: String) {
+        val fld = this.fields.get(nr)
+
+        if (playedByToken == this.playesWhite) {
+            fld.fieldState = FieldState.White
+            this.playerToMove = this.playerBlack
+        } else {
+            fld.fieldState = FieldState.Black
+            this.playerToMove = this.playerWhite
+        }
+
+        this.winningFields = testWinner()
+
+        if (this.winningFields.size == 3) {
+            if (playedByToken == this.playesWhite) {
+                this.winner = this.playerBlack
+            } else {
+                this.winner = this.playerWhite
+            }
+        }
+
+        if (winningFields.size == 4) {
+            if (playedByToken == this.playesWhite) {
+                this.winner = this.playerWhite
+            } else {
+                this.winner = this.playerBlack
+            }
+        }
+    }
+
+    private fun testWinner(): List<Int> {
         for (g3 in get3()) {
 
             if (this.fields.get(g3.get(0)).fieldState == FieldState.Black &&

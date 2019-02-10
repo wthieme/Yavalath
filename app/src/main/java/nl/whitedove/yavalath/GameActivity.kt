@@ -12,15 +12,19 @@ import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import kotlinx.android.synthetic.main.game_activity.*
 import org.joda.time.DateTime
+import org.joda.time.Period
 import java.util.*
 
 class GameActivity : AppCompatActivity() {
     private var mContext: Context = this
     private var mReceiverAbandon: BroadcastReceiver? = null
     private var mReceiverPong: BroadcastReceiver? = null
+    private var mReceiverMove: BroadcastReceiver? = null
     private var mHandler: Handler? = null
     private var mTimer: Timer? = null
     private var mLastPong = DateTime.now()
+    private var mGameHandler: Handler? = null
+    private var mGameTimer: Timer? = null
 
     private val runnableOffline: Runnable = Runnable {
         val iconFont = FontManager.GetTypeface(this, FontManager.FONTAWESOME_SOLID)
@@ -30,6 +34,19 @@ class GameActivity : AppCompatActivity() {
         showWaitOrQuitDialog()
     }
 
+    private val runnableUpdateGUI: Runnable = Runnable {
+        val game = GameHelper.mGame!!
+        val now = DateTime.now()
+        val period = Period(game.created, now)
+        val seconds = Math.abs(period.seconds).toString().padStart(2, '0')
+        val minutes = Math.abs(period.minutes).toString().padStart(2, '0')
+        tvTime.text = String.format(getString(R.string.time), minutes, seconds)
+    }
+
+    private val runnablePing: Runnable = Runnable {
+        pingInBackground()
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.game_activity)
@@ -37,6 +54,7 @@ class GameActivity : AppCompatActivity() {
         initTimer()
         initViews()
         initReceivers()
+        initGameTimer()
         toonGameData()
     }
 
@@ -56,6 +74,25 @@ class GameActivity : AppCompatActivity() {
     private fun initViews() {
     }
 
+    private fun initGameTimer() {
+        mGameHandler = Handler()
+        mGameTimer = Timer()
+        val timer = mGameTimer
+        timer!!.schedule(object : TimerTask() {
+            override fun run() {
+                val game = GameHelper.mGame!!
+                if (game.winner.isEmpty())
+                    UpdateGUI()
+                else
+                    this.cancel()
+            }
+        }, 0, 1000)
+    }
+
+    private fun UpdateGUI() {
+        mGameHandler!!.post(runnableUpdateGUI)
+    }
+
     private fun initTimer() {
         mLastPong = DateTime.now()
         mHandler = Handler()
@@ -67,7 +104,7 @@ class GameActivity : AppCompatActivity() {
                     setOffline()
                     this.cancel()
                 }
-                pingInBackground()
+                pinging()
             }
         }, 0, 10000)
     }
@@ -76,24 +113,34 @@ class GameActivity : AppCompatActivity() {
         mHandler!!.post(runnableOffline)
     }
 
+    private fun pinging() {
+        mHandler!!.post(runnablePing)
+    }
+
     private fun toonGameData() {
         val game = GameHelper.mGame!!
+        tvPlayerWhite.text = game.playerWhite
+        tvPlayerBlack.text = game.playerBlack
+
         val movesPlayed = game.movesPlayed()
-        if (FcmSender.mMyFcmToken == game.playesWhite) {
-            tvPlayerWhite.text = game.myName
-            tvPlayerBlack.text = game.hisName
-            if (movesPlayed % 2 == 0) {
-                tvToMove.text = String.format(getString(R.string.to_move), game.myName)
-            } else {
-                tvToMove.text = String.format(getString(R.string.to_move), game.hisName)
-            }
+        if (movesPlayed == 0)
+            tvNrMoves.text = ""
+        else
+            tvNrMoves.text = movesPlayed.toString()
+
+        val winner = game.winner
+        if (winner.isEmpty()) {
+            tvToMove.text = String.format(getString(R.string.to_move), game.playerToMove)
         } else {
-            tvPlayerWhite.text = game.hisName
-            tvPlayerBlack.text = game.myName
-            if (movesPlayed % 2 == 0) {
-                tvToMove.text = String.format(getString(R.string.to_move), game.hisName)
+            tvToMove.text = String.format(getString(R.string.wins), winner)
+            if (game.winningFields.size == 3) {
+                for (field in game.winningFields) {
+                    // TODO highlight the fields with red
+                }
             } else {
-                tvToMove.text = String.format(getString(R.string.to_move), game.myName)
+                for (field in game.winningFields) {
+                    // TODO highlight the fields with green
+                }
             }
         }
     }
@@ -181,6 +228,24 @@ class GameActivity : AppCompatActivity() {
             }
             registerReceiver(mReceiverPong, IntentFilter(FcmNames.ResponseType.Pong.EnumToString()))
         }
+
+        if (mReceiverMove == null) {
+            mReceiverMove = object : BroadcastReceiver() {
+                override fun onReceive(context: Context, intent: Intent) {
+                    fcmActive()
+                    setOnline()
+                    toonGameData()
+                }
+            }
+            registerReceiver(mReceiverMove, IntentFilter(FcmNames.ResponseType.Move.EnumToString()))
+        }
+    }
+
+    private fun move(fieldNr: Int) {
+        val game = GameHelper.mGame!!
+        game.move(fieldNr, FcmSender.mMyFcmToken)
+        moveInBackground(fieldNr)
+        toonGameData()
     }
 
     private fun setOnline() {
@@ -193,8 +258,10 @@ class GameActivity : AppCompatActivity() {
     private fun unregBroadcastReceivers() {
         Helper.unRegisterReceiver(mContext, mReceiverAbandon)
         Helper.unRegisterReceiver(mContext, mReceiverPong)
+        Helper.unRegisterReceiver(mContext, mReceiverMove)
         mReceiverAbandon = null
         mReceiverPong = null
+        mReceiverMove = null
     }
 
     private fun abandonInBackground() {
@@ -211,6 +278,7 @@ class GameActivity : AppCompatActivity() {
     }
 
     private fun pingInBackground() {
+        fcmActive()
         AsyncPingInBackgroundTask().execute()
     }
 
@@ -219,6 +287,20 @@ class GameActivity : AppCompatActivity() {
         override fun doInBackground(vararg params: Void): Void? {
             val guid = UUID.randomUUID().toString()
             FcmSender.sendPing(guid, FcmSender.mHisFcmToken)
+            return null
+        }
+    }
+
+    private fun moveInBackground(fieldNr: Int) {
+        fcmActive()
+        AsyncMoveInBackgroundTask().execute(fieldNr)
+    }
+
+    private class AsyncMoveInBackgroundTask internal constructor() : AsyncTask<Int, Void, Void>() {
+
+        override fun doInBackground(vararg params: Int?): Void? {
+            val fieldNr = params[0]!!
+            FcmSender.sendMove(fieldNr, FcmSender.mHisFcmToken)
             return null
         }
     }

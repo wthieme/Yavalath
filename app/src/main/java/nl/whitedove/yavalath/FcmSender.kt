@@ -52,7 +52,6 @@ internal object FcmSender {
 
         } catch (ignored: IOException) {
         }
-
     }
 
     fun sendPing(guid: String, toToken: String) {
@@ -92,4 +91,11 @@ internal object FcmSender {
         data[FcmNames.Error] = result
         FcmSender.sendMessage(FcmNames.ResponseType.Nok, data, toToken)
     }
+
+    fun sendMove(fieldNr: Int, toToken: String) {
+        val data = HashMap<String, String>()
+        data[FcmNames.FieldNr] = fieldNr.toString()
+        FcmSender.sendMessage(FcmNames.ResponseType.Move, data, toToken)
+    }
+
 }

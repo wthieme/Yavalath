@@ -56,5 +56,8 @@
     <string name="OfflineText">%s is offline, what do you want to do?</string>
     <string name="Wait">Wait</string>
     <string name="Quit">Quit</string>
+    <string name="wins">%s wins the game!</string>
+    <string name="time">%s:%s</string>
+    <string name="nr_of_moves">0</string>
 </resources>
 

@@ -127,6 +127,30 @@
     </LinearLayout>
 
     <TextView
+        android:id="@+id/tvNrMoves"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/tvToMove"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="10dp"
+        android:layout_marginStart="20dp"
+        android:text="@string/nr_of_moves"
+        android:textColor="@color/colorPrimary"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/tvTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/tvToMove"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="10dp"
+        android:layout_marginEnd="20dp"
+        android:text="@string/time"
+        android:textColor="@color/colorPrimary"
+        android:textSize="16sp" />
+
+    <TextView
         android:id="@+id/tvToMove"
         android:layout_width="match_parent"
         android:textAlignment="center"
