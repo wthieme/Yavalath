@@ -23,6 +23,11 @@
     <string name="fa_bars">&#xf0c9;</string>
     <string name="fa_sync">&#xf021;</string>
     <string name="fa_arrow_left">&#xf060;</string>
+    <string name="fa_apple">&#xf5d1;</string>
+    <string name="fa_acorn">&#xf6ae;</string>
+    <string name="fa_smile">&#xf118;</string>
+    <string name="fa_heart">&#xf004;</string>
+    <string name="fa_star">&#xf005;</string>
     <string name="CountryUnknown">Unknown</string>
     <string name="NameMustNotBeEmpty">Name must not be empty</string>
     <string name="back">Back</string>
