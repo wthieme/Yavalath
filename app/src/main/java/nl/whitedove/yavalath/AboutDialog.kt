@@ -10,7 +10,7 @@ import android.widget.TextView
 
 internal class AboutDialog(ctx: Context) : Dialog(ctx), View.OnClickListener {
 
-    override fun onCreate(savedInstanceState: Bundle) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         requestWindowFeature(Window.FEATURE_NO_TITLE)
         setContentView(R.layout.about_dialog)

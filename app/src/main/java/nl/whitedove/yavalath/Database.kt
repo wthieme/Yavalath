@@ -47,7 +47,7 @@ internal object Database {
     fun setListener(callback: Runnable) {
         val db = FirebaseFirestore.getInstance()
         db.collection(Database.Names.players)
-                .addSnapshotListener { value, e -> callback.run() }
+                .addSnapshotListener { _, _ -> callback.run() }
     }
 
     fun createOrUpdatePlayer(name: String, country: String) {

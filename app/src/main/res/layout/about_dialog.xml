@@ -64,21 +64,10 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/tvUsing"
-        android:layout_width="250dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/llVersion"
-        android:layout_centerHorizontal="true"
-        android:layout_margin="10dp"
-        android:text="@string/about_terms"
-        android:textColor="@color/colorPrimary"
-        android:textSize="16sp" />
-
-    <TextView
         android:id="@+id/tvMaker"
         android:layout_width="250dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tvUsing"
+        android:layout_below="@+id/llVersion"
         android:layout_centerHorizontal="true"
         android:layout_margin="10dp"
         android:text="@string/about_copyright"

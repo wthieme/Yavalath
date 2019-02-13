@@ -4,13 +4,6 @@
     <string name="app_makers">By Wilhelm Thieme</string>
     <string name="enter_name">Enter name</string>
     <string name="enter">Enter</string>
-    <string name="loginterms">By tapping Enter you agree to The Yavalath <u>Terms &amp; Conditions</u> and <u>Privacy Policy.</u></string>
-    <string name="terms">Terms &amp; Conditions</string>
-    <string name="privacy">Privacy Policy</string>
-    <string name="privacy_title">Privacy statement</string>
-    <string name="terms_title">Terms &amp; Conditions</string>
-    <string name="error_loading_privacy">Error loading Privacy statement</string>
-    <string name="error_loading_terms">Error loading Terms &amp; Conditions</string>
     <string name="momentAgo">a moment ago</string>
     <string name="minuteAgo">1 minute ago</string>
     <string name="minutesAgo">%s minutes ago</string>
@@ -37,11 +30,8 @@
     <string name="active_time">00:00</string>
     <string name="Version">Version</string>
     <string name="VersionNr">V1.0</string>
-    <string name="about_terms">By using this app you agree to The Yavalath Terms &amp; Conditions and Privacy Policy.</string>
-    <string name="about_copyright">Copyright &#169; 2018 Wilhelm Thieme Sr. All rights reserved.</string>
+    <string name="about_copyright">Copyright &#169; 2018 Wilhelm Thieme.</string>
     <string name="OK">OK</string>
-    <string name="Rules">Rules</string>
-    <string name="RulesTitle">The Rules Of The Game</string>
     <string name="players_ready_for_a_game_of_yavalath">Players ready for a game of Yavalath</string>
     <string name="Title">YesNoTitle</string>
     <string name="Yes">Yes</string>
@@ -64,5 +54,17 @@
     <string name="wins">%s wins the game!</string>
     <string name="time">%s:%s</string>
     <string name="nr_of_moves">0</string>
+    <string name="Rules">Rules</string>
+    <string name="RulesTitle">The Rules Of The Game</string>
+    <string name="clickRules"><u>Click to view the rules of <b>Yavalath</b></u></string>
+    <string name="RulesTxt"><b><i>Yavalath</i></b> is a board game for 2 players.
+        \n\nOne player has the white stones, and the other has the black ones. If it is your turn, you place a stone on the board.
+        \n\nYou can place the stone on any empty field.
+        \n\nThe purpose of the game is to be the first one to get \'4 in a row\'.
+        \n\n<b>But be careful!</b>
+        \n\nIf you get \'3 in a row\' you lose!
+        \nHave fun playing this game!
+</string>
+
 </resources>
 

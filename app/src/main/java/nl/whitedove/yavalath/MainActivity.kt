@@ -20,6 +20,7 @@ import android.view.View
 import android.widget.PopupMenu
 import android.widget.TextView
 import kotlinx.android.synthetic.main.content_main.*
+import kotlinx.android.synthetic.main.rules_dialog.*
 
 class MainActivity : AppCompatActivity() {
     private var mContext: Context = this
@@ -63,46 +64,25 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        val loginterms = getString(R.string.loginterms)
-        val terms = getString(R.string.terms)
-        val privacy = getString(R.string.privacy)
+        val clickRules = getString(R.string.clickRules)
 
-        tvloginterms.movementMethod = LinkMovementMethod.getInstance()
-        tvloginterms.setText(loginterms, TextView.BufferType.SPANNABLE)
-        val sp = tvloginterms.text as Spannable
+        tvrulestxt.movementMethod = LinkMovementMethod.getInstance()
+        tvrulestxt.setText(clickRules, TextView.BufferType.SPANNABLE)
+        val sp = tvrulestxt.text as Spannable
         val cs1 = object : ClickableSpan() {
             override fun onClick(widget: View) {
-                showTermsDialog()
+                showRulesDialog()
             }
         }
-        val i1 = loginterms.indexOf(terms)
-        sp.setSpan(cs1, i1, i1 + terms.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-
-        val cs2 = object : ClickableSpan() {
-            override fun onClick(widget: View) {
-                showPrivacyDialog()
-            }
-        }
-        val i2 = loginterms.indexOf(privacy)
-        sp.setSpan(cs2, i2, i2 + privacy.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        sp.setSpan(cs1, 0, clickRules.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
 
         FontManager.markAsIconContainer(tvMenu, iconFont)
         tvMenu.setOnClickListener { view -> menuClick(view) }
     }
 
-    private fun showPrivacyDialog() {
-        val pd = PrivacyDialog(this)
-        Helper.showDialog(pd, true)
-    }
-
-    private fun showTermsDialog() {
-        val td = TermsDialog(this)
-        Helper.showDialog(td, true)
-    }
-
     private fun showRulesDialog() {
         val rd = RulesDialog(this)
-        Helper.showDialog(rd, true)
+        Helper.showDialog(rd, false)
     }
 
     private fun showAboutDialog() {
@@ -135,7 +115,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun checkName(cxt: Context): Boolean {
         val nick = Helper.getName(cxt)
-        if (nick == null || nick.isEmpty()) {
+        if (nick.isEmpty()) {
             Helper.showMessage(cxt, getString(R.string.NameMustNotBeEmpty))
             return false
         }
@@ -156,16 +136,6 @@ class MainActivity : AppCompatActivity() {
 
                 R.id.itAbout -> {
                     showAboutDialog()
-                    return@OnMenuItemClickListener true
-                }
-
-                R.id.itTerms -> {
-                    showTermsDialog()
-                    return@OnMenuItemClickListener true
-                }
-
-                R.id.itPrivacy -> {
-                    showPrivacyDialog()
                     return@OnMenuItemClickListener true
                 }
             }

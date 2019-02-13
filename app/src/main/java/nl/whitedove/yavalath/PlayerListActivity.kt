@@ -116,8 +116,8 @@ class PlayerListActivity : AppCompatActivity() {
         val builder = AlertDialog.Builder(this)
         builder.setMessage(title)
                 .setCancelable(false)
-                .setPositiveButton(getString(R.string.Yes), { dialog, id -> answerYes(playerName) })
-                .setNegativeButton(getString(R.string.No), { dialog, id -> answerNo() })
+                .setPositiveButton(getString(R.string.Yes), { _, _ -> answerYes(playerName) })
+                .setNegativeButton(getString(R.string.No), { _, _ -> answerNo() })
         val alert = builder.create()
         alert.show()
     }
@@ -179,7 +179,7 @@ class PlayerListActivity : AppCompatActivity() {
                     val builder = AlertDialog.Builder(mContext)
                     builder.setMessage(err)
                             .setCancelable(false)
-                            .setPositiveButton(getString(R.string.OK)) { dialog, id -> answerOk() }
+                            .setPositiveButton(getString(R.string.OK)) { _, _ -> answerOk() }
 
                     val alert = builder.create()
                     alert.show()

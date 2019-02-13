@@ -5,8 +5,8 @@
     android:layout_height="match_parent"
     android:background="@color/colorBackground"
     android:clipChildren="false"
-    android:orientation="vertical"
     android:keepScreenOn="true"
+    android:orientation="vertical"
     android:paddingTop="5dp">
 
     <TextView
@@ -16,16 +16,16 @@
         android:text="@string/app_name"
         android:textAlignment="center"
         android:textColor="@color/colorPrimary"
-        android:textStyle="bold"
-        android:textSize="24sp" />
+        android:textSize="24sp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/tvFcmBolt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toStartOf="@+id/tvOnline"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
+        android:layout_toStartOf="@+id/tvOnline"
         android:alpha="0"
         android:text="@string/fa_bolt"
         android:textColor="@color/colorYellow"
@@ -48,17 +48,17 @@
         android:layout_height="1dp"
         android:layout_below="@id/tvYavalath"
         android:layout_marginTop="10dp"
-        android:background="@color/colorDisabled"/>
+        android:background="@color/colorDisabled" />
 
     <LinearLayout
         android:id="@+id/llWhite"
         android:layout_width="wrap_content"
-        android:layout_below="@+id/vLine"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginTop="10dp"
+        android:layout_below="@+id/vLine"
+        android:layout_alignParentStart="true"
         android:layout_marginStart="20dp"
-        android:layout_alignParentStart="true">
+        android:layout_marginTop="10dp"
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/tvPlayerWhite"
@@ -72,10 +72,10 @@
         <TextView
             android:id="@+id/tvWhite"
             android:layout_width="match_parent"
-            android:textAlignment="center"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:text="@string/White"
+            android:textAlignment="center"
             android:textColor="@color/colorPrimary"
             android:textSize="18sp" />
 
@@ -87,9 +87,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/vLine"
-        android:layout_toEndOf="@+id/llWhite"
-        android:layout_toStartOf="@+id/llBlack"
         android:layout_marginTop="30dp"
+        android:layout_toStartOf="@+id/llBlack"
+        android:layout_toEndOf="@+id/llWhite"
         android:text="@string/vs"
         android:textAlignment="center"
         android:textColor="@color/colorPrimary"
@@ -100,10 +100,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/vLine"
-        android:orientation="vertical"
+        android:layout_alignParentEnd="true"
         android:layout_marginTop="10dp"
         android:layout_marginEnd="20dp"
-        android:layout_alignParentEnd="true">
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/tvPlayerBlack"
@@ -117,14 +117,522 @@
         <TextView
             android:id="@+id/tvBlack"
             android:layout_width="match_parent"
-            android:textAlignment="center"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:text="@string/Black"
+            android:textAlignment="center"
             android:textColor="@color/colorPrimary"
             android:textSize="18sp" />
 
     </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/rltotaal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/llBlack">
+
+        <RelativeLayout
+            android:id="@+id/rl1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true">
+
+            <include
+                android:id="@+id/fld0"
+                layout="@layout/field_layout"
+                android:layout_width="38dp"
+                android:layout_height="44dp" />
+
+            <include
+                android:id="@+id/fld1"
+                layout="@layout/field_layout"
+                android:layout_width="38dp"
+                android:layout_height="44dp"
+                android:layout_toEndOf="@+id/fld0" />
+
+            <include
+                android:id="@+id/fld2"
+                layout="@layout/field_layout"
+                android:layout_width="38dp"
+                android:layout_height="44dp"
+                android:layout_toEndOf="@+id/fld1" />
+
+            <include
+                android:id="@+id/fld3"
+                layout="@layout/field_layout"
+                android:layout_width="38dp"
+                android:layout_height="44dp"
+                android:layout_toEndOf="@+id/fld2" />
+
+            <include
+                android:id="@+id/fld4"
+                layout="@layout/field_layout"
+                android:layout_width="38dp"
+                android:layout_height="44dp"
+                android:layout_toEndOf="@+id/fld3" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/rl1"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="-11dp">
+
+            <include
+                android:id="@+id/fld5"
+                layout="@layout/field_layout"
+                android:layout_width="38dp"
+                android:layout_height="44dp" />
+
+            <include
+                android:id="@+id/fld6"
+                layout="@layout/field_layout"
+                android:layout_width="38dp"
+                android:layout_height="44dp"
+                android:layout_toEndOf="@+id/fld5" />
+
+            <include
+                android:id="@+id/fld7"
+                layout="@layout/field_layout"
+                android:layout_width="38dp"
+                android:layout_height="44dp"
+                android:layout_toEndOf="@+id/fld6" />
+
+            <include
+                android:id="@+id/fld8"
+                layout="@layout/field_layout"
+                android:layout_width="38dp"
+                android:layout_height="44dp"
+                android:layout_toEndOf="@+id/fld7" />
+
+            <include
+                android:id="@+id/fld9"
+                layout="@layout/field_layout"
+                android:layout_width="38dp"
+                android:layout_height="44dp"
+                android:layout_toEndOf="@+id/fld8" />
+
+            <include
+                android:id="@+id/fld10"
+                layout="@layout/field_layout"
+                android:layout_width="38dp"
+                android:layout_height="44dp"
+                android:layout_toEndOf="@+id/fld9" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/rl2"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="-11dp">
+
+            <include
+                android:id="@+id/fld11"
+                layout="@layout/field_layout"
+                android:layout_width="38dp"
+                android:layout_height="44dp" />
+
+            <include
+                android:id="@+id/fld12"
+                layout="@layout/field_layout"
+                android:layout_width="38dp"
+                android:layout_height="44dp"
+                android:layout_toEndOf="@+id/fld11" />
+
+            <include
+                android:id="@+id/fld13"
+                layout="@layout/field_layout"
+                android:layout_width="38dp"
+                android:layout_height="44dp"
+                android:layout_toEndOf="@+id/fld12" />
+
+            <include
+                android:id="@+id/fld14"
+                layout="@layout/field_layout"
+                android:layout_width="38dp"
+                android:layout_height="44dp"
+                android:layout_toEndOf="@+id/fld13" />
+
+            <include
+                android:id="@+id/fld15"
+                layout="@layout/field_layout"
+                android:layout_width="38dp"
+                android:layout_height="44dp"
+                android:layout_toEndOf="@+id/fld14" />
+
+            <include
+                android:id="@+id/fld16"
+                layout="@layout/field_layout"
+                android:layout_width="38dp"
+                android:layout_height="44dp"
+                android:layout_toEndOf="@+id/fld15" />
+
+            <include
+                android:id="@+id/fld17"
+                layout="@layout/field_layout"
+                android:layout_width="38dp"
+                android:layout_height="44dp"
+                android:layout_toEndOf="@+id/fld16" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/rl3"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="-11dp">
+
+            <include
+                android:id="@+id/fld18"
+                layout="@layout/field_layout"
+                android:layout_width="38dp"
+                android:layout_height="44dp" />
+
+            <include
+                android:id="@+id/fld19"
+                layout="@layout/field_layout"
+                android:layout_width="38dp"
+                android:layout_height="44dp"
+                android:layout_toEndOf="@+id/fld18" />
+
+            <include
+                android:id="@+id/fld20"
+                layout="@layout/field_layout"
+                android:layout_width="38dp"
+                android:layout_height="44dp"
+                android:layout_toEndOf="@+id/fld19" />
+
+            <include
+                android:id="@+id/fld21"
+                layout="@layout/field_layout"
+                android:layout_width="38dp"
+                android:layout_height="44dp"
+                android:layout_toEndOf="@+id/fld20" />
+
+            <include
+                android:id="@+id/fld22"
+                layout="@layout/field_layout"
+                android:layout_width="38dp"
+                android:layout_height="44dp"
+                android:layout_toEndOf="@+id/fld21" />
+
+            <include
+                android:id="@+id/fld23"
+                layout="@layout/field_layout"
+                android:layout_width="38dp"
+                android:layout_height="44dp"
+                android:layout_toEndOf="@+id/fld22" />
+
+            <include
+                android:id="@+id/fld24"
+                layout="@layout/field_layout"
+                android:layout_width="38dp"
+                android:layout_height="44dp"
+                android:layout_toEndOf="@+id/fld23" />
+
+            <include
+                android:id="@+id/fld25"
+                layout="@layout/field_layout"
+                android:layout_width="38dp"
+                android:layout_height="44dp"
+                android:layout_toEndOf="@+id/fld24" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/rl4"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="-11dp">
+
+            <include
+                android:id="@+id/fld26"
+                layout="@layout/field_layout"
+                android:layout_width="38dp"
+                android:layout_height="44dp" />
+
+            <include
+                android:id="@+id/fld27"
+                layout="@layout/field_layout"
+                android:layout_width="38dp"
+                android:layout_height="44dp"
+                android:layout_toEndOf="@+id/fld26" />
+
+            <include
+                android:id="@+id/fld28"
+                layout="@layout/field_layout"
+                android:layout_width="38dp"
+                android:layout_height="44dp"
+                android:layout_toEndOf="@+id/fld27" />
+
+            <include
+                android:id="@+id/fld29"
+                layout="@layout/field_layout"
+                android:layout_width="38dp"
+                android:layout_height="44dp"
+                android:layout_toEndOf="@+id/fld28" />
+
+            <include
+                android:id="@+id/fld30"
+                layout="@layout/field_layout"
+                android:layout_width="38dp"
+                android:layout_height="44dp"
+                android:layout_toEndOf="@+id/fld29" />
+
+            <include
+                android:id="@+id/fld31"
+                layout="@layout/field_layout"
+                android:layout_width="38dp"
+                android:layout_height="44dp"
+                android:layout_toEndOf="@+id/fld30" />
+
+            <include
+                android:id="@+id/fld32"
+                layout="@layout/field_layout"
+                android:layout_width="38dp"
+                android:layout_height="44dp"
+                android:layout_toEndOf="@+id/fld31" />
+
+            <include
+                android:id="@+id/fld33"
+                layout="@layout/field_layout"
+                android:layout_width="38dp"
+                android:layout_height="44dp"
+                android:layout_toEndOf="@+id/fld32" />
+
+            <include
+                android:id="@+id/fld34"
+                layout="@layout/field_layout"
+                android:layout_width="38dp"
+                android:layout_height="44dp"
+                android:layout_toEndOf="@+id/fld33" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/rl5"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="-11dp">
+
+            <include
+                android:id="@+id/fld35"
+                layout="@layout/field_layout"
+                android:layout_width="38dp"
+                android:layout_height="44dp" />
+
+            <include
+                android:id="@+id/fld36"
+                layout="@layout/field_layout"
+                android:layout_width="38dp"
+                android:layout_height="44dp"
+                android:layout_toEndOf="@+id/fld35" />
+
+            <include
+                android:id="@+id/fld37"
+                layout="@layout/field_layout"
+                android:layout_width="38dp"
+                android:layout_height="44dp"
+                android:layout_toEndOf="@+id/fld36" />
+
+            <include
+                android:id="@+id/fld38"
+                layout="@layout/field_layout"
+                android:layout_width="38dp"
+                android:layout_height="44dp"
+                android:layout_toEndOf="@+id/fld37" />
+
+            <include
+                android:id="@+id/fld39"
+                layout="@layout/field_layout"
+                android:layout_width="38dp"
+                android:layout_height="44dp"
+                android:layout_toEndOf="@+id/fld38" />
+
+            <include
+                android:id="@+id/fld40"
+                layout="@layout/field_layout"
+                android:layout_width="38dp"
+                android:layout_height="44dp"
+                android:layout_toEndOf="@+id/fld39" />
+
+            <include
+                android:id="@+id/fld41"
+                layout="@layout/field_layout"
+                android:layout_width="38dp"
+                android:layout_height="44dp"
+                android:layout_toEndOf="@+id/fld40" />
+
+            <include
+                android:id="@+id/fld42"
+                layout="@layout/field_layout"
+                android:layout_width="38dp"
+                android:layout_height="44dp"
+                android:layout_toEndOf="@+id/fld41" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/rl6"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="-11dp">
+
+            <include
+                android:id="@+id/fld43"
+                layout="@layout/field_layout"
+                android:layout_width="38dp"
+                android:layout_height="44dp" />
+
+            <include
+                android:id="@+id/fld44"
+                layout="@layout/field_layout"
+                android:layout_width="38dp"
+                android:layout_height="44dp"
+                android:layout_toEndOf="@+id/fld43" />
+
+            <include
+                android:id="@+id/fld45"
+                layout="@layout/field_layout"
+                android:layout_width="38dp"
+                android:layout_height="44dp"
+                android:layout_toEndOf="@+id/fld44" />
+
+            <include
+                android:id="@+id/fld46"
+                layout="@layout/field_layout"
+                android:layout_width="38dp"
+                android:layout_height="44dp"
+                android:layout_toEndOf="@+id/fld45" />
+
+            <include
+                android:id="@+id/fld47"
+                layout="@layout/field_layout"
+                android:layout_width="38dp"
+                android:layout_height="44dp"
+                android:layout_toEndOf="@+id/fld46" />
+
+            <include
+                android:id="@+id/fld48"
+                layout="@layout/field_layout"
+                android:layout_width="38dp"
+                android:layout_height="44dp"
+                android:layout_toEndOf="@+id/fld47" />
+
+            <include
+                android:id="@+id/fld49"
+                layout="@layout/field_layout"
+                android:layout_width="38dp"
+                android:layout_height="44dp"
+                android:layout_toEndOf="@+id/fld48" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/rl7"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="-11dp">
+
+            <include
+                android:id="@+id/fld50"
+                layout="@layout/field_layout"
+                android:layout_width="38dp"
+                android:layout_height="44dp" />
+
+            <include
+                android:id="@+id/fld51"
+                layout="@layout/field_layout"
+                android:layout_width="38dp"
+                android:layout_height="44dp"
+                android:layout_toEndOf="@+id/fld50" />
+
+            <include
+                android:id="@+id/fld52"
+                layout="@layout/field_layout"
+                android:layout_width="38dp"
+                android:layout_height="44dp"
+                android:layout_toEndOf="@+id/fld51" />
+
+            <include
+                android:id="@+id/fld53"
+                layout="@layout/field_layout"
+                android:layout_width="38dp"
+                android:layout_height="44dp"
+                android:layout_toEndOf="@+id/fld52" />
+
+            <include
+                android:id="@+id/fld54"
+                layout="@layout/field_layout"
+                android:layout_width="38dp"
+                android:layout_height="44dp"
+                android:layout_toEndOf="@+id/fld53" />
+
+            <include
+                android:id="@+id/fld55"
+                layout="@layout/field_layout"
+                android:layout_width="38dp"
+                android:layout_height="44dp"
+                android:layout_toEndOf="@+id/fld54" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl9"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/rl8"
+            android:layout_marginTop="-11dp"
+            android:layout_centerHorizontal="true">
+
+            <include
+                android:id="@+id/fld56"
+                layout="@layout/field_layout"
+                android:layout_width="38dp"
+                android:layout_height="44dp" />
+
+            <include
+                android:id="@+id/fld57"
+                layout="@layout/field_layout"
+                android:layout_width="38dp"
+                android:layout_height="44dp"
+                android:layout_toEndOf="@+id/fld56" />
+
+            <include
+                android:id="@+id/fld58"
+                layout="@layout/field_layout"
+                android:layout_width="38dp"
+                android:layout_height="44dp"
+                android:layout_toEndOf="@+id/fld57" />
+
+            <include
+                android:id="@+id/fld59"
+                layout="@layout/field_layout"
+                android:layout_width="38dp"
+                android:layout_height="44dp"
+                android:layout_toEndOf="@+id/fld58" />
+
+            <include
+                android:id="@+id/fld60"
+                layout="@layout/field_layout"
+                android:layout_width="38dp"
+                android:layout_height="44dp"
+                android:layout_toEndOf="@+id/fld59" />
+
+        </RelativeLayout>
+    </RelativeLayout>
 
     <TextView
         android:id="@+id/tvNrMoves"
@@ -132,8 +640,8 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/tvToMove"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="10dp"
         android:layout_marginStart="20dp"
+        android:layout_marginBottom="10dp"
         android:text="@string/nr_of_moves"
         android:textColor="@color/colorPrimary"
         android:textSize="16sp" />
@@ -144,8 +652,8 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/tvToMove"
         android:layout_alignParentEnd="true"
-        android:layout_marginBottom="10dp"
         android:layout_marginEnd="20dp"
+        android:layout_marginBottom="10dp"
         android:text="@string/time"
         android:textColor="@color/colorPrimary"
         android:textSize="16sp" />
@@ -153,11 +661,11 @@
     <TextView
         android:id="@+id/tvToMove"
         android:layout_width="match_parent"
-        android:textAlignment="center"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="20dp"
         android:text="@string/to_move"
+        android:textAlignment="center"
         android:textColor="@color/colorPrimary"
         android:textSize="20sp" />
 

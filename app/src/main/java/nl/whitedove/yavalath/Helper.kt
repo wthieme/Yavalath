@@ -53,7 +53,7 @@ internal object Helper {
 
     fun getFcmToken(cxt: Context): String {
         val preferences = PreferenceManager.getDefaultSharedPreferences(cxt)
-        return preferences.getString(FcmNames.FcmToken, "")
+        return preferences.getString(FcmNames.FcmToken, "")!!
     }
 
     fun setFcmToken(cxt: Context, token: String) {
