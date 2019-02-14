@@ -4,7 +4,7 @@
     android:height="100dp"
     android:viewportWidth="866"
     android:viewportHeight="1000">
-    <path
+    <path android:name="path_hexagon"
         android:fillColor="@color/colorLightYellow"
         android:pathData="M 433,5 L 861,250 861,750 433,995 5,750 5,250  Z"
         android:strokeWidth="10"

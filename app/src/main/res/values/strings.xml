@@ -21,6 +21,7 @@
     <string name="fa_smile">&#xf118;</string>
     <string name="fa_heart">&#xf004;</string>
     <string name="fa_star">&#xf005;</string>
+    <string name="fa_share_square">&#xf14d;</string>
     <string name="CountryUnknown">Unknown</string>
     <string name="NameMustNotBeEmpty">Name must not be empty</string>
     <string name="back">Back</string>
@@ -65,6 +66,8 @@
         \n\nIf you get \'3 in a row\' you lose!
         \nHave fun playing this game!
 </string>
+    <string name="send">Send</string>
+    <string name="new_game">New game</string>
 
 </resources>
 

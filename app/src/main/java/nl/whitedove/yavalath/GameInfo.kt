@@ -4,7 +4,6 @@ import org.joda.time.DateTime
 
 class GameInfo(myName: String, myFcmToken: String, hisName: String, hisToken: String, playesWhite: String) {
     var created: DateTime
-    var gameState: GameState
     var fields: ArrayList<Field>
     var myName: String
     var hisName: String
@@ -16,10 +15,10 @@ class GameInfo(myName: String, myFcmToken: String, hisName: String, hisToken: St
     var playerToMove: String
     var winningFields: List<Int> = listOf(0)
     var winner: String
+    var lastMove: Int
 
     init {
         this.created = DateTime.now()
-        this.gameState = GameState.Unknown
         this.fields = ArrayList()
         this.myName = myName
         this.myFcmToken = myFcmToken
@@ -39,6 +38,7 @@ class GameInfo(myName: String, myFcmToken: String, hisName: String, hisToken: St
             this.playerToMove = hisName
         }
         this.winner = ""
+        this.lastMove = -1
     }
 
     private fun get3(): List<List<Int>> {
@@ -104,8 +104,13 @@ class GameInfo(myName: String, myFcmToken: String, hisName: String, hisToken: St
         return nr
     }
 
+    fun myMove(): Boolean {
+        return (this.playerToMove == this.myName)
+    }
+
     fun move(nr: Int, playedByToken: String) {
-        val fld = this.fields.get(nr)
+        this.lastMove = nr
+        val fld = this.fields[nr]
 
         if (playedByToken == this.playesWhite) {
             fld.fieldState = FieldState.White
@@ -135,34 +140,33 @@ class GameInfo(myName: String, myFcmToken: String, hisName: String, hisToken: St
     }
 
     private fun testWinner(): List<Int> {
-        for (g3 in get3()) {
-
-            if (this.fields.get(g3.get(0)).fieldState == FieldState.Black &&
-                    this.fields.get(g3.get(1)).fieldState == FieldState.Black &&
-                    this.fields.get(g3.get(2)).fieldState == FieldState.Black)
-                return listOf(g3.get(0), g3.get(1), g3.get(2))
-
-            if (this.fields.get(g3.get(0)).fieldState == FieldState.White &&
-                    this.fields.get(g3.get(1)).fieldState == FieldState.White &&
-                    this.fields.get(g3.get(2)).fieldState == FieldState.White)
-                return listOf(g3.get(0), g3.get(1), g3.get(2))
-        }
-
         for (g4 in get4()) {
+            if (this.fields[g4[0]].fieldState == FieldState.White &&
+                    this.fields[g4[1]].fieldState == FieldState.White &&
+                    this.fields[g4[2]].fieldState == FieldState.White &&
+                    this.fields[g4[3]].fieldState == FieldState.White)
+                return listOf(g4[0], g4[1], g4[2], g4[3])
 
-            if (this.fields.get(g4.get(0)).fieldState == FieldState.White &&
-                    this.fields.get(g4.get(1)).fieldState == FieldState.White &&
-                    this.fields.get(g4.get(2)).fieldState == FieldState.White &&
-                    this.fields.get(g4.get(3)).fieldState == FieldState.White)
-                return listOf(g4.get(0), g4.get(1), g4.get(2), g4.get(3))
-
-            if (this.fields.get(g4.get(0)).fieldState == FieldState.Black &&
-                    this.fields.get(g4.get(1)).fieldState == FieldState.Black &&
-                    this.fields.get(g4.get(2)).fieldState == FieldState.Black &&
-                    this.fields.get(g4.get(3)).fieldState == FieldState.White)
-                return listOf(g4.get(0), g4.get(1), g4.get(2), g4.get(3))
+            if (this.fields[g4[0]].fieldState == FieldState.Black &&
+                    this.fields[g4[1]].fieldState == FieldState.Black &&
+                    this.fields[g4[2]].fieldState == FieldState.Black &&
+                    this.fields[g4[3]].fieldState == FieldState.White)
+                return listOf(g4[0], g4[1], g4[2], g4[3])
         }
 
-        return listOf(0);
+        for (g3 in get3()) {
+            if (this.fields[g3[0]].fieldState == FieldState.Black &&
+                    this.fields[g3[1]].fieldState == FieldState.Black &&
+                    this.fields[g3[2]].fieldState == FieldState.Black)
+                return listOf(g3[0], g3[1], g3[2])
+
+            if (this.fields[g3[0]].fieldState == FieldState.White &&
+                    this.fields[g3[1]].fieldState == FieldState.White &&
+                    this.fields[g3[2]].fieldState == FieldState.White)
+                return listOf(g3[0], g3[1], g3[2])
+        }
+
+
+        return listOf(0)
     }
 }
