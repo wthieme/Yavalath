@@ -65,6 +65,14 @@ class FcmReceiver : FirebaseMessagingService() {
             receiveMove(fieldNr, fromToken)
             return
         }
+
+        if (rt === FcmNames.ResponseType.Ready) {
+            val ready = data[FcmNames.Ready] as String
+            val isReady = ready == "Y"
+            val fromToken = data[FcmNames.Sender] as String
+            receiveReady(isReady, fromToken)
+            return
+        }
     }
 
     private fun checkMessage(data: Map<String, String>): Boolean {
@@ -74,7 +82,6 @@ class FcmReceiver : FirebaseMessagingService() {
     }
 
     private fun checkSender(data: Map<String, String>): Boolean {
-
         val messageOk: Boolean
         if (data.isEmpty()) return false
         val from = data[FcmNames.Sender]
@@ -114,6 +121,13 @@ class FcmReceiver : FirebaseMessagingService() {
         val game = GameHelper.mGame!!
         game.move(fieldNr, fromToken)
         val intent = Intent(FcmNames.ResponseType.Move.EnumToString())
+        sendBroadcast(intent)
+    }
+
+    private fun receiveReady(ready: Boolean, fromToken: String) {
+        val game = GameHelper.mGame!!
+        game.ready(ready, fromToken)
+        val intent = Intent(FcmNames.ResponseType.Ready.EnumToString())
         sendBroadcast(intent)
     }
 }

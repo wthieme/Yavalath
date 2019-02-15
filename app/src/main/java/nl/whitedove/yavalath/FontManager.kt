@@ -11,8 +11,6 @@ import android.widget.Button
 import android.widget.TextView
 
 internal object FontManager {
-    val FONTAWESOME_BRANDS = "fa-brands-400.ttf"
-    val FONTAWESOME_REGULAR = "fa-regular-400.ttf"
     val FONTAWESOME_SOLID = "fa-solid-900.ttf"
 
     fun GetTypeface(context: Context, font: String): Typeface {

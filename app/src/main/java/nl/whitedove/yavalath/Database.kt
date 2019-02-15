@@ -9,9 +9,6 @@ internal object Database {
 
     var mPlayers: ArrayList<PlayerInfo> = ArrayList()
     var mPlayer: PlayerInfo? = null
-    val PrivacyUrl = "http://wjthieme.com/vampires/privacy"
-    val TermsUrl = "http://wjthieme.com/vampires/terms"
-    val RulesUrl = "http://wjthieme.com/vampires/rules"
     var TIMEOUT = 30
 
     internal object Names {
@@ -37,7 +34,11 @@ internal object Database {
                             val lastActive = DateTime(doc[Database.Names.lastActive] as Long)
                             players.add(PlayerInfo(naam, token, country, lastActive))
                         }
-                        mPlayers = players
+                        val sorted = players.sortedWith(compareBy({ it.country.toLowerCase() }, {it.name.toLowerCase()}))
+                        mPlayers = ArrayList()
+                        for (p in sorted)
+                            mPlayers.add(p)
+
                         removeInActivePlayers()
                         callback.run()
                     }

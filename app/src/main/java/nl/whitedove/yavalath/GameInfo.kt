@@ -16,6 +16,8 @@ class GameInfo(myName: String, myFcmToken: String, hisName: String, hisToken: St
     var winningFields: List<Int> = listOf(0)
     var winner: String
     var lastMove: Int
+    var whiteReady: Boolean
+    var blackReady: Boolean
 
     init {
         this.created = DateTime.now()
@@ -39,6 +41,8 @@ class GameInfo(myName: String, myFcmToken: String, hisName: String, hisToken: St
         }
         this.winner = ""
         this.lastMove = -1
+        this.whiteReady = true
+        this.blackReady = true
     }
 
     private fun get3(): List<List<Int>> {
@@ -108,6 +112,14 @@ class GameInfo(myName: String, myFcmToken: String, hisName: String, hisToken: St
         return (this.playerToMove == this.myName)
     }
 
+    fun ready(ready: Boolean, byToken: String) {
+        if (byToken == this.playesWhite) {
+            this.whiteReady = ready
+        } else {
+            this.blackReady = ready
+        }
+    }
+
     fun move(nr: Int, playedByToken: String) {
         this.lastMove = nr
         val fld = this.fields[nr]
@@ -150,7 +162,7 @@ class GameInfo(myName: String, myFcmToken: String, hisName: String, hisToken: St
             if (this.fields[g4[0]].fieldState == FieldState.Black &&
                     this.fields[g4[1]].fieldState == FieldState.Black &&
                     this.fields[g4[2]].fieldState == FieldState.Black &&
-                    this.fields[g4[3]].fieldState == FieldState.White)
+                    this.fields[g4[3]].fieldState == FieldState.Black)
                 return listOf(g4[0], g4[1], g4[2], g4[3])
         }
 

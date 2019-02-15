@@ -98,4 +98,10 @@ internal object FcmSender {
         FcmSender.sendMessage(FcmNames.ResponseType.Move, data, toToken)
     }
 
+    fun sendReady(ready: String, toToken: String) {
+        val data = HashMap<String, String>()
+        data[FcmNames.Ready] = ready
+        FcmSender.sendMessage(FcmNames.ResponseType.Ready, data, toToken)
+    }
+
 }

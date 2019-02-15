@@ -68,6 +68,9 @@
 </string>
     <string name="send">Send</string>
     <string name="new_game">New game</string>
+    <string name="ReadyToStart">Play again?</string>
+    <string name="no">N</string>
+    <string name="yes">Y</string>
 
 </resources>
 

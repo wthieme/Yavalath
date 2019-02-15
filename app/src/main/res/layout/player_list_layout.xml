@@ -10,7 +10,7 @@
         android:layout_gravity="center"
         android:background="@color/colorWhite"
         android:orientation="horizontal"
-        android:padding="10dp">
+        android:padding="5dp">
 
         <TextView
             android:id="@+id/tvPlayerName"
