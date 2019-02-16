@@ -53,7 +53,8 @@
     <string name="Wait">Wait</string>
     <string name="Quit">Quit</string>
     <string name="wins">%s wins the game!</string>
-    <string name="time">%s:%s</string>
+    <string name="timems">%s:%s</string>
+    <string name="timehms">%s:%s:%s</string>
     <string name="nr_of_moves">0</string>
     <string name="Rules">Rules</string>
     <string name="RulesTitle">The Rules Of The Game</string>
@@ -71,6 +72,7 @@
     <string name="ReadyToStart">Play again?</string>
     <string name="no">N</string>
     <string name="yes">Y</string>
+    <string name="draw">It\'s a draw!</string>
 
 </resources>
 

@@ -17,7 +17,7 @@ class FcmReceiver : FirebaseMessagingService() {
         if (!checkMessage(data)) return
 
         val responseType = data[FcmNames.Type]
-        val rt = FcmNames.ResponseType.StringToEnum(responseType!!)
+        val rt = FcmNames.ResponseType.stringToEnum(responseType!!)
 
         if (rt === FcmNames.ResponseType.Invite) {
             val toToken = data[FcmNames.Sender] as String
@@ -41,13 +41,13 @@ class FcmReceiver : FirebaseMessagingService() {
             return
         }
 
-        if (rt === FcmNames.ResponseType.Nok) {
+        if (rt === FcmNames.ResponseType.InviteNOk) {
             val err = data[FcmNames.Error] as String
             receiveNok(err)
             return
         }
 
-        if (rt === FcmNames.ResponseType.Ok) {
+        if (rt === FcmNames.ResponseType.InviteOk) {
             val guid = data[FcmNames.UUID] as String
             receiveOk(guid)
             return
@@ -66,7 +66,7 @@ class FcmReceiver : FirebaseMessagingService() {
             return
         }
 
-        if (rt === FcmNames.ResponseType.Ready) {
+        if (rt === FcmNames.ResponseType.ReadyNewGame) {
             val ready = data[FcmNames.Ready] as String
             val isReady = ready == "Y"
             val fromToken = data[FcmNames.Sender] as String
@@ -90,44 +90,44 @@ class FcmReceiver : FirebaseMessagingService() {
     }
 
     private fun receiveInvite(playerName: String) {
-        val intent = Intent(FcmNames.ResponseType.Invite.EnumToString())
+        val intent = Intent(FcmNames.ResponseType.Invite.enumToString())
         intent.putExtra(FcmNames.Name, playerName)
         sendBroadcast(intent)
     }
 
     private fun receivePong() {
-        val intent = Intent(FcmNames.ResponseType.Pong.EnumToString())
+        val intent = Intent(FcmNames.ResponseType.Pong.enumToString())
         sendBroadcast(intent)
     }
 
     private fun receiveNok(error: String) {
-        val intent = Intent(FcmNames.ResponseType.Nok.EnumToString())
+        val intent = Intent(FcmNames.ResponseType.InviteNOk.enumToString())
         intent.putExtra(FcmNames.Error, error)
         sendBroadcast(intent)
     }
 
     private fun receiveOk(guid: String) {
-        val intent = Intent(FcmNames.ResponseType.Ok.EnumToString())
+        val intent = Intent(FcmNames.ResponseType.InviteOk.enumToString())
         intent.putExtra(FcmNames.UUID, guid)
         sendBroadcast(intent)
     }
 
     private fun receiveAbandon() {
-        val intent = Intent(FcmNames.ResponseType.Abandon.EnumToString())
+        val intent = Intent(FcmNames.ResponseType.Abandon.enumToString())
         sendBroadcast(intent)
     }
 
     private fun receiveMove(fieldNr: Int, fromToken: String) {
         val game = GameHelper.mGame!!
         game.move(fieldNr, fromToken)
-        val intent = Intent(FcmNames.ResponseType.Move.EnumToString())
+        val intent = Intent(FcmNames.ResponseType.Move.enumToString())
         sendBroadcast(intent)
     }
 
     private fun receiveReady(ready: Boolean, fromToken: String) {
         val game = GameHelper.mGame!!
         game.ready(ready, fromToken)
-        val intent = Intent(FcmNames.ResponseType.Ready.EnumToString())
+        val intent = Intent(FcmNames.ResponseType.ReadyNewGame.enumToString())
         sendBroadcast(intent)
     }
 }

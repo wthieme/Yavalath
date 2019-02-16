@@ -19,8 +19,8 @@ import java.util.*
 
 class PlayerListActivity : AppCompatActivity() {
     private var mReceiverInvite: BroadcastReceiver? = null
-    private var mReceiverNOk: BroadcastReceiver? = null
-    private var mReceiverOk: BroadcastReceiver? = null
+    private var mReceiverInviteNOk: BroadcastReceiver? = null
+    private var mReceiverInviteOk: BroadcastReceiver? = null
     private var mHandler: Handler? = null
     private var mContext: Context = this
     private var mInviteCount: Int = 0
@@ -145,11 +145,11 @@ class PlayerListActivity : AppCompatActivity() {
                     showYesNoDialog(playername)
                 }
             }
-            registerReceiver(mReceiverInvite, IntentFilter(FcmNames.ResponseType.Invite.EnumToString()))
+            registerReceiver(mReceiverInvite, IntentFilter(FcmNames.ResponseType.Invite.enumToString()))
         }
 
-        if (mReceiverOk == null) {
-            mReceiverOk = object : BroadcastReceiver() {
+        if (mReceiverInviteOk == null) {
+            mReceiverInviteOk = object : BroadcastReceiver() {
                 override fun onReceive(context: Context, intent: Intent) {
                     fcmActive()
                     tvInviting.text = ""
@@ -161,11 +161,11 @@ class PlayerListActivity : AppCompatActivity() {
                     gotoGame(mInvitedName, FcmSender.mMyFcmToken)
                 }
             }
-            registerReceiver(mReceiverOk, IntentFilter(FcmNames.ResponseType.Ok.EnumToString()))
+            registerReceiver(mReceiverInviteOk, IntentFilter(FcmNames.ResponseType.InviteOk.enumToString()))
         }
 
-        if (mReceiverNOk == null) {
-            mReceiverNOk = object : BroadcastReceiver() {
+        if (mReceiverInviteNOk == null) {
+            mReceiverInviteNOk = object : BroadcastReceiver() {
                 override fun onReceive(context: Context, intent: Intent) {
                     fcmActive()
                     tvInviting.text = ""
@@ -185,17 +185,17 @@ class PlayerListActivity : AppCompatActivity() {
                     alert.show()
                 }
             }
-            registerReceiver(mReceiverNOk, IntentFilter(FcmNames.ResponseType.Nok.EnumToString()))
+            registerReceiver(mReceiverInviteNOk, IntentFilter(FcmNames.ResponseType.InviteNOk.enumToString()))
         }
     }
 
     private fun unregBroadcastReceivers() {
         Helper.unRegisterReceiver(mContext, mReceiverInvite)
-        Helper.unRegisterReceiver(mContext, mReceiverOk)
-        Helper.unRegisterReceiver(mContext, mReceiverNOk)
+        Helper.unRegisterReceiver(mContext, mReceiverInviteOk)
+        Helper.unRegisterReceiver(mContext, mReceiverInviteNOk)
         mReceiverInvite = null
-        mReceiverOk = null
-        mReceiverNOk = null
+        mReceiverInviteOk = null
+        mReceiverInviteNOk = null
     }
 
     private fun toonPlayerList(players: ArrayList<PlayerInfo>) {

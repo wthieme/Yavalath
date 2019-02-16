@@ -151,6 +151,15 @@ class GameInfo(myName: String, myFcmToken: String, hisName: String, hisToken: St
         }
     }
 
+    fun testDraw(): Boolean {
+        for (field in this.fields) {
+            if (field.fieldState == FieldState.Empty) {
+                return false
+            }
+        }
+        return true
+    }
+
     private fun testWinner(): List<Int> {
         for (g4 in get4()) {
             if (this.fields[g4[0]].fieldState == FieldState.White &&

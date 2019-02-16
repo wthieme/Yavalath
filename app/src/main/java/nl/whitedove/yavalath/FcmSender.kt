@@ -21,9 +21,7 @@ internal object FcmSender {
         json.put(FcmNames.Priority, FcmNames.High)
         val jsonData = JSONObject(data)
         jsonData.put(FcmNames.Sender, mMyFcmToken)
-        jsonData.put(FcmNames.Type, responseType.EnumToString())
-        jsonData.put(FcmNames.Environment, Helper.getAndroidVersion())
-        jsonData.put(FcmNames.AppVersion, Helper.getAppVersion())
+        jsonData.put(FcmNames.Type, responseType.enumToString())
         json.put(FcmNames.Data, jsonData)
 
         val js = json.toString()
@@ -69,14 +67,13 @@ internal object FcmSender {
         val data = HashMap<String, String>()
         data[FcmNames.UUID] = guid
         data[FcmNames.Name] = name
-        data[FcmNames.FcmToken] = mMyFcmToken
         FcmSender.sendMessage(FcmNames.ResponseType.Invite, data, toToken)
     }
 
     fun sendOk(guid: String, ToToken: String) {
         val data = HashMap<String, String>()
         data[FcmNames.UUID] = guid
-        FcmSender.sendMessage(FcmNames.ResponseType.Ok, data, ToToken)
+        FcmSender.sendMessage(FcmNames.ResponseType.InviteOk, data, ToToken)
     }
 
     fun sendPong(toToken: String, pongData: String) {
@@ -89,7 +86,7 @@ internal object FcmSender {
         val data = HashMap<String, String>()
         data[FcmNames.UUID] = guid
         data[FcmNames.Error] = result
-        FcmSender.sendMessage(FcmNames.ResponseType.Nok, data, toToken)
+        FcmSender.sendMessage(FcmNames.ResponseType.InviteNOk, data, toToken)
     }
 
     fun sendMove(fieldNr: Int, toToken: String) {
@@ -101,7 +98,7 @@ internal object FcmSender {
     fun sendReady(ready: String, toToken: String) {
         val data = HashMap<String, String>()
         data[FcmNames.Ready] = ready
-        FcmSender.sendMessage(FcmNames.ResponseType.Ready, data, toToken)
+        FcmSender.sendMessage(FcmNames.ResponseType.ReadyNewGame, data, toToken)
     }
 
 }

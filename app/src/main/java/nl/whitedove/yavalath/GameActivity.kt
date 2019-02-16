@@ -48,7 +48,12 @@ class GameActivity : AppCompatActivity() {
         val period = Period(game.created, now)
         val seconds = Math.abs(period.seconds).toString().padStart(2, '0')
         val minutes = Math.abs(period.minutes).toString().padStart(2, '0')
-        tvTime.text = String.format(getString(R.string.time), minutes, seconds)
+        val hours = Math.abs(period.hours).toString().padStart(2, '0')
+        if (hours == "00") {
+            tvTime.text = String.format(getString(R.string.timems), minutes, seconds)
+        } else {
+            tvTime.text = String.format(getString(R.string.timehms), hours, minutes, seconds)
+        }
     }
 
     private val runnablePing: Runnable = Runnable {
@@ -92,7 +97,7 @@ class GameActivity : AppCompatActivity() {
         timer!!.schedule(object : TimerTask() {
             override fun run() {
                 val game = GameHelper.mGame!!
-                if (game.winner.isEmpty())
+                if (game.winner.isEmpty() && !game.testDraw())
                     updateGUI()
                 else
                     this.cancel()
@@ -139,6 +144,7 @@ class GameActivity : AppCompatActivity() {
         val movesPlayed = game.movesPlayed()
         val myMove = game.myMove()
         val winner = game.winner
+        val draw = game.testDraw()
 
         tvPlayerWhite.text = game.playerWhite
         tvPlayerBlack.text = game.playerBlack
@@ -148,21 +154,26 @@ class GameActivity : AppCompatActivity() {
         else
             tvNrMoves.text = movesPlayed.toString()
 
-        if (winner.isEmpty()) {
-            tvToMove.text = String.format(getString(R.string.to_move), game.playerToMove)
-        } else {
-            game.whiteReady = false
-            game.blackReady = false
-            tvToMove.text = String.format(getString(R.string.wins), winner)
-            initReadySwitch(swReady, false)
-        }
-
-        if (winner.isEmpty()) {
-            tvReady.visibility = View.GONE
-            swReady.visibility = View.GONE
-        } else {
+        if (draw) {
             tvReady.visibility = View.VISIBLE
             swReady.visibility = View.VISIBLE
+            game.whiteReady = false
+            game.blackReady = false
+            tvToMove.text = getString(R.string.draw)
+            initReadySwitch(swReady, false)
+        } else {
+            if (winner.isEmpty()) {
+                tvReady.visibility = View.GONE
+                swReady.visibility = View.GONE
+                tvToMove.text = String.format(getString(R.string.to_move), game.playerToMove)
+            } else {
+                tvReady.visibility = View.VISIBLE
+                swReady.visibility = View.VISIBLE
+                game.whiteReady = false
+                game.blackReady = false
+                tvToMove.text = String.format(getString(R.string.wins), winner)
+                initReadySwitch(swReady, false)
+            }
         }
 
         btnSend.visibility = View.GONE
@@ -185,7 +196,7 @@ class GameActivity : AppCompatActivity() {
 
             if (field.fieldState == FieldState.Empty) {
                 tvStone.visibility = View.GONE
-                if (myMove && winner.isEmpty()) {
+                if (myMove && !draw && winner.isEmpty()) {
                     fldview.setOnClickListener { fieldClick(i) }
                 }
             } else {
@@ -198,8 +209,17 @@ class GameActivity : AppCompatActivity() {
         }
 
         if (game.lastMove != -1) {
+            val name = "fld" + Integer.toString(game.lastMove)
+            val id = res.getIdentifier(name, "id", packname)
+            val fldview = findViewById<View>(id)
+            val ivHexagon = fldview.findViewById<(ImageView)>(R.id.ivHexagon)
+            val vector = VectorChildFinder(this, R.drawable.hexagon, ivHexagon)
+            val pathHexagon = vector.findPathByName("path_hexagon")
+            pathHexagon.fillColor = ContextCompat.getColor(mContext, R.color.colorSelected)
+
             // TODO animate move
         }
+
         if (!winner.isEmpty()) {
             for (fldNr in game.winningFields) {
                 val name = "fld" + Integer.toString(fldNr)
@@ -237,6 +257,8 @@ class GameActivity : AppCompatActivity() {
         }
 
         GameHelper.mGame = GameInfo(game.myName, game.myFcmToken, game.hisName, game.hisFcmToken, token)
+        initGameTimer()
+        initTimer()
         showGameData()
     }
 
@@ -257,6 +279,7 @@ class GameActivity : AppCompatActivity() {
         val packname = this.packageName
         val myMove = game.myMove()
         val winner = game.winner
+        val draw = game.testDraw()
 
         for (i in 0..60) {
             val name = "fld" + Integer.toString(i)
@@ -290,7 +313,7 @@ class GameActivity : AppCompatActivity() {
         val pathHexagon = vector.findPathByName("path_hexagon")
         pathHexagon.fillColor = ContextCompat.getColor(mContext, R.color.colorSelected)
 
-        if (myMove && winner.isEmpty()) {
+        if (myMove && !draw && winner.isEmpty()) {
             btnSend.visibility = View.VISIBLE
             FontManager.setIconAndText(btnSend,
                     iconFont,
@@ -304,8 +327,6 @@ class GameActivity : AppCompatActivity() {
             btnSend.visibility = View.GONE
             btnSend.setOnClickListener(null)
         }
-
-        // TODO animate move
     }
 
     private fun sendMove() {
@@ -386,7 +407,7 @@ class GameActivity : AppCompatActivity() {
                     quitMessage()
                 }
             }
-            registerReceiver(mReceiverAbandon, IntentFilter(FcmNames.ResponseType.Abandon.EnumToString()))
+            registerReceiver(mReceiverAbandon, IntentFilter(FcmNames.ResponseType.Abandon.enumToString()))
         }
 
         if (mReceiverPong == null) {
@@ -397,18 +418,19 @@ class GameActivity : AppCompatActivity() {
                     setOnline()
                 }
             }
-            registerReceiver(mReceiverPong, IntentFilter(FcmNames.ResponseType.Pong.EnumToString()))
+            registerReceiver(mReceiverPong, IntentFilter(FcmNames.ResponseType.Pong.enumToString()))
         }
 
         if (mReceiverMove == null) {
             mReceiverMove = object : BroadcastReceiver() {
                 override fun onReceive(context: Context, intent: Intent) {
                     fcmActive()
+                    SoundPlayer.playSound(mContext, "sonar")
                     setOnline()
                     showGameData()
                 }
             }
-            registerReceiver(mReceiverMove, IntentFilter(FcmNames.ResponseType.Move.EnumToString()))
+            registerReceiver(mReceiverMove, IntentFilter(FcmNames.ResponseType.Move.enumToString()))
         }
 
         if (mReceiverReady == null) {
@@ -419,7 +441,7 @@ class GameActivity : AppCompatActivity() {
                     checkNewGame()
                 }
             }
-            registerReceiver(mReceiverReady, IntentFilter(FcmNames.ResponseType.Ready.EnumToString()))
+            registerReceiver(mReceiverReady, IntentFilter(FcmNames.ResponseType.ReadyNewGame.enumToString()))
         }
     }
 

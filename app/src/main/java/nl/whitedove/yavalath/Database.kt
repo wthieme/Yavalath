@@ -4,19 +4,22 @@ import com.google.firebase.firestore.FirebaseFirestore
 import org.joda.time.DateTime
 import java.util.*
 import kotlin.collections.ArrayList
+import org.joda.time.format.ISODateTimeFormat
+
+
 
 internal object Database {
 
     var mPlayers: ArrayList<PlayerInfo> = ArrayList()
-    var mPlayer: PlayerInfo? = null
+    private var mPlayer: PlayerInfo? = null
     var TIMEOUT = 30
 
     internal object Names {
-        val players = "players"
-        val playerName = "playerName"
-        val playerToken = "playerToken"
-        val country = "country"
-        val lastActive = "lastactive"
+        const val players = "players"
+        const val playerName = "playerName"
+        const val playerToken = "playerToken"
+        const val country = "country"
+        const val lastActive = "lastActive"
     }
 
     fun getPlayers(callback: Runnable) {
@@ -31,7 +34,8 @@ internal object Database {
                             val naam = doc[Database.Names.playerName] as String
                             val token = doc[Database.Names.playerToken] as String
                             val country = doc[Database.Names.country] as String
-                            val lastActive = DateTime(doc[Database.Names.lastActive] as Long)
+                            val fmt = ISODateTimeFormat.dateTime()
+                            val lastActive = fmt.parseDateTime(doc[Database.Names.lastActive] as String)
                             players.add(PlayerInfo(naam, token, country, lastActive))
                         }
                         val sorted = players.sortedWith(compareBy({ it.country.toLowerCase() }, {it.name.toLowerCase()}))
@@ -58,12 +62,12 @@ internal object Database {
         doc[Names.playerName] = name
         doc[Names.playerToken] = token
         doc[Names.country] = country
-        doc[Names.lastActive] = DateTime.now().millis
+        doc[Names.lastActive] = DateTime.now().toString()
         db.collection(Database.Names.players).document(token).set(doc)
         mPlayer = PlayerInfo(name, token, country, DateTime.now())
     }
 
-    fun removeInActivePlayers() {
+    private fun removeInActivePlayers() {
         val playersToRemove: ArrayList<PlayerInfo> = ArrayList()
         for (player in mPlayers) {
             if (player.lastActive.isBefore(DateTime.now().minusMinutes(15)))

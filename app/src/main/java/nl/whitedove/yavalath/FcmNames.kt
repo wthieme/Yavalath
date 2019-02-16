@@ -5,26 +5,24 @@ import java.util.*
 
 internal object FcmNames {
 
-    val To = "to"
-    val Sender = "sender"
-    val Type = "type"
-    val UUID = "uuid"
-    val Data = "data"
-    val Priority = "priority"
-    val High = "high"
-    val Environment = "environment"
-    val AppVersion = "appVersion"
-    val Error = "error"
-    val Name = "name"
-    val FcmToken = "fcmToken"
-    val FieldNr = "fieldNr"
-    val Ready = "ready"
+    const val To = "to"
+    const val Sender = "sender"
+    const val Type = "type"
+    const val UUID = "uuid"
+    const val Data = "data"
+    const val Priority = "priority"
+    const val High = "high"
+    const val Error = "error"
+    const val Name = "name"
+    const val FcmToken = "fcmToken"
+    const val FieldNr = "fieldNr"
+    const val Ready = "ready"
 
-    internal enum class ResponseType private constructor(private val value: String) {
-        Ping("ping"), Pong("pong"), Ok("OK"), Nok("notOK"),
-        Invite("invite"), Abandon("abandon"), Move("move"), Ready("ready");
+    internal enum class ResponseType(private val value: String) {
+        Ping("ping"), Pong("pong"), InviteOk("inviteOk"), InviteNOk("inviteNOk"),
+        Invite("invite"), Abandon("abandon"), Move("move"), ReadyNewGame("readyNewGame");
 
-        fun EnumToString(): String {
+        fun enumToString(): String {
             return value
         }
 
@@ -39,7 +37,7 @@ internal object FcmNames {
                 }
             }
 
-            fun StringToEnum(responseType: String): ResponseType? {
+            fun stringToEnum(responseType: String): ResponseType? {
                 return map[responseType]
             }
         }
