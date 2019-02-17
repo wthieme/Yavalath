@@ -2,47 +2,38 @@ package nl.whitedove.yavalath
 
 import org.joda.time.DateTime
 
-class GameInfo(myName: String, myFcmToken: String, hisName: String, hisToken: String, playesWhite: String) {
-    var created: DateTime
-    var fields: ArrayList<Field>
-    var myName: String
-    var hisName: String
-    var myFcmToken: String
-    var hisFcmToken: String
-    var playesWhite: String
+class GameInfo(var myName: String, var myFcmToken: String, var hisName: String, hisToken: String, var playesWhite: String) {
+    var created: DateTime = DateTime.now()
+    var fields: ArrayList<Field> = ArrayList()
+    var hisFcmToken: String = hisToken
     var playerWhite: String
     var playerBlack: String
     var playerToMove: String
-    var winningFields: List<Int> = listOf(0)
+    var winningFields: ArrayList<Int> = ArrayList()
     var winner: String
     var lastMove: Int
     var whiteReady: Boolean
     var blackReady: Boolean
+    var gameState: GameState
 
     init {
-        this.created = DateTime.now()
-        this.fields = ArrayList()
-        this.myName = myName
-        this.myFcmToken = myFcmToken
-        this.hisName = hisName
-        this.hisFcmToken = hisToken
-        this.playesWhite = playesWhite
         for (i in 0..60) {
             this.fields.add(Field(i))
         }
-        if (playesWhite == myFcmToken) {
-            this.playerWhite = myName
-            this.playerBlack = hisName
-            this.playerToMove = myName
+        if (this.playesWhite == this.myFcmToken) {
+            this.playerWhite = this.myName
+            this.playerBlack = this.hisName
+            this.playerToMove = this.myName
         } else {
-            this.playerWhite = hisName
-            this.playerBlack = myName
-            this.playerToMove = hisName
+            this.playerWhite = this.hisName
+            this.playerBlack = this.myName
+            this.playerToMove = this.hisName
         }
         this.winner = ""
         this.lastMove = -1
         this.whiteReady = true
         this.blackReady = true
+        this.gameState = GameState.Running
     }
 
     private fun get3(): List<List<Int>> {
@@ -132,7 +123,7 @@ class GameInfo(myName: String, myFcmToken: String, hisName: String, hisToken: St
             this.playerToMove = this.playerWhite
         }
 
-        this.winningFields = testWinner()
+        this.gameState = testGameEnd()
 
         if (this.winningFields.size == 3) {
             if (playedByToken == this.playesWhite) {
@@ -151,43 +142,90 @@ class GameInfo(myName: String, myFcmToken: String, hisName: String, hisToken: St
         }
     }
 
-    fun testDraw(): Boolean {
+    private fun testGameEnd(): GameState {
+        val gameState = GameState.Running
+
+        var boardFull = true
         for (field in this.fields) {
             if (field.fieldState == FieldState.Empty) {
-                return false
+                boardFull = false
+                break
             }
         }
-        return true
-    }
 
-    private fun testWinner(): List<Int> {
+        var whiteWins = false
+        var blackWins = false
+
+        var row4 = false
         for (g4 in get4()) {
             if (this.fields[g4[0]].fieldState == FieldState.White &&
                     this.fields[g4[1]].fieldState == FieldState.White &&
                     this.fields[g4[2]].fieldState == FieldState.White &&
-                    this.fields[g4[3]].fieldState == FieldState.White)
-                return listOf(g4[0], g4[1], g4[2], g4[3])
+                    this.fields[g4[3]].fieldState == FieldState.White) {
+                winningFields.addAll(listOf(g4[0], g4[1], g4[2], g4[3]))
+                whiteWins = true
+                row4 = true
+                break
+            }
 
             if (this.fields[g4[0]].fieldState == FieldState.Black &&
                     this.fields[g4[1]].fieldState == FieldState.Black &&
                     this.fields[g4[2]].fieldState == FieldState.Black &&
-                    this.fields[g4[3]].fieldState == FieldState.Black)
-                return listOf(g4[0], g4[1], g4[2], g4[3])
+                    this.fields[g4[3]].fieldState == FieldState.Black) {
+                winningFields.addAll(listOf(g4[0], g4[1], g4[2], g4[3]))
+                blackWins = true
+                row4 = true
+                break
+            }
         }
-
+        var row3 = false
         for (g3 in get3()) {
             if (this.fields[g3[0]].fieldState == FieldState.Black &&
                     this.fields[g3[1]].fieldState == FieldState.Black &&
-                    this.fields[g3[2]].fieldState == FieldState.Black)
-                return listOf(g3[0], g3[1], g3[2])
+                    this.fields[g3[2]].fieldState == FieldState.Black &&
+                    bevatAantal(this.winningFields, listOf(g3[0], g3[1], g3[2])) <= 1) {
+                winningFields.addAll(listOf(g3[0], g3[1], g3[2]))
+                whiteWins = true
+                row3 = true
+                break
+            }
 
             if (this.fields[g3[0]].fieldState == FieldState.White &&
                     this.fields[g3[1]].fieldState == FieldState.White &&
-                    this.fields[g3[2]].fieldState == FieldState.White)
-                return listOf(g3[0], g3[1], g3[2])
+                    this.fields[g3[2]].fieldState == FieldState.White &&
+                    bevatAantal(this.winningFields, listOf(g3[0], g3[1], g3[2])) <= 1) {
+                winningFields.addAll(listOf(g3[0], g3[1], g3[2]))
+                blackWins = true
+                row3 = true
+                break
+            }
         }
 
+        if (row3 && row4) {
+            return GameState.DrawBy3And4
+        }
 
-        return listOf(0)
+        if (row4 || row3) {
+            if (whiteWins) {
+                return GameState.WhiteWins
+            }
+            if (blackWins) {
+                return GameState.BlackWins
+            }
+        }
+
+        if (boardFull) {
+            return GameState.DrawBoardFull
+        }
+        return gameState
+    }
+
+    private fun bevatAantal(winningFields: List<Int>, testFields: List<Int>): Int {
+        var aantal = 0;
+        for (testField in testFields) {
+            if (winningFields.contains(testField))
+                aantal++
+        }
+        return aantal
     }
 }

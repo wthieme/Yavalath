@@ -43,13 +43,13 @@ class FcmReceiver : FirebaseMessagingService() {
 
         if (rt === FcmNames.ResponseType.InviteNOk) {
             val err = data[FcmNames.Error] as String
-            receiveNok(err)
+            receiveInviteNOk(err)
             return
         }
 
         if (rt === FcmNames.ResponseType.InviteOk) {
             val guid = data[FcmNames.UUID] as String
-            receiveOk(guid)
+            receiveInviteOk(guid)
             return
         }
 
@@ -70,7 +70,7 @@ class FcmReceiver : FirebaseMessagingService() {
             val ready = data[FcmNames.Ready] as String
             val isReady = ready == "Y"
             val fromToken = data[FcmNames.Sender] as String
-            receiveReady(isReady, fromToken)
+            receiveReadynewGame(isReady, fromToken)
             return
         }
     }
@@ -100,13 +100,13 @@ class FcmReceiver : FirebaseMessagingService() {
         sendBroadcast(intent)
     }
 
-    private fun receiveNok(error: String) {
+    private fun receiveInviteNOk(error: String) {
         val intent = Intent(FcmNames.ResponseType.InviteNOk.enumToString())
         intent.putExtra(FcmNames.Error, error)
         sendBroadcast(intent)
     }
 
-    private fun receiveOk(guid: String) {
+    private fun receiveInviteOk(guid: String) {
         val intent = Intent(FcmNames.ResponseType.InviteOk.enumToString())
         intent.putExtra(FcmNames.UUID, guid)
         sendBroadcast(intent)
@@ -124,7 +124,7 @@ class FcmReceiver : FirebaseMessagingService() {
         sendBroadcast(intent)
     }
 
-    private fun receiveReady(ready: Boolean, fromToken: String) {
+    private fun receiveReadynewGame(ready: Boolean, fromToken: String) {
         val game = GameHelper.mGame!!
         game.ready(ready, fromToken)
         val intent = Intent(FcmNames.ResponseType.ReadyNewGame.enumToString())

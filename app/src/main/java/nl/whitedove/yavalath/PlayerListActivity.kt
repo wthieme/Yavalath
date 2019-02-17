@@ -72,6 +72,7 @@ class PlayerListActivity : AppCompatActivity() {
         intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
         this.startActivity(intent)
         this.overridePendingTransition(R.anim.slide_enter, R.anim.slide_exit)
+        Database.deletePlayer(FcmSender.mMyFcmToken)
         this.finish()
     }
 
@@ -299,7 +300,7 @@ class PlayerListActivity : AppCompatActivity() {
 
         override fun doInBackground(vararg params: Void): Void? {
             val guid = mGuid
-            FcmSender.sendOk(guid, FcmSender.mHisFcmToken)
+            FcmSender.sendInviteOk(guid, FcmSender.mHisFcmToken)
             return null
         }
     }
@@ -313,7 +314,7 @@ class PlayerListActivity : AppCompatActivity() {
         override fun doInBackground(vararg params: String): Void? {
             val result = params[0]
             val guid = mGuid
-            FcmSender.sendNok(guid, result, FcmSender.mHisFcmToken)
+            FcmSender.sendInviteNok(guid, result, FcmSender.mHisFcmToken)
             return null
         }
     }

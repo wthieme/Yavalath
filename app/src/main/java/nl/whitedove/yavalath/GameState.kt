@@ -4,7 +4,7 @@ import android.annotation.SuppressLint
 import java.util.HashMap
 
 enum class GameState(val value: Int) {
-    Unknown(1), Lobby(2), InPropress(3), Finished(4);
+   Running(1), WhiteWins(2), BlackWins(3), DrawBoardFull(4), DrawBy3And4 (5);
 
     companion object {
         @SuppressLint("UseSparseArrays")
@@ -17,7 +17,7 @@ enum class GameState(val value: Int) {
         }
 
         fun valueOf(state: Int): GameState {
-            return map[state] ?: Unknown
+            return map[state]!!
         }
     }
 }

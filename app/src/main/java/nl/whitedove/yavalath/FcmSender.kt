@@ -70,7 +70,7 @@ internal object FcmSender {
         FcmSender.sendMessage(FcmNames.ResponseType.Invite, data, toToken)
     }
 
-    fun sendOk(guid: String, ToToken: String) {
+    fun sendInviteOk(guid: String, ToToken: String) {
         val data = HashMap<String, String>()
         data[FcmNames.UUID] = guid
         FcmSender.sendMessage(FcmNames.ResponseType.InviteOk, data, ToToken)
@@ -82,7 +82,7 @@ internal object FcmSender {
         FcmSender.sendMessage(FcmNames.ResponseType.Pong, data, toToken)
     }
 
-    fun sendNok(guid: String, result: String, toToken: String) {
+    fun sendInviteNok(guid: String, result: String, toToken: String) {
         val data = HashMap<String, String>()
         data[FcmNames.UUID] = guid
         data[FcmNames.Error] = result
@@ -95,7 +95,7 @@ internal object FcmSender {
         FcmSender.sendMessage(FcmNames.ResponseType.Move, data, toToken)
     }
 
-    fun sendReady(ready: String, toToken: String) {
+    fun sendReadyNewGame(ready: String, toToken: String) {
         val data = HashMap<String, String>()
         data[FcmNames.Ready] = ready
         FcmSender.sendMessage(FcmNames.ResponseType.ReadyNewGame, data, toToken)

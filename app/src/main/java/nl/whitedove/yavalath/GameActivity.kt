@@ -70,6 +70,10 @@ class GameActivity : AppCompatActivity() {
         showGameData()
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        unregBroadcastReceivers()
+    }
     public override fun onPause() {
         super.onPause()
         mHandler = null
@@ -80,6 +84,17 @@ class GameActivity : AppCompatActivity() {
         super.onResume()
         initTimer()
         initGameTimer()
+    }
+
+    private fun unregBroadcastReceivers() {
+        Helper.unRegisterReceiver(mContext, mReceiverAbandon)
+        Helper.unRegisterReceiver(mContext, mReceiverPong)
+        Helper.unRegisterReceiver(mContext, mReceiverMove)
+        Helper.unRegisterReceiver(mContext, mReceiverReady)
+        mReceiverAbandon = null
+        mReceiverPong = null
+        mReceiverMove = null
+        mReceiverReady = null
     }
 
     override fun onBackPressed() {
@@ -97,7 +112,7 @@ class GameActivity : AppCompatActivity() {
         timer!!.schedule(object : TimerTask() {
             override fun run() {
                 val game = GameHelper.mGame!!
-                if (game.winner.isEmpty() && !game.testDraw())
+                if (game.gameState == GameState.Running)
                     updateGUI()
                 else
                     this.cancel()
@@ -143,8 +158,6 @@ class GameActivity : AppCompatActivity() {
         val iconFont = FontManager.GetTypeface(this, FontManager.FONTAWESOME_SOLID)
         val movesPlayed = game.movesPlayed()
         val myMove = game.myMove()
-        val winner = game.winner
-        val draw = game.testDraw()
 
         tvPlayerWhite.text = game.playerWhite
         tvPlayerBlack.text = game.playerBlack
@@ -154,26 +167,27 @@ class GameActivity : AppCompatActivity() {
         else
             tvNrMoves.text = movesPlayed.toString()
 
-        if (draw) {
+        if (game.gameState == GameState.DrawBoardFull || game.gameState == GameState.DrawBy3And4) {
             tvReady.visibility = View.VISIBLE
             swReady.visibility = View.VISIBLE
             game.whiteReady = false
             game.blackReady = false
             tvToMove.text = getString(R.string.draw)
             initReadySwitch(swReady, false)
-        } else {
-            if (winner.isEmpty()) {
-                tvReady.visibility = View.GONE
-                swReady.visibility = View.GONE
-                tvToMove.text = String.format(getString(R.string.to_move), game.playerToMove)
-            } else {
-                tvReady.visibility = View.VISIBLE
-                swReady.visibility = View.VISIBLE
-                game.whiteReady = false
-                game.blackReady = false
-                tvToMove.text = String.format(getString(R.string.wins), winner)
-                initReadySwitch(swReady, false)
-            }
+        }
+        if (game.gameState == GameState.Running) {
+            tvReady.visibility = View.GONE
+            swReady.visibility = View.GONE
+            tvToMove.text = String.format(getString(R.string.to_move), game.playerToMove)
+        }
+
+        if (game.gameState == GameState.WhiteWins || game.gameState == GameState.BlackWins) {
+            tvReady.visibility = View.VISIBLE
+            swReady.visibility = View.VISIBLE
+            game.whiteReady = false
+            game.blackReady = false
+            tvToMove.text = String.format(getString(R.string.wins), game.winner)
+            initReadySwitch(swReady, false)
         }
 
         btnSend.visibility = View.GONE
@@ -196,7 +210,7 @@ class GameActivity : AppCompatActivity() {
 
             if (field.fieldState == FieldState.Empty) {
                 tvStone.visibility = View.GONE
-                if (myMove && !draw && winner.isEmpty()) {
+                if (myMove && game.gameState == GameState.Running) {
                     fldview.setOnClickListener { fieldClick(i) }
                 }
             } else {
@@ -220,7 +234,7 @@ class GameActivity : AppCompatActivity() {
             // TODO animate move
         }
 
-        if (!winner.isEmpty()) {
+        if (game.gameState == GameState.WhiteWins || game.gameState == GameState.BlackWins) {
             for (fldNr in game.winningFields) {
                 val name = "fld" + Integer.toString(fldNr)
                 val id = res.getIdentifier(name, "id", packname)
@@ -229,6 +243,23 @@ class GameActivity : AppCompatActivity() {
                 val vector = VectorChildFinder(this, R.drawable.hexagon, ivHexagon)
                 val pathHexagon = vector.findPathByName("path_hexagon")
                 if (game.winningFields.size == 3) {
+                    pathHexagon.fillColor = ContextCompat.getColor(mContext, R.color.colorLightRed)
+                } else {
+                    pathHexagon.fillColor = ContextCompat.getColor(mContext, R.color.colorLightGreen)
+                }
+            }
+        }
+        if (game.gameState == GameState.DrawBy3And4) {
+            var nr = 0
+            for (fldNr in game.winningFields) {
+                nr++
+                val name = "fld" + Integer.toString(fldNr)
+                val id = res.getIdentifier(name, "id", packname)
+                val fldview = findViewById<View>(id)
+                val ivHexagon = fldview.findViewById<(ImageView)>(R.id.ivHexagon)
+                val vector = VectorChildFinder(this, R.drawable.hexagon, ivHexagon)
+                val pathHexagon = vector.findPathByName("path_hexagon")
+                if (nr > 4) {
                     pathHexagon.fillColor = ContextCompat.getColor(mContext, R.color.colorLightRed)
                 } else {
                     pathHexagon.fillColor = ContextCompat.getColor(mContext, R.color.colorLightGreen)
@@ -249,11 +280,10 @@ class GameActivity : AppCompatActivity() {
             return
         }
 
-        val token: String
-        if (game.playesWhite == game.myFcmToken) {
-            token = game.hisFcmToken
+        val token = if (game.playesWhite == game.myFcmToken) {
+            game.hisFcmToken
         } else {
-            token = game.myFcmToken
+            game.myFcmToken
         }
 
         GameHelper.mGame = GameInfo(game.myName, game.myFcmToken, game.hisName, game.hisFcmToken, token)
@@ -268,7 +298,7 @@ class GameActivity : AppCompatActivity() {
         if (isReady) {
             checkNewGame()
         }
-        StartReadyInBackground(isReady)
+        startReadyInBackground(isReady)
     }
 
     private fun fieldClick(fieldNr: Int) {
@@ -278,8 +308,6 @@ class GameActivity : AppCompatActivity() {
         val res = this.resources
         val packname = this.packageName
         val myMove = game.myMove()
-        val winner = game.winner
-        val draw = game.testDraw()
 
         for (i in 0..60) {
             val name = "fld" + Integer.toString(i)
@@ -313,7 +341,7 @@ class GameActivity : AppCompatActivity() {
         val pathHexagon = vector.findPathByName("path_hexagon")
         pathHexagon.fillColor = ContextCompat.getColor(mContext, R.color.colorSelected)
 
-        if (myMove && !draw && winner.isEmpty()) {
+        if (myMove && game.gameState==GameState.Running) {
             btnSend.visibility = View.VISIBLE
             FontManager.setIconAndText(btnSend,
                     iconFont,
@@ -465,7 +493,7 @@ class GameActivity : AppCompatActivity() {
         }
     }
 
-    private fun StartReadyInBackground(isReady: Boolean) {
+    private fun startReadyInBackground(isReady: Boolean) {
         fcmActive()
         AsyncReadyInBackgroundTask().execute(isReady)
     }
@@ -475,7 +503,7 @@ class GameActivity : AppCompatActivity() {
         override fun doInBackground(vararg params: Boolean?): Void? {
             val isReady = params[0]!!
             val ready = if (isReady) "Y" else "N"
-            FcmSender.sendReady(ready, FcmSender.mHisFcmToken)
+            FcmSender.sendReadyNewGame(ready, FcmSender.mHisFcmToken)
             return null
         }
     }
