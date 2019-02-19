@@ -74,6 +74,7 @@ class GameActivity : AppCompatActivity() {
         super.onDestroy()
         unregBroadcastReceivers()
     }
+
     public override fun onPause() {
         super.onPause()
         mHandler = null
@@ -159,15 +160,15 @@ class GameActivity : AppCompatActivity() {
         val movesPlayed = game.movesPlayed()
         val myMove = game.myMove()
 
-        tvPlayerWhite.text = game.playerWhite
-        tvPlayerBlack.text = game.playerBlack
+        tvPlayerWhite.text = String.format(getString(R.string.PlayerWhite), game.playerWhite, GameHelper.mPointsWhite.toString())
+        tvPlayerBlack.text = String.format(getString(R.string.PlayerBlack), game.playerBlack, GameHelper.mPointsBlack.toString())
 
         if (movesPlayed == 0)
             tvNrMoves.text = ""
         else
             tvNrMoves.text = movesPlayed.toString()
 
-        if (game.gameState == GameState.DrawBoardFull || game.gameState == GameState.DrawBy3And4) {
+        if (game.gameState == GameState.DrawBoardFull || game.gameState == GameState.DrawByWinAndLose) {
             tvReady.visibility = View.VISIBLE
             swReady.visibility = View.VISIBLE
             game.whiteReady = false
@@ -230,40 +231,41 @@ class GameActivity : AppCompatActivity() {
             val vector = VectorChildFinder(this, R.drawable.hexagon, ivHexagon)
             val pathHexagon = vector.findPathByName("path_hexagon")
             pathHexagon.fillColor = ContextCompat.getColor(mContext, R.color.colorSelected)
-
-            // TODO animate move
         }
 
-        if (game.gameState == GameState.WhiteWins || game.gameState == GameState.BlackWins) {
-            for (fldNr in game.winningFields) {
+        for (winningRows in game.winningFields5) {
+            for (fldNr in winningRows) {
                 val name = "fld" + Integer.toString(fldNr)
                 val id = res.getIdentifier(name, "id", packname)
                 val fldview = findViewById<View>(id)
                 val ivHexagon = fldview.findViewById<(ImageView)>(R.id.ivHexagon)
                 val vector = VectorChildFinder(this, R.drawable.hexagon, ivHexagon)
                 val pathHexagon = vector.findPathByName("path_hexagon")
-                if (game.winningFields.size == 3) {
-                    pathHexagon.fillColor = ContextCompat.getColor(mContext, R.color.colorLightRed)
-                } else {
-                    pathHexagon.fillColor = ContextCompat.getColor(mContext, R.color.colorLightGreen)
-                }
+                pathHexagon.fillColor = ContextCompat.getColor(mContext, R.color.colorLightGreen)
             }
         }
-        if (game.gameState == GameState.DrawBy3And4) {
-            var nr = 0
-            for (fldNr in game.winningFields) {
-                nr++
+
+        for (winningRows in game.winningFields4) {
+            for (fldNr in winningRows) {
                 val name = "fld" + Integer.toString(fldNr)
                 val id = res.getIdentifier(name, "id", packname)
                 val fldview = findViewById<View>(id)
                 val ivHexagon = fldview.findViewById<(ImageView)>(R.id.ivHexagon)
                 val vector = VectorChildFinder(this, R.drawable.hexagon, ivHexagon)
                 val pathHexagon = vector.findPathByName("path_hexagon")
-                if (nr > 4) {
-                    pathHexagon.fillColor = ContextCompat.getColor(mContext, R.color.colorLightRed)
-                } else {
-                    pathHexagon.fillColor = ContextCompat.getColor(mContext, R.color.colorLightGreen)
-                }
+                pathHexagon.fillColor = ContextCompat.getColor(mContext, R.color.colorLightGreen)
+            }
+        }
+
+        for (winningRows in game.winningFields3) {
+            for (fldNr in winningRows) {
+                val name = "fld" + Integer.toString(fldNr)
+                val id = res.getIdentifier(name, "id", packname)
+                val fldview = findViewById<View>(id)
+                val ivHexagon = fldview.findViewById<(ImageView)>(R.id.ivHexagon)
+                val vector = VectorChildFinder(this, R.drawable.hexagon, ivHexagon)
+                val pathHexagon = vector.findPathByName("path_hexagon")
+                pathHexagon.fillColor = ContextCompat.getColor(mContext, R.color.colorLightRed)
             }
         }
     }
@@ -287,6 +289,10 @@ class GameActivity : AppCompatActivity() {
         }
 
         GameHelper.mGame = GameInfo(game.myName, game.myFcmToken, game.hisName, game.hisFcmToken, token)
+        val pointsWhite = GameHelper.mPointsWhite
+        val pointsBlack = GameHelper.mPointsBlack
+        GameHelper.mPointsWhite = pointsBlack
+        GameHelper.mPointsBlack = pointsWhite
         initGameTimer()
         initTimer()
         showGameData()
@@ -341,7 +347,7 @@ class GameActivity : AppCompatActivity() {
         val pathHexagon = vector.findPathByName("path_hexagon")
         pathHexagon.fillColor = ContextCompat.getColor(mContext, R.color.colorSelected)
 
-        if (myMove && game.gameState==GameState.Running) {
+        if (myMove && game.gameState == GameState.Running) {
             btnSend.visibility = View.VISIBLE
             FontManager.setIconAndText(btnSend,
                     iconFont,

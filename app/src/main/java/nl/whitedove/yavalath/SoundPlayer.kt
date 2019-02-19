@@ -8,9 +8,11 @@ object SoundPlayer {
     private var mPlayer: MediaPlayer? = null
 
     internal fun playSound(context: Context, name: String) {
-        if (mPlayer != null && mPlayer!!.isPlaying) mPlayer!!.stop()
         val id = context.resources.getIdentifier(name, "raw", context.packageName)
-        mPlayer = MediaPlayer.create(context, id)
+        if (mPlayer == null) {
+            mPlayer = MediaPlayer.create(context, id)
+        }
+        if (mPlayer!!.isPlaying) mPlayer!!.stop()
         mPlayer!!.start()
     }
 }

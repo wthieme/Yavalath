@@ -40,10 +40,10 @@
     <string name="InviteText">Do you accept the invitation from %s to play a game of Yavalath?</string>
     <string name="invite_not_accepted">%s declined your invitation</string>
     <string name="cant_play_self">You can\'t play Yavalath with yourself</string>
-    <string name="PlayerWhite">Player white</string>
+    <string name="PlayerWhite">%s - %s</string>
     <string name="White">White</string>
     <string name="Black">Black</string>
-    <string name="PlayerBlack">Player black</string>
+    <string name="PlayerBlack">%s - %s</string>
     <string name="vs">vs</string>
     <string name="to_move">%s to move</string>
     <string name="cant_play_same_name">You can\'t play against a player with the same name as you</string>

@@ -9,7 +9,9 @@ class GameInfo(var myName: String, var myFcmToken: String, var hisName: String, 
     var playerWhite: String
     var playerBlack: String
     var playerToMove: String
-    var winningFields: ArrayList<Int> = ArrayList()
+    var winningFields3: ArrayList<List<Int>> = ArrayList()
+    var winningFields4: ArrayList<List<Int>> = ArrayList()
+    var winningFields5: ArrayList<List<Int>> = ArrayList()
     var winner: String
     var lastMove: Int
     var whiteReady: Boolean
@@ -90,6 +92,30 @@ class GameInfo(var myName: String, var myFcmToken: String, var hisName: String, 
         )
     }
 
+    private fun get5(): List<List<Int>> {
+        return listOf(
+                listOf(0, 1, 2, 3, 4),
+                listOf(5, 6, 7, 8, 9), listOf(6, 7, 8, 9, 10),
+                listOf(11, 12, 13, 14, 15), listOf(12, 13, 14, 15, 16), listOf(13, 14, 15, 16, 17),
+                listOf(18, 19, 20, 21, 22), listOf(19, 20, 21, 22, 23), listOf(20, 21, 22, 23, 24), listOf(21, 22, 23, 24, 25),
+                listOf(26, 27, 28, 29, 30), listOf(27, 28, 29, 30, 31), listOf(28, 29, 30, 31, 32), listOf(29, 30, 31, 32, 33), listOf(30, 31, 32, 33, 34),
+                listOf(35, 36, 37, 38, 39), listOf(36, 37, 38, 39, 40), listOf(37, 38, 39, 40, 41), listOf(38, 39, 40, 41, 42),
+                listOf(43, 44, 45, 46, 47), listOf(44, 45, 46, 47, 48), listOf(45, 46, 47, 48, 49),
+                listOf(50, 51, 52, 53, 54), listOf(51, 52, 53, 54, 55),
+                listOf(56, 57, 58, 59, 60),
+                listOf(0, 6, 13, 21, 30), listOf(1, 7, 14, 22, 31), listOf(2, 8, 15, 23, 32), listOf(3, 9, 16, 24, 33), listOf(4, 10, 17, 25, 34),
+                listOf(5, 12, 20, 29, 38), listOf(6, 13, 21, 30, 39), listOf(7, 14, 22, 31, 40), listOf(8, 15, 23, 32, 41), listOf(9, 16, 24, 33, 42),
+                listOf(11, 19, 28, 37, 45), listOf(12, 20, 29, 38, 46), listOf(13, 21, 30, 39, 47), listOf(14, 22, 31, 40, 48), listOf(15, 23, 32, 41, 49),
+                listOf(18, 27, 36, 44, 51), listOf(19, 28, 37, 45, 52), listOf(20, 29, 38, 46, 53), listOf(21, 30, 39, 47, 54), listOf(22, 31, 40, 48, 55),
+                listOf(26, 35, 43, 50, 56), listOf(27, 36, 44, 51, 57), listOf(28, 37, 45, 52, 58), listOf(29, 38, 46, 53, 59), listOf(30, 39, 47, 54, 60),
+                listOf(0, 5, 11, 18, 26), listOf(1, 6, 12, 19, 27), listOf(2, 7, 13, 20, 28), listOf(3, 8, 14, 21, 29), listOf(4, 9, 15, 22, 30),
+                listOf(6, 12, 19, 27, 35), listOf(7, 13, 20, 28, 36), listOf(8, 14, 21, 29, 37), listOf(9, 15, 22, 30, 38), listOf(10, 16, 23, 31, 39),
+                listOf(13, 20, 28, 36, 43), listOf(14, 21, 29, 37, 44), listOf(15, 22, 30, 38, 45), listOf(16, 23, 31, 39, 46), listOf(17, 24, 32, 40, 47),
+                listOf(21, 29, 37, 44, 50), listOf(22, 30, 38, 45, 51), listOf(23, 31, 39, 46, 52), listOf(24, 32, 40, 47, 53), listOf(25, 33, 41, 48, 54),
+                listOf(30, 38, 45, 51, 56), listOf(31, 39, 46, 52, 57), listOf(32, 40, 47, 53, 58), listOf(33, 41, 48, 54, 59), listOf(34, 42, 49, 55, 60)
+        )
+    }
+
     fun movesPlayed(): Int {
         var nr = 0
         for (f in fields) {
@@ -125,20 +151,31 @@ class GameInfo(var myName: String, var myFcmToken: String, var hisName: String, 
 
         this.gameState = testGameEnd()
 
-        if (this.winningFields.size == 3) {
-            if (playedByToken == this.playesWhite) {
-                this.winner = this.playerBlack
+        if (this.gameState == GameState.BlackWins) {
+            this.winner = this.playerBlack
+            if (this.winningFields3.size > (this.winningFields4.size + this.winningFields5.size)) {
+                GameHelper.mPointsBlack += this.winningFields3.size
+                GameHelper.mPointsWhite += this.winningFields4.size + this.winningFields5.size
             } else {
-                this.winner = this.playerWhite
+                GameHelper.mPointsWhite += this.winningFields3.size
+                GameHelper.mPointsBlack += this.winningFields4.size + this.winningFields5.size
             }
         }
 
-        if (winningFields.size == 4) {
-            if (playedByToken == this.playesWhite) {
-                this.winner = this.playerWhite
+        if (this.gameState == GameState.WhiteWins) {
+            this.winner = this.playerWhite
+            if (this.winningFields3.size > (this.winningFields4.size + this.winningFields5.size)) {
+                GameHelper.mPointsWhite += this.winningFields3.size
+                GameHelper.mPointsBlack += this.winningFields4.size + this.winningFields5.size
             } else {
-                this.winner = this.playerBlack
+                GameHelper.mPointsBlack += this.winningFields3.size
+                GameHelper.mPointsWhite += this.winningFields4.size + this.winningFields5.size
             }
+        }
+
+        if (this.gameState == GameState.DrawBoardFull || this.gameState == GameState.DrawByWinAndLose) {
+            GameHelper.mPointsWhite++
+            GameHelper.mPointsBlack++
         }
     }
 
@@ -153,65 +190,82 @@ class GameInfo(var myName: String, var myFcmToken: String, var hisName: String, 
             }
         }
 
-        var whiteWins = false
-        var blackWins = false
+        for (g5 in get5()) {
+            if (this.fields[g5[0]].fieldState == FieldState.White &&
+                    this.fields[g5[1]].fieldState == FieldState.White &&
+                    this.fields[g5[2]].fieldState == FieldState.White &&
+                    this.fields[g5[3]].fieldState == FieldState.White &&
+                    this.fields[g5[4]].fieldState == FieldState.White) {
+                this.winningFields5.add(listOf(g5[0], g5[1], g5[2], g5[3], g5[4]))
+            }
 
-        var row4 = false
+            if (this.fields[g5[0]].fieldState == FieldState.Black &&
+                    this.fields[g5[1]].fieldState == FieldState.Black &&
+                    this.fields[g5[2]].fieldState == FieldState.Black &&
+                    this.fields[g5[3]].fieldState == FieldState.Black &&
+                    this.fields[g5[4]].fieldState == FieldState.Black) {
+                this.winningFields5.add(listOf(g5[0], g5[1], g5[2], g5[3], g5[4]))
+            }
+        }
+
         for (g4 in get4()) {
             if (this.fields[g4[0]].fieldState == FieldState.White &&
                     this.fields[g4[1]].fieldState == FieldState.White &&
                     this.fields[g4[2]].fieldState == FieldState.White &&
-                    this.fields[g4[3]].fieldState == FieldState.White) {
-                winningFields.addAll(listOf(g4[0], g4[1], g4[2], g4[3]))
-                whiteWins = true
-                row4 = true
-                break
+                    this.fields[g4[3]].fieldState == FieldState.White &&
+                    this.isOwnRow(this.winningFields5, listOf(g4[0], g4[1], g4[2], g4[3]))) {
+                this.winningFields4.add(listOf(g4[0], g4[1], g4[2], g4[3]))
             }
 
             if (this.fields[g4[0]].fieldState == FieldState.Black &&
                     this.fields[g4[1]].fieldState == FieldState.Black &&
                     this.fields[g4[2]].fieldState == FieldState.Black &&
-                    this.fields[g4[3]].fieldState == FieldState.Black) {
-                winningFields.addAll(listOf(g4[0], g4[1], g4[2], g4[3]))
-                blackWins = true
-                row4 = true
-                break
+                    this.fields[g4[3]].fieldState == FieldState.Black &&
+                    this.isOwnRow(this.winningFields5, listOf(g4[0], g4[1], g4[2], g4[3]))) {
+                this.winningFields4.add(listOf(g4[0], g4[1], g4[2], g4[3]))
             }
         }
-        var row3 = false
+
         for (g3 in get3()) {
             if (this.fields[g3[0]].fieldState == FieldState.Black &&
                     this.fields[g3[1]].fieldState == FieldState.Black &&
                     this.fields[g3[2]].fieldState == FieldState.Black &&
-                    bevatAantal(this.winningFields, listOf(g3[0], g3[1], g3[2])) <= 1) {
-                winningFields.addAll(listOf(g3[0], g3[1], g3[2]))
-                whiteWins = true
-                row3 = true
-                break
+                    this.isOwnRow(this.winningFields5, listOf(g3[0], g3[1], g3[2])) &&
+                    this.isOwnRow(this.winningFields4, listOf(g3[0], g3[1], g3[2]))) {
+                this.winningFields3.add(listOf(g3[0], g3[1], g3[2]))
             }
 
             if (this.fields[g3[0]].fieldState == FieldState.White &&
                     this.fields[g3[1]].fieldState == FieldState.White &&
                     this.fields[g3[2]].fieldState == FieldState.White &&
-                    bevatAantal(this.winningFields, listOf(g3[0], g3[1], g3[2])) <= 1) {
-                winningFields.addAll(listOf(g3[0], g3[1], g3[2]))
-                blackWins = true
-                row3 = true
-                break
+                    this.isOwnRow(this.winningFields5, listOf(g3[0], g3[1], g3[2])) &&
+                    this.isOwnRow(this.winningFields4, listOf(g3[0], g3[1], g3[2]))) {
+                this.winningFields3.add(listOf(g3[0], g3[1], g3[2]))
             }
         }
 
-        if (row3 && row4) {
-            return GameState.DrawBy3And4
+        if (this.winningFields3.size > 0 && (this.winningFields3.size == winningFields4.size + this.winningFields5.size)) {
+            return GameState.DrawByWinAndLose
         }
 
-        if (row4 || row3) {
-            if (whiteWins) {
-                return GameState.WhiteWins
-            }
-            if (blackWins) {
-                return GameState.BlackWins
-            }
+        if (this.fields[lastMove].fieldState == FieldState.White &&
+                this.winningFields3.size > (this.winningFields4.size + this.winningFields5.size)) {
+            return GameState.BlackWins
+        }
+
+        if (this.fields[lastMove].fieldState == FieldState.Black &&
+                this.winningFields3.size > (this.winningFields4.size + this.winningFields5.size)) {
+            return GameState.WhiteWins
+        }
+
+        if (this.fields[lastMove].fieldState == FieldState.White &&
+                (this.winningFields4.size + this.winningFields5.size) > this.winningFields3.size) {
+            return GameState.WhiteWins
+        }
+
+        if (this.fields[lastMove].fieldState == FieldState.Black &&
+                (this.winningFields4.size + this.winningFields5.size) > this.winningFields3.size) {
+            return GameState.BlackWins
         }
 
         if (boardFull) {
@@ -220,12 +274,12 @@ class GameInfo(var myName: String, var myFcmToken: String, var hisName: String, 
         return gameState
     }
 
-    private fun bevatAantal(winningFields: List<Int>, testFields: List<Int>): Int {
-        var aantal = 0;
-        for (testField in testFields) {
-            if (winningFields.contains(testField))
-                aantal++
+    private fun isOwnRow(winningFields: List<List<Int>>, testFields: List<Int>): Boolean {
+        for (winningField in winningFields) {
+            if (winningField.containsAll(testFields)) {
+                return false
+            }
         }
-        return aantal
+        return true
     }
 }
