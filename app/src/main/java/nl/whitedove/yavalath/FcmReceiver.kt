@@ -21,9 +21,10 @@ class FcmReceiver : FirebaseMessagingService() {
 
         if (rt === FcmNames.ResponseType.Invite) {
             val toToken = data[FcmNames.Sender] as String
+            val guid = data[FcmNames.UUID] as String
             val playerName = data[FcmNames.Name] as String
             FcmSender.mHisFcmToken = toToken
-            receiveInvite(playerName)
+            receiveInvite(guid, playerName)
             return
         }
 
@@ -42,8 +43,9 @@ class FcmReceiver : FirebaseMessagingService() {
         }
 
         if (rt === FcmNames.ResponseType.InviteNOk) {
+            val guid = data[FcmNames.UUID] as String
             val err = data[FcmNames.Error] as String
-            receiveInviteNOk(err)
+            receiveInviteNOk(guid, err)
             return
         }
 
@@ -89,8 +91,9 @@ class FcmReceiver : FirebaseMessagingService() {
         return messageOk
     }
 
-    private fun receiveInvite(playerName: String) {
+    private fun receiveInvite(guid: String, playerName: String) {
         val intent = Intent(FcmNames.ResponseType.Invite.enumToString())
+        intent.putExtra(FcmNames.UUID, guid)
         intent.putExtra(FcmNames.Name, playerName)
         sendBroadcast(intent)
     }
@@ -100,8 +103,9 @@ class FcmReceiver : FirebaseMessagingService() {
         sendBroadcast(intent)
     }
 
-    private fun receiveInviteNOk(error: String) {
+    private fun receiveInviteNOk(guid : String, error: String) {
         val intent = Intent(FcmNames.ResponseType.InviteNOk.enumToString())
+        intent.putExtra(FcmNames.UUID, guid)
         intent.putExtra(FcmNames.Error, error)
         sendBroadcast(intent)
     }

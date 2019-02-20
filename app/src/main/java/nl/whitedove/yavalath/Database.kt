@@ -2,10 +2,9 @@ package nl.whitedove.yavalath
 
 import com.google.firebase.firestore.FirebaseFirestore
 import org.joda.time.DateTime
+import org.joda.time.format.ISODateTimeFormat
 import java.util.*
 import kotlin.collections.ArrayList
-import org.joda.time.format.ISODateTimeFormat
-
 
 
 internal object Database {
@@ -20,6 +19,8 @@ internal object Database {
         const val playerToken = "playerToken"
         const val country = "country"
         const val lastActive = "lastActive"
+        const val device = "device"
+        const val platform = "platform"
     }
 
     fun getPlayers(callback: Runnable) {
@@ -34,11 +35,19 @@ internal object Database {
                             val naam = doc[Database.Names.playerName] as String
                             val token = doc[Database.Names.playerToken] as String
                             val country = doc[Database.Names.country] as String
+                            var device = ""
+                            if (doc[Database.Names.device] != null) {
+                                device = doc[Database.Names.device] as String
+                            }
+                            var platform = ""
+                            if (doc[Database.Names.platform] != null) {
+                                platform = doc[Database.Names.platform] as String
+                            }
                             val fmt = ISODateTimeFormat.dateTime()
                             val lastActive = fmt.parseDateTime(doc[Database.Names.lastActive] as String)
-                            players.add(PlayerInfo(naam, token, country, lastActive))
+                            players.add(PlayerInfo(naam, token, country, lastActive, device, platform))
                         }
-                        val sorted = players.sortedWith(compareBy({ it.country.toLowerCase() }, {it.name.toLowerCase()}))
+                        val sorted = players.sortedWith(compareBy({ it.country.toLowerCase() }, { it.name.toLowerCase() }))
                         mPlayers = ArrayList()
                         for (p in sorted)
                             mPlayers.add(p)
@@ -62,9 +71,13 @@ internal object Database {
         doc[Names.playerName] = name
         doc[Names.playerToken] = token
         doc[Names.country] = country
+        val device = Helper.getDeviceName()
+        doc[Names.device] = device
+        val platform = Helper.getAndroidVersion()
+        doc[Names.platform] = platform
         doc[Names.lastActive] = DateTime.now().toString()
         db.collection(Database.Names.players).document(token).set(doc)
-        mPlayer = PlayerInfo(name, token, country, DateTime.now())
+        mPlayer = PlayerInfo(name, token, country, DateTime.now(), device, platform)
     }
 
     private fun removeInActivePlayers() {

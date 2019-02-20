@@ -124,7 +124,7 @@ class PlayerListActivity : AppCompatActivity() {
     }
 
     private fun answerYes(playerName: String) {
-        okInBackground()
+        inviteOkInBackground()
         gotoGame(playerName, FcmSender.mHisFcmToken)
     }
 
@@ -134,7 +134,7 @@ class PlayerListActivity : AppCompatActivity() {
 
     private fun answerNo() {
         val notAccepted = String.format(getString(R.string.invite_not_accepted), Helper.getName(this))
-        nokInBackground(notAccepted)
+        inviteNokInBackground(notAccepted)
     }
 
     private fun initReceivers() {
@@ -143,6 +143,7 @@ class PlayerListActivity : AppCompatActivity() {
                 override fun onReceive(context: Context, intent: Intent) {
                     fcmActive()
                     val playername = intent.getStringExtra(FcmNames.Name)
+                    mGuid = intent.getStringExtra(FcmNames.UUID)
                     showYesNoDialog(playername)
                 }
             }
@@ -292,7 +293,7 @@ class PlayerListActivity : AppCompatActivity() {
         }
     }
 
-    private fun okInBackground() {
+    private fun inviteOkInBackground() {
         AsyncOkInBackgroundTask().execute()
     }
 
@@ -305,7 +306,7 @@ class PlayerListActivity : AppCompatActivity() {
         }
     }
 
-    private fun nokInBackground(notAccepted: String) {
+    private fun inviteNokInBackground(notAccepted: String) {
         AsyncNokInBackgroundTask().execute(notAccepted)
     }
 

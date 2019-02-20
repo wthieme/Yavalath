@@ -53,50 +53,53 @@ internal object FcmSender {
     }
 
     fun sendPing(guid: String, toToken: String) {
-        val data = HashMap<String, String>()
+        val data = HashMap<String, Any>()
         data[FcmNames.UUID] = guid
         FcmSender.sendMessage(FcmNames.ResponseType.Ping, data, toToken)
     }
 
     fun sendAbandon(toToken: String) {
-        val data = HashMap<String, String>()
+        val data = HashMap<String, Any>()
+        data[FcmNames.UUID] = UUID.randomUUID().toString()
         FcmSender.sendMessage(FcmNames.ResponseType.Abandon, data, toToken)
     }
 
     fun sendInvite(guid: String, toToken: String, name: String) {
-        val data = HashMap<String, String>()
+        val data = HashMap<String, Any>()
         data[FcmNames.UUID] = guid
         data[FcmNames.Name] = name
         FcmSender.sendMessage(FcmNames.ResponseType.Invite, data, toToken)
     }
 
     fun sendInviteOk(guid: String, ToToken: String) {
-        val data = HashMap<String, String>()
+        val data = HashMap<String, Any>()
         data[FcmNames.UUID] = guid
         FcmSender.sendMessage(FcmNames.ResponseType.InviteOk, data, ToToken)
     }
 
     fun sendPong(toToken: String, pongData: String) {
-        val data = HashMap<String, String>()
+        val data = HashMap<String, Any>()
         data[FcmNames.UUID] = pongData
         FcmSender.sendMessage(FcmNames.ResponseType.Pong, data, toToken)
     }
 
     fun sendInviteNok(guid: String, result: String, toToken: String) {
-        val data = HashMap<String, String>()
+        val data = HashMap<String, Any>()
         data[FcmNames.UUID] = guid
         data[FcmNames.Error] = result
         FcmSender.sendMessage(FcmNames.ResponseType.InviteNOk, data, toToken)
     }
 
     fun sendMove(fieldNr: Int, toToken: String) {
-        val data = HashMap<String, String>()
-        data[FcmNames.FieldNr] = fieldNr.toString()
+        val data = HashMap<String, Any>()
+        data[FcmNames.UUID] = UUID.randomUUID().toString()
+        data[FcmNames.FieldNr] = fieldNr
         FcmSender.sendMessage(FcmNames.ResponseType.Move, data, toToken)
     }
 
     fun sendReadyNewGame(ready: String, toToken: String) {
-        val data = HashMap<String, String>()
+        val data = HashMap<String, Any>()
+        data[FcmNames.UUID] = UUID.randomUUID().toString()
         data[FcmNames.Ready] = ready
         FcmSender.sendMessage(FcmNames.ResponseType.ReadyNewGame, data, toToken)
     }

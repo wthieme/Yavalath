@@ -1,6 +1,8 @@
 package nl.whitedove.yavalath
 
 import android.content.Context
+import android.graphics.Typeface
+import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -38,6 +40,7 @@ internal class CustomListAdapterPlayers(private val context: Context, private va
             holder.tvNaam = cv!!.findViewById(R.id.tvPlayerName)
             holder.tvLastActive = cv.findViewById(R.id.tvLastActive)
             holder.tvCountry = cv.findViewById(R.id.tvCountry)
+            holder.tvEnvironment = cv.findViewById((R.id.tvEnvironment))
             cv.tag = holder
         } else {
             holder = cv.tag as ViewHolder
@@ -54,8 +57,30 @@ internal class CustomListAdapterPlayers(private val context: Context, private va
         else
             holder.tvLastActive!!.text = String.format(mContext.getString(R.string.minutesAgo), Math.abs(Minutes.minutesBetween(nu, player.lastActive).minutes))
 
-         holder.tvCountry!!.text = player.country
-
+        holder.tvCountry!!.text = player.country
+        var env = "1.0"
+        var icon = mContext.getString(R.string.fa_os_unknown)
+        var col = ContextCompat.getColor(mContext, R.color.colorBlue)
+        var iconFont = FontManager.GetTypeface(context, FontManager.FONTAWESOME_SOLID)
+        if (player.platform.startsWith("android", true)) {
+            iconFont = FontManager.GetTypeface(context, FontManager.FONTAWESOME_BRANDS)
+            icon = mContext.getString(R.string.fa_os_android)
+            col = ContextCompat.getColor(mContext, R.color.colorGreen)
+            env = player.platform.replace("android", "", true).trim()
+        }
+        if (player.platform.startsWith("ios",true)) {
+            iconFont = FontManager.GetTypeface(context, FontManager.FONTAWESOME_BRANDS)
+            icon = mContext.getString(R.string.fa_os_ios)
+            col = ContextCompat.getColor(mContext, R.color.colorDisabled)
+            env = player.platform.replace("ios", "", true).trim()
+        }
+        FontManager.setIconAndText(holder.tvEnvironment!!,
+                iconFont,
+                icon,
+                col,
+                Typeface.DEFAULT,
+                env,
+                ContextCompat.getColor(mContext, R.color.colorPrimary))
         return cv
     }
 
@@ -63,5 +88,6 @@ internal class CustomListAdapterPlayers(private val context: Context, private va
         internal var tvNaam: TextView? = null
         internal var tvLastActive: TextView? = null
         internal var tvCountry: TextView? = null
+        internal var tvEnvironment: TextView? = null
     }
 }

@@ -1,4 +1,4 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -18,6 +18,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_marginStart="5dp"
+            android:text="@string/Player"
             android:textStyle="bold"
             android:textSize="18sp" />
 
@@ -25,6 +26,7 @@
             android:id="@+id/tvLastActive"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/tvPlayerName"
             android:layout_marginEnd="5dp"
             android:layout_alignParentEnd="true"
             android:text="@string/active_time"
@@ -38,6 +40,17 @@
             android:layout_marginStart="5dp"
             android:text="@string/CountryUnknown"
             android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tvEnvironment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignBaseline="@+id/tvCountry"
+            android:text="@string/Environment"
+            android:textSize="16sp" />
+
     </RelativeLayout>
 
-</LinearLayout>
+</RelativeLayout>
