@@ -35,7 +35,7 @@ class GameActivity : AppCompatActivity() {
     private var mGameTimer: Timer? = null
 
     private val runnableOffline: Runnable = Runnable {
-        val iconFont = FontManager.GetTypeface(this, FontManager.FONTAWESOME_SOLID)
+        val iconFont = FontManager.getTypeface(this, FontManager.FONTAWESOME_SOLID)
         FontManager.markAsIconContainer(tvOnline, iconFont)
         val col = ContextCompat.getColor(this, R.color.colorRed)
         tvOnline.setTextColor(col)
@@ -156,7 +156,7 @@ class GameActivity : AppCompatActivity() {
         val game = GameHelper.mGame!!
         val res = this.resources
         val packname = this.packageName
-        val iconFont = FontManager.GetTypeface(this, FontManager.FONTAWESOME_SOLID)
+        val iconFont = FontManager.getTypeface(this, FontManager.FONTAWESOME_SOLID)
         val movesPlayed = game.movesPlayed()
         val myMove = game.myMove()
 
@@ -308,7 +308,7 @@ class GameActivity : AppCompatActivity() {
     }
 
     private fun fieldClick(fieldNr: Int) {
-        val iconFont = FontManager.GetTypeface(this, FontManager.FONTAWESOME_SOLID)
+        val iconFont = FontManager.getTypeface(this, FontManager.FONTAWESOME_SOLID)
         val game = GameHelper.mGame!!
         game.lastMove = fieldNr
         val res = this.resources
@@ -480,7 +480,7 @@ class GameActivity : AppCompatActivity() {
     }
 
     private fun setOnline() {
-        val iconFont = FontManager.GetTypeface(this, FontManager.FONTAWESOME_SOLID)
+        val iconFont = FontManager.getTypeface(this, FontManager.FONTAWESOME_SOLID)
         FontManager.markAsIconContainer(tvOnline, iconFont)
         val col = ContextCompat.getColor(this, R.color.colorGreen)
         tvOnline.setTextColor(col)

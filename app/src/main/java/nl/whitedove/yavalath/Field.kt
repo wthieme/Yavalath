@@ -1,7 +1,7 @@
 package nl.whitedove.yavalath
 
 class Field(nr: Int) {
-    var nr: Int
+    private var nr: Int
     var fieldState: FieldState
 
     init {

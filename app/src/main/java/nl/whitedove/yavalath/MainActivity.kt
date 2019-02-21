@@ -20,7 +20,6 @@ import android.view.View
 import android.widget.PopupMenu
 import android.widget.TextView
 import kotlinx.android.synthetic.main.content_main.*
-import kotlinx.android.synthetic.main.rules_dialog.*
 
 class MainActivity : AppCompatActivity() {
     private var mContext: Context = this
@@ -36,7 +35,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun initViews() {
 
-        val iconFont = FontManager.GetTypeface(this, FontManager.FONTAWESOME_SOLID)
+        val iconFont = FontManager.getTypeface(this, FontManager.FONTAWESOME_SOLID)
 
         FontManager.setIconAndText(btnEnter,
                 iconFont,

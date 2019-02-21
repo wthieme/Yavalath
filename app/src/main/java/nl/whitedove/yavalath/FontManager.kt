@@ -14,7 +14,7 @@ internal object FontManager {
     val FONTAWESOME_SOLID = "fa-solid-900.ttf"
     val FONTAWESOME_BRANDS = "fa-brands-400.ttf"
 
-    fun GetTypeface(context: Context, font: String): Typeface {
+    fun getTypeface(context: Context, font: String): Typeface {
         return Typeface.createFromAsset(context.assets, font)
     }
 

@@ -50,26 +50,25 @@ internal class CustomListAdapterPlayers(private val context: Context, private va
         holder.tvNaam!!.text = player.name
 
         val nu = DateTime.now()
-        if (player.lastActive.isAfter(nu.minusMinutes(1)))
-            holder.tvLastActive!!.text = mContext.getString(R.string.momentAgo)
-        else if (player.lastActive.isAfter(nu.minusMinutes(2)))
-            holder.tvLastActive!!.text = mContext.getString(R.string.minuteAgo)
-        else
-            holder.tvLastActive!!.text = String.format(mContext.getString(R.string.minutesAgo), Math.abs(Minutes.minutesBetween(nu, player.lastActive).minutes))
+        when {
+            player.lastActive.isAfter(nu.minusMinutes(1)) -> holder.tvLastActive!!.text = mContext.getString(R.string.momentAgo)
+            player.lastActive.isAfter(nu.minusMinutes(2)) -> holder.tvLastActive!!.text = mContext.getString(R.string.minuteAgo)
+            else -> holder.tvLastActive!!.text = String.format(mContext.getString(R.string.minutesAgo), Math.abs(Minutes.minutesBetween(nu, player.lastActive).minutes))
+        }
 
         holder.tvCountry!!.text = player.country
         var env = "1.0"
         var icon = mContext.getString(R.string.fa_os_unknown)
         var col = ContextCompat.getColor(mContext, R.color.colorBlue)
-        var iconFont = FontManager.GetTypeface(context, FontManager.FONTAWESOME_SOLID)
+        var iconFont = FontManager.getTypeface(context, FontManager.FONTAWESOME_SOLID)
         if (player.platform.startsWith("android", true)) {
-            iconFont = FontManager.GetTypeface(context, FontManager.FONTAWESOME_BRANDS)
+            iconFont = FontManager.getTypeface(context, FontManager.FONTAWESOME_BRANDS)
             icon = mContext.getString(R.string.fa_os_android)
             col = ContextCompat.getColor(mContext, R.color.colorGreen)
             env = player.platform.replace("android", "", true).trim()
         }
         if (player.platform.startsWith("ios",true)) {
-            iconFont = FontManager.GetTypeface(context, FontManager.FONTAWESOME_BRANDS)
+            iconFont = FontManager.getTypeface(context, FontManager.FONTAWESOME_BRANDS)
             icon = mContext.getString(R.string.fa_os_ios)
             col = ContextCompat.getColor(mContext, R.color.colorDisabled)
             env = player.platform.replace("ios", "", true).trim()

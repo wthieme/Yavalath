@@ -41,7 +41,7 @@ internal object Helper {
         return result
     }
 
-    fun RandomNrInRange(lower: Int, upper: Int): Int {
+    fun randomNrInRange(lower: Int, upper: Int): Int {
         return mRandom.nextInt(lower + upper + 1) + lower
     }
 
@@ -155,7 +155,7 @@ internal object Helper {
     }
 
     fun fcmActive(context: Context, tvFcmBolt: TextView) {
-        val iconFont = FontManager.GetTypeface(context, FontManager.FONTAWESOME_SOLID)
+        val iconFont = FontManager.getTypeface(context, FontManager.FONTAWESOME_SOLID)
         FontManager.markAsIconContainer(tvFcmBolt, iconFont)
         tvFcmBolt.animate().alpha(1.0f).setDuration(50)
                 .setListener(object : AnimatorListenerAdapter() {

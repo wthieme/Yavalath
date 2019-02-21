@@ -20,8 +20,8 @@ internal object LocationHelper {
         }
 
         val country: String
-        val lat = location.getLatitude()
-        val lng = location.getLongitude()
+        val lat = location.latitude
+        val lng = location.longitude
         val geocoder = Geocoder(cxt)
 
         val list: List<Address>?

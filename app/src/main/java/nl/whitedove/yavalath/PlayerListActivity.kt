@@ -78,7 +78,7 @@ class PlayerListActivity : AppCompatActivity() {
 
     private fun initViews() {
         btnBack.setOnClickListener { goback() }
-        val iconFont = FontManager.GetTypeface(this, FontManager.FONTAWESOME_SOLID)
+        val iconFont = FontManager.getTypeface(this, FontManager.FONTAWESOME_SOLID)
         FontManager.setIconAndText(btnBack,
                 iconFont,
                 getString(R.string.fa_arrow_left),
