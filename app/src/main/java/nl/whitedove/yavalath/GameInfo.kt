@@ -150,33 +150,6 @@ class GameInfo(var myName: String, var myFcmToken: String, var hisName: String, 
         }
 
         this.gameState = testGameEnd()
-
-        if (this.gameState == GameState.BlackWins) {
-            this.winner = this.playerBlack
-            if (this.winningFields3.size > (this.winningFields4.size + this.winningFields5.size)) {
-                GameHelper.mPointsBlack += this.winningFields3.size
-                GameHelper.mPointsWhite += this.winningFields4.size + this.winningFields5.size
-            } else {
-                GameHelper.mPointsWhite += this.winningFields3.size
-                GameHelper.mPointsBlack += this.winningFields4.size + this.winningFields5.size
-            }
-        }
-
-        if (this.gameState == GameState.WhiteWins) {
-            this.winner = this.playerWhite
-            if (this.winningFields3.size > (this.winningFields4.size + this.winningFields5.size)) {
-                GameHelper.mPointsWhite += this.winningFields3.size
-                GameHelper.mPointsBlack += this.winningFields4.size + this.winningFields5.size
-            } else {
-                GameHelper.mPointsBlack += this.winningFields3.size
-                GameHelper.mPointsWhite += this.winningFields4.size + this.winningFields5.size
-            }
-        }
-
-        if (this.gameState == GameState.DrawBoardFull || this.gameState == GameState.DrawByWinAndLose) {
-            GameHelper.mPointsWhite++
-            GameHelper.mPointsBlack++
-        }
     }
 
     private fun testGameEnd(): GameState {
@@ -243,34 +216,53 @@ class GameInfo(var myName: String, var myFcmToken: String, var hisName: String, 
                 this.winningFields3.add(listOf(g3[0], g3[1], g3[2]))
             }
         }
+        val points45 = 3 * this.winningFields5.size + this.winningFields4.size
+        val points3 = this.winningFields3.size
 
-        if (this.winningFields3.size > 0 && (this.winningFields3.size == winningFields4.size + this.winningFields5.size)) {
+        if (boardFull) {
+            GameHelper.mPointsWhite++
+            GameHelper.mPointsBlack++
+            return GameState.DrawBoardFull
+        }
+
+        if (points3 == 0 && points45 == 0) {
+            return GameState.Running
+        }
+
+        if (points3 == points45) {
+            GameHelper.mPointsWhite += points3
+            GameHelper.mPointsBlack += points3
             return GameState.DrawByWinAndLose
         }
 
-        if (this.fields[lastMove].fieldState == FieldState.White &&
-                this.winningFields3.size > (this.winningFields4.size + this.winningFields5.size)) {
+        if (this.fields[lastMove].fieldState == FieldState.White && points3 > points45) {
+            GameHelper.mPointsBlack += points3
+            GameHelper.mPointsWhite += points45
+            this.winner = this.playerBlack
             return GameState.BlackWins
         }
 
-        if (this.fields[lastMove].fieldState == FieldState.Black &&
-                this.winningFields3.size > (this.winningFields4.size + this.winningFields5.size)) {
+        if (this.fields[lastMove].fieldState == FieldState.Black && points3 > points45) {
+            GameHelper.mPointsWhite += points3
+            GameHelper.mPointsBlack += points45
+            this.winner = this.playerWhite
             return GameState.WhiteWins
         }
 
-        if (this.fields[lastMove].fieldState == FieldState.White &&
-                (this.winningFields4.size + this.winningFields5.size) > this.winningFields3.size) {
+        if (this.fields[lastMove].fieldState == FieldState.White && points45 > points3) {
+            GameHelper.mPointsWhite += points45
+            GameHelper.mPointsBlack += points3
+            this.winner = this.playerWhite
             return GameState.WhiteWins
         }
 
-        if (this.fields[lastMove].fieldState == FieldState.Black &&
-                (this.winningFields4.size + this.winningFields5.size) > this.winningFields3.size) {
+        if (this.fields[lastMove].fieldState == FieldState.Black && points45 > points3) {
+            GameHelper.mPointsBlack += points45
+            GameHelper.mPointsWhite += points3
+            this.winner = this.playerBlack
             return GameState.BlackWins
         }
 
-        if (boardFull) {
-            return GameState.DrawBoardFull
-        }
         return gameState
     }
 
@@ -283,3 +275,4 @@ class GameInfo(var myName: String, var myFcmToken: String, var hisName: String, 
         return true
     }
 }
+

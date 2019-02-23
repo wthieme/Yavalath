@@ -6,15 +6,13 @@ import org.joda.time.format.ISODateTimeFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
-
 internal object Database {
-
     var mPlayers: ArrayList<PlayerInfo> = ArrayList()
     private var mPlayer: PlayerInfo? = null
     var TIMEOUT = 30
 
     internal object Names {
-        const val players = "players"
+        var collectionName = "players"
         const val playerName = "playerName"
         const val playerToken = "playerToken"
         const val country = "country"
@@ -23,10 +21,17 @@ internal object Database {
         const val platform = "platform"
     }
 
+    private fun getCollectionName(): String {
+        if (Helper.DEBUG)
+            return "DEV" + Database.Names.collectionName
+        else
+            return Database.Names.collectionName
+    }
+
     fun getPlayers(callback: Runnable) {
         val players = ArrayList<PlayerInfo>()
         val db = FirebaseFirestore.getInstance()
-        db.collection(Database.Names.players)
+        db.collection(getCollectionName())
                 .get()
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
@@ -60,7 +65,7 @@ internal object Database {
 
     fun setListener(callback: Runnable) {
         val db = FirebaseFirestore.getInstance()
-        db.collection(Database.Names.players)
+        db.collection(getCollectionName())
                 .addSnapshotListener { _, _ -> callback.run() }
     }
 
@@ -76,7 +81,7 @@ internal object Database {
         val platform = Helper.getAndroidVersion()
         doc[Names.platform] = platform
         doc[Names.lastActive] = DateTime.now().toString()
-        db.collection(Database.Names.players).document(token).set(doc)
+        db.collection(getCollectionName()).document(token).set(doc)
         mPlayer = PlayerInfo(name, token, country, DateTime.now(), device, platform)
     }
 
@@ -94,7 +99,7 @@ internal object Database {
 
     fun deletePlayer(token: String) {
         val db = FirebaseFirestore.getInstance()
-        db.collection(Database.Names.players).document(token)
+        db.collection(getCollectionName()).document(token)
                 .delete()
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {

@@ -77,6 +77,11 @@ class MainActivity : AppCompatActivity() {
 
         FontManager.markAsIconContainer(tvMenu, iconFont)
         tvMenu.setOnClickListener { view -> menuClick(view) }
+
+        if (Helper.DEBUG)
+            tvDebug.visibility=View.VISIBLE
+        else
+            tvDebug.visibility=View.GONE
     }
 
     private fun showRulesDialog() {

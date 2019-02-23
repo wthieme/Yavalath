@@ -20,7 +20,7 @@ import android.text.TextUtils
 
 internal object Helper {
 
-    private val DEBUG = false
+    val DEBUG = false
     private val mRandom = Random()
     var mCurrentBestLocation: Location? = null
     const val ONE_MINUTE = 1000L * 60L
