@@ -2,7 +2,7 @@ package nl.whitedove.yavalath
 
 import org.joda.time.DateTime
 
-class GameInfo(var myName: String, var myFcmToken: String, var hisName: String, hisToken: String, var playesWhite: String) {
+class GameInfo(var myName: String, var myFcmToken: String, var hisName: String, hisToken: String, var playesWhite: String, var gameMode: GameMode, var gameLevel: GameLevel) {
     var created: DateTime = DateTime.now()
     var fields: ArrayList<Field> = ArrayList()
     var hisFcmToken: String = hisToken
@@ -17,6 +17,7 @@ class GameInfo(var myName: String, var myFcmToken: String, var hisName: String, 
     var whiteReady: Boolean
     var blackReady: Boolean
     var gameState: GameState
+
 
     init {
         for (i in 0..60) {
@@ -126,7 +127,12 @@ class GameInfo(var myName: String, var myFcmToken: String, var hisName: String, 
     }
 
     fun myMove(): Boolean {
-        return (this.playerToMove == this.myName)
+        when {
+            this.gameMode == GameMode.HumanVsHumanInternet -> return (this.playerToMove == this.myName)
+            this.gameMode == GameMode.HumanVsHumanLocal -> return true
+            this.gameMode == GameMode.HumanVsComputer -> return (this.playerToMove == this.myName)
+        }
+        return true
     }
 
     fun ready(ready: Boolean, byToken: String) {

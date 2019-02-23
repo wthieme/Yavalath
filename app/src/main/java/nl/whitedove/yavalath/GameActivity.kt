@@ -88,6 +88,10 @@ class GameActivity : AppCompatActivity() {
     }
 
     private fun unregBroadcastReceivers() {
+        val game = GameHelper.mGame!!
+        if (game.gameMode != GameMode.HumanVsHumanInternet) {
+            return
+        }
         Helper.unRegisterReceiver(mContext, mReceiverAbandon)
         Helper.unRegisterReceiver(mContext, mReceiverPong)
         Helper.unRegisterReceiver(mContext, mReceiverMove)
@@ -127,6 +131,11 @@ class GameActivity : AppCompatActivity() {
     }
 
     private fun initTimer() {
+        val game = GameHelper.mGame!!
+        if (game.gameMode != GameMode.HumanVsHumanInternet) {
+            return
+        }
+
         mLastPong = DateTime.now()
         mHandler = Handler()
         mTimer = Timer()
@@ -278,17 +287,26 @@ class GameActivity : AppCompatActivity() {
 
     private fun checkNewGame() {
         val game = GameHelper.mGame!!
-        if (!game.whiteReady || !game.blackReady) {
-            return
+
+        when {
+            game.gameMode == GameMode.HumanVsHumanInternet -> {
+                if (!game.whiteReady || !game.blackReady) return
+                val playWhitetoken = if (game.playesWhite == game.myFcmToken) {
+                    game.hisFcmToken
+                } else {
+                    game.myFcmToken
+                }
+                GameHelper.mGame = GameInfo(game.myName, game.myFcmToken, game.hisName, game.hisFcmToken, playWhitetoken, game.gameMode, game.gameLevel)
+            }
+            game.gameMode == GameMode.HumanVsHumanLocal -> {
+                if (!game.whiteReady && !game.blackReady) return
+                GameHelper.mGame = GameInfo(game.hisName, game.hisFcmToken, game.myName, game.myFcmToken, game.hisFcmToken, game.gameMode, game.gameLevel)
+            }
+            game.gameMode == GameMode.HumanVsComputer -> {
+                if (!game.whiteReady && !game.blackReady) return
+            }
         }
 
-        val token = if (game.playesWhite == game.myFcmToken) {
-            game.hisFcmToken
-        } else {
-            game.myFcmToken
-        }
-
-        GameHelper.mGame = GameInfo(game.myName, game.myFcmToken, game.hisName, game.hisFcmToken, token)
         val pointsWhite = GameHelper.mPointsWhite
         val pointsBlack = GameHelper.mPointsBlack
         GameHelper.mPointsWhite = pointsBlack
@@ -304,7 +322,9 @@ class GameActivity : AppCompatActivity() {
         if (isReady) {
             checkNewGame()
         }
-        startReadyInBackground(isReady)
+        if (game.gameMode == GameMode.HumanVsHumanInternet) {
+            startReadyInBackground(isReady)
+        }
     }
 
     private fun fieldClick(fieldNr: Int) {
@@ -314,6 +334,7 @@ class GameActivity : AppCompatActivity() {
         val res = this.resources
         val packname = this.packageName
         val myMove = game.myMove()
+        val movesPlayed = game.movesPlayed()
 
         for (i in 0..60) {
             val name = "fld" + Integer.toString(i)
@@ -336,10 +357,24 @@ class GameActivity : AppCompatActivity() {
         val fldview = findViewById<View>(id)
         val tvStone = fldview.findViewById<TextView>(R.id.tvStone)
         tvStone.visibility = View.VISIBLE
-        if (game.playerWhite == game.myName) {
-            tvStone.setTextColor(ContextCompat.getColor(mContext, R.color.colorWhite))
-        } else {
-            tvStone.setTextColor(ContextCompat.getColor(mContext, R.color.colorBlack))
+
+        when {
+            game.gameMode == GameMode.HumanVsHumanInternet -> {
+                if (game.playerWhite == game.myName) {
+                    tvStone.setTextColor(ContextCompat.getColor(mContext, R.color.colorWhite))
+                } else {
+                    tvStone.setTextColor(ContextCompat.getColor(mContext, R.color.colorBlack))
+                }
+            }
+            game.gameMode == GameMode.HumanVsHumanLocal -> {
+                if (movesPlayed % 2 == 0) {
+                    tvStone.setTextColor(ContextCompat.getColor(mContext, R.color.colorWhite))
+                } else {
+                    tvStone.setTextColor(ContextCompat.getColor(mContext, R.color.colorBlack))
+                }
+            }
+            game.gameMode == GameMode.HumanVsComputer -> {
+            }
         }
 
         val ivHexagon = fldview.findViewById<(ImageView)>(R.id.ivHexagon)
@@ -351,10 +386,10 @@ class GameActivity : AppCompatActivity() {
             btnSend.visibility = View.VISIBLE
             FontManager.setIconAndText(btnSend,
                     iconFont,
-                    getString(R.string.fa_share_square),
+                    if (game.gameMode == GameMode.HumanVsHumanInternet) getString(R.string.fa_share_square) else getString(R.string.fa_arrow_down),
                     ContextCompat.getColor(this, R.color.colorIcon),
                     Typeface.DEFAULT,
-                    getString(R.string.send),
+                    if (game.gameMode == GameMode.HumanVsHumanInternet) getString(R.string.send) else getString(R.string.apply),
                     ContextCompat.getColor(this, R.color.colorPrimary))
             btnSend.setOnClickListener { sendMove() }
         } else {
@@ -366,9 +401,24 @@ class GameActivity : AppCompatActivity() {
     private fun sendMove() {
         val game = GameHelper.mGame!!
         val fieldNr = game.lastMove
-        game.move(fieldNr, FcmSender.mMyFcmToken)
+        val movesPlayed = game.movesPlayed()
+
+        when {
+            game.gameMode == GameMode.HumanVsHumanInternet -> {
+                game.move(fieldNr, game.myFcmToken)
+            }
+            game.gameMode == GameMode.HumanVsHumanLocal -> {
+                game.move(fieldNr, if (movesPlayed % 2 == 0) game.myFcmToken else game.hisFcmToken)
+            }
+            game.gameMode == GameMode.HumanVsComputer -> {
+            }
+        }
+
         showGameData()
-        moveInBackground(fieldNr)
+
+        if (game.gameMode == GameMode.HumanVsHumanInternet) {
+            moveInBackground(fieldNr)
+        }
     }
 
     private fun fcmActive() {
@@ -387,7 +437,10 @@ class GameActivity : AppCompatActivity() {
     }
 
     private fun answerYes() {
-        abandonInBackground()
+        val game = GameHelper.mGame!!
+        if (game.gameMode == GameMode.HumanVsHumanInternet) {
+            abandonInBackground()
+        }
         gotoMain()
     }
 
@@ -434,6 +487,11 @@ class GameActivity : AppCompatActivity() {
     }
 
     private fun initReceivers() {
+        val game = GameHelper.mGame!!
+        if (game.gameMode != GameMode.HumanVsHumanInternet) {
+            return
+        }
+
         if (mReceiverAbandon == null) {
             mReceiverAbandon = object : BroadcastReceiver() {
                 override fun onReceive(context: Context, intent: Intent) {

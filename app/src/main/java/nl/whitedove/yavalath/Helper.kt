@@ -10,12 +10,11 @@ import android.net.ConnectivityManager
 import android.os.Build
 import android.preference.PreferenceManager
 import android.support.v4.content.ContextCompat
+import android.text.TextUtils
 import android.view.WindowManager
 import android.widget.TextView
 import android.widget.Toast
 import java.util.*
-import android.text.TextUtils
-
 
 
 internal object Helper {
@@ -67,28 +66,69 @@ internal object Helper {
         FcmSender.mMyFcmToken = token
     }
 
-    fun getName(cxt: Context): String {
-        val preferences = PreferenceManager.getDefaultSharedPreferences(cxt)
+    fun getGameLevel(context: Context): GameLevel {
+        val preferences = PreferenceManager.getDefaultSharedPreferences(context)
+        val gameLevel = preferences.getInt("gameLevel", 1)
+        return GameLevel.valueOf(gameLevel)
+    }
+
+    fun setGameLevel(context: Context, gameLevel: GameLevel) {
+        val preferences = PreferenceManager.getDefaultSharedPreferences(context)
+        val editor = preferences.edit()
+        editor.putInt("gameLevel", gameLevel.value)
+        editor.apply()
+    }
+
+    fun getGameMode(context: Context): GameMode {
+        val preferences = PreferenceManager.getDefaultSharedPreferences(context)
+        val gameMode = preferences.getInt("gameMode", 1)
+        return GameMode.valueOf(gameMode)
+    }
+
+    fun setGameMode(context: Context, gameMode: GameMode) {
+        val preferences = PreferenceManager.getDefaultSharedPreferences(context)
+        val editor = preferences.edit()
+        editor.putInt("gameMode", gameMode.value)
+        editor.apply()
+    }
+
+    fun getName1(context: Context): String {
+        val preferences = PreferenceManager.getDefaultSharedPreferences(context)
         val nick = preferences.getString("nick", "")
         if (nick == null)
             return ""
         return nick
     }
 
-    fun setName(cxt: Context, nick: String) {
-        val preferences = PreferenceManager.getDefaultSharedPreferences(cxt)
+    fun setName1(context: Context, nick: String) {
+        val preferences = PreferenceManager.getDefaultSharedPreferences(context)
         val editor = preferences.edit()
         editor.putString("nick", nick)
         editor.apply()
     }
 
-    fun showMessage(cxt: Context, melding: String) {
+    fun getName2(context: Context): String {
+        val preferences = PreferenceManager.getDefaultSharedPreferences(context)
+        val nick2 = preferences.getString("nick2", "")
+        if (nick2 == null)
+            return ""
+        return nick2
+    }
+
+    fun setName2(context: Context, nick2: String) {
+        val preferences = PreferenceManager.getDefaultSharedPreferences(context)
+        val editor = preferences.edit()
+        editor.putString("nick2", nick2)
+        editor.apply()
+    }
+
+    fun showMessage(context: Context, melding: String) {
         Helper.log(melding)
         val duration = Toast.LENGTH_SHORT
-        val toast = Toast.makeText(cxt, melding, duration)
-        toast.view.setBackgroundColor(ContextCompat.getColor(cxt, R.color.colorDisabled))
+        val toast = Toast.makeText(context, melding, duration)
+        toast.view.setBackgroundColor(ContextCompat.getColor(context, R.color.colorDisabled))
         val text = toast.view.findViewById(android.R.id.message) as TextView
-        text.setTextColor(ContextCompat.getColor(cxt, R.color.colorWhite))
+        text.setTextColor(ContextCompat.getColor(context, R.color.colorWhite))
         toast.show()
     }
 

@@ -10,6 +10,7 @@ import android.location.LocationManager
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.text.Editable
 import android.text.Spannable
@@ -20,6 +21,8 @@ import android.view.View
 import android.widget.PopupMenu
 import android.widget.TextView
 import kotlinx.android.synthetic.main.content_main.*
+import java.util.*
+
 
 class MainActivity : AppCompatActivity() {
     private var mContext: Context = this
@@ -34,36 +37,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initViews() {
-
-        val iconFont = FontManager.getTypeface(this, FontManager.FONTAWESOME_SOLID)
-
-        FontManager.setIconAndText(btnEnter,
-                iconFont,
-                getString(R.string.fa_sign_in_alt),
-                ContextCompat.getColor(this, R.color.colorIcon),
-                Typeface.DEFAULT,
-                getString(R.string.enter),
-                ContextCompat.getColor(this, R.color.colorPrimary))
-        btnEnter.setOnClickListener { enter() }
-
-        val name = Helper.getName(this)
-        etName.setText(name)
-
-        etName.addTextChangedListener(object : TextWatcher {
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-
-            }
-
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
-
-            }
-
-            override fun afterTextChanged(s: Editable) {
-                Helper.setName(mContext, etName.text.toString())
-            }
-        })
-
         val clickRules = getString(R.string.clickRules)
+        val iconFont = FontManager.getTypeface(this, FontManager.FONTAWESOME_SOLID)
+        FontManager.markAsIconContainer(tvMenu, iconFont)
+        tvMenu.setOnClickListener { view -> menuClick(view) }
 
         tvrulestxt.movementMethod = LinkMovementMethod.getInstance()
         tvrulestxt.setText(clickRules, TextView.BufferType.SPANNABLE)
@@ -75,13 +52,158 @@ class MainActivity : AppCompatActivity() {
         }
         sp.setSpan(cs1, 0, clickRules.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
 
-        FontManager.markAsIconContainer(tvMenu, iconFont)
-        tvMenu.setOnClickListener { view -> menuClick(view) }
+        val mode = Helper.getGameMode(mContext)
+        when (mode) {
+            GameMode.HumanVsHumanInternet -> {
+                rbH2H2Internet.isChecked = true
+                modeChanged(llHumanVsHumanInternet)
+            }
+            GameMode.HumanVsHumanLocal -> {
+                rbH2HLocal.isChecked = true
+                modeChanged(llHumanVsHumanLocal)
+            }
+            GameMode.HumanVsComputer -> {
+                rbH2Computer.isChecked = true
+                modeChanged(llHumanVsComputer)
+            }
+        }
+
+        rgMode.setOnCheckedChangeListener { _, checkedId ->
+            when (checkedId) {
+                R.id.rbH2H2Internet -> {
+                    Helper.setGameMode(mContext, GameMode.HumanVsHumanInternet)
+                    modeChanged(llHumanVsHumanInternet)
+                }
+                R.id.rbH2HLocal -> {
+                    Helper.setGameMode(mContext, GameMode.HumanVsHumanLocal)
+                    modeChanged(llHumanVsHumanLocal)
+                }
+                R.id.rbH2Computer -> {
+                    Helper.setGameMode(mContext, GameMode.HumanVsComputer)
+                    modeChanged(llHumanVsComputer)
+                }
+            }
+        }
+
+        val name1 = Helper.getName1(this)
+        etNameH2HInternet.setText(name1)
+
+        etNameH2HInternet.addTextChangedListener(object : TextWatcher {
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+            }
+
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+            }
+
+            override fun afterTextChanged(s: Editable) {
+                Helper.setName1(mContext, etNameH2HInternet.text.toString())
+            }
+        })
+
+        FontManager.setIconAndText(btnEnter,
+                iconFont,
+                getString(R.string.fa_sign_in_alt),
+                ContextCompat.getColor(this, R.color.colorIcon),
+                Typeface.DEFAULT,
+                getString(R.string.enter),
+                ContextCompat.getColor(this, R.color.colorPrimary))
+
+        btnEnter.setOnClickListener { enter() }
+
+        etNameH2HLocal1.setText(name1)
+
+        etNameH2HLocal1.addTextChangedListener(object : TextWatcher {
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+            }
+
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+            }
+
+            override fun afterTextChanged(s: Editable) {
+                Helper.setName1(mContext, etNameH2HLocal1.text.toString())
+            }
+        })
+
+        val name2 = Helper.getName2(this)
+        etNameH2HLocal2.setText(name2)
+        etNameH2HLocal2.addTextChangedListener(object : TextWatcher {
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+            }
+
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+            }
+
+            override fun afterTextChanged(s: Editable) {
+                Helper.setName2(mContext, etNameH2HLocal2.text.toString())
+            }
+        })
+
+        FontManager.setIconAndText(btnStartHumanVsHumanLocal,
+                iconFont,
+                getString(R.string.fa_play),
+                ContextCompat.getColor(this, R.color.colorIcon),
+                Typeface.DEFAULT,
+                getString(R.string.Start),
+                ContextCompat.getColor(this, R.color.colorPrimary))
+        btnStartHumanVsHumanLocal.setOnClickListener { startHumanToHuman() }
+
+        val level = Helper.getGameLevel(mContext)
+        when (level) {
+            GameLevel.Easy -> rbEasy.isChecked = true
+            GameLevel.Intermediate -> rbIntermediate.isChecked = true
+            GameLevel.Expert -> rbExpert.isChecked = true
+        }
+
+        rgLevel.setOnCheckedChangeListener { _, checkedId ->
+            when (checkedId) {
+                R.id.rbEasy ->
+                    Helper.setGameLevel(mContext, GameLevel.Easy)
+                R.id.rbIntermediate ->
+                    Helper.setGameLevel(mContext, GameLevel.Intermediate)
+                R.id.rbExpert ->
+                    Helper.setGameLevel(mContext, GameLevel.Expert)
+            }
+        }
+
+
+        etNameComputer.setText(name1)
+
+        etNameComputer.addTextChangedListener(object : TextWatcher {
+            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+            }
+
+            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+            }
+
+            override fun afterTextChanged(s: Editable) {
+                Helper.setName1(mContext, etNameComputer.text.toString())
+            }
+        })
+
+        FontManager.setIconAndText(btnStartComputer,
+                iconFont,
+                getString(R.string.fa_play),
+                ContextCompat.getColor(this, R.color.colorIcon),
+                Typeface.DEFAULT,
+                getString(R.string.Start),
+                ContextCompat.getColor(this, R.color.colorPrimary))
+        btnStartComputer.setOnClickListener { startHumanToComputer() }
+
 
         if (Helper.DEBUG)
-            tvDebug.visibility=View.VISIBLE
+            tvDebug.visibility = View.VISIBLE
         else
-            tvDebug.visibility=View.GONE
+            tvDebug.visibility = View.GONE
+    }
+
+    private fun modeChanged(to: View) {
+        llHumanVsHumanInternet.visibility = View.GONE
+        llHumanVsHumanLocal.visibility = View.GONE
+        llHumanVsComputer.visibility = View.GONE
+        val duration = 500
+        to.setAlpha(0.0f)
+        to.setVisibility(View.VISIBLE)
+        to.animate().alpha(1.0f).setDuration(duration.toLong())
     }
 
     private fun showRulesDialog() {
@@ -94,8 +216,36 @@ class MainActivity : AppCompatActivity() {
         Helper.showDialog(ad, false)
     }
 
+    private fun startHumanToComputer() {
+        if (!checkName1(this)) return
+        val builder = AlertDialog.Builder(this)
+        builder.setMessage(getString(R.string.coming_soon))
+                .setCancelable(false)
+                .setPositiveButton(getString(R.string.OK)) { _, _ -> answerOk() }
+        val alert = builder.create()
+        alert.show()
+        return
+    }
+
+    private fun answerOk() {}
+
+    private fun startHumanToHuman() {
+        if (!checkName1(this)) return
+        if (!checkName2(this)) return
+        val token1 = UUID.randomUUID().toString()
+        val token2 = UUID.randomUUID().toString()
+        GameHelper.mGame = GameInfo(Helper.getName1(mContext), token1, Helper.getName2(mContext), token2, token1, GameMode.HumanVsHumanLocal, GameLevel.Easy)
+        GameHelper.mPointsWhite = 0
+        GameHelper.mPointsBlack = 0
+        val intent = Intent(this, GameActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+        this.startActivity(intent)
+        this.overridePendingTransition(R.anim.slide_in, R.anim.slide_out)
+        this.finish()
+    }
+
     private fun enter() {
-        if (!checkName(this)) return
+        if (!checkName1(this)) return
         if (!Helper.testInternet(this)) return
         createPlayer()
         fcmActive()
@@ -106,9 +256,8 @@ class MainActivity : AppCompatActivity() {
         this.finish()
     }
 
-    private fun createPlayer()
-    {
-        val name = Helper.getName(mContext)
+    private fun createPlayer() {
+        val name = Helper.getName1(mContext)
         val country = LocationHelper.getCountry(mContext)
         Database.createOrUpdatePlayer(name, country)
     }
@@ -117,10 +266,19 @@ class MainActivity : AppCompatActivity() {
         Helper.fcmActive(mContext, tvFcmBolt)
     }
 
-    private fun checkName(cxt: Context): Boolean {
-        val nick = Helper.getName(cxt)
+    private fun checkName1(context: Context): Boolean {
+        val nick = Helper.getName1(context)
         if (nick.isEmpty()) {
-            Helper.showMessage(cxt, getString(R.string.NameMustNotBeEmpty))
+            Helper.showMessage(context, getString(R.string.NameMustNotBeEmpty))
+            return false
+        }
+        return true
+    }
+
+    private fun checkName2(context: Context): Boolean {
+        val nick2 = Helper.getName2(context)
+        if (nick2.isEmpty()) {
+            Helper.showMessage(context, getString(R.string.Name2MustNotBeEmpty))
             return false
         }
         return true

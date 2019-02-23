@@ -133,7 +133,7 @@ class PlayerListActivity : AppCompatActivity() {
     }
 
     private fun answerNo() {
-        val notAccepted = String.format(getString(R.string.invite_not_accepted), Helper.getName(this))
+        val notAccepted = String.format(getString(R.string.invite_not_accepted), Helper.getName1(this))
         inviteNokInBackground(notAccepted)
     }
 
@@ -229,7 +229,7 @@ class PlayerListActivity : AppCompatActivity() {
             return
         }
 
-        val myName = Helper.getName(this)
+        val myName = Helper.getName1(this)
         if (player.name == myName) {
             val builder = AlertDialog.Builder(this)
             builder.setMessage(getString(R.string.cant_play_same_name))
@@ -243,7 +243,7 @@ class PlayerListActivity : AppCompatActivity() {
         FcmSender.mHisFcmToken = player.fcmToken
         fcmActive()
         showInviteText(player.name)
-        inviteInBackground(Helper.getName(mContext))
+        inviteInBackground(Helper.getName1(mContext))
     }
 
     private fun showInviteText(name: String) {

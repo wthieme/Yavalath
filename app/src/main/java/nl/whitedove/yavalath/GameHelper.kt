@@ -9,7 +9,7 @@ internal object GameHelper {
     var mPointsBlack = 0
 
     fun createGame(context: Context, playerName: String, playesWhite: String) {
-        mGame = GameInfo(Helper.getName(context), FcmSender.mMyFcmToken, playerName, FcmSender.mHisFcmToken, playesWhite)
+        mGame = GameInfo(Helper.getName1(context), FcmSender.mMyFcmToken, playerName, FcmSender.mHisFcmToken, playesWhite, GameMode.HumanVsHumanInternet, GameLevel.Easy)
         mPointsBlack = 0
         mPointsWhite = 0
     }
