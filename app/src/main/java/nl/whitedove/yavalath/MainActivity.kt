@@ -165,7 +165,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-
         etNameComputer.setText(name1)
 
         etNameComputer.addTextChangedListener(object : TextWatcher {
@@ -218,13 +217,26 @@ class MainActivity : AppCompatActivity() {
 
     private fun startHumanToComputer() {
         if (!checkName1(this)) return
-        val builder = AlertDialog.Builder(this)
-        builder.setMessage(getString(R.string.coming_soon))
-                .setCancelable(false)
-                .setPositiveButton(getString(R.string.OK)) { _, _ -> answerOk() }
-        val alert = builder.create()
-        alert.show()
-        return
+        val gameLevel = Helper.getGameLevel(mContext)
+        if (gameLevel == GameLevel.Intermediate || gameLevel == GameLevel.Expert) {
+            val builder = AlertDialog.Builder(this)
+            builder.setMessage(getString(R.string.coming_soon))
+                    .setCancelable(false)
+                    .setPositiveButton(getString(R.string.OK)) { _, _ -> answerOk() }
+            val alert = builder.create()
+            alert.show()
+            return
+        }
+        val token1 = UUID.randomUUID().toString()
+        val token2 = UUID.randomUUID().toString()
+        GameHelper.mGame = GameInfo(Helper.getName1(mContext), token1, getString(R.string.computer), token2, token1, GameMode.HumanVsComputer, gameLevel)
+        GameHelper.mPointsWhite = 0
+        GameHelper.mPointsBlack = 0
+        val intent = Intent(this, GameActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+        this.startActivity(intent)
+        this.overridePendingTransition(R.anim.slide_in, R.anim.slide_out)
+        this.finish()
     }
 
     private fun answerOk() {}
@@ -270,6 +282,10 @@ class MainActivity : AppCompatActivity() {
         val nick = Helper.getName1(context)
         if (nick.isEmpty()) {
             Helper.showMessage(context, getString(R.string.NameMustNotBeEmpty))
+            return false
+        }
+        if (nick.equals(getString(R.string.computer), true)) {
+            Helper.showMessage(context, getString(R.string.ComputerReserved))
             return false
         }
         return true

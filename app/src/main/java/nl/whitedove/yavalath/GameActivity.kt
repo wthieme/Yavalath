@@ -19,6 +19,7 @@ import com.devs.vectorchildfinder.VectorChildFinder
 import kotlinx.android.synthetic.main.game_activity.*
 import org.joda.time.DateTime
 import org.joda.time.Period
+import java.lang.ref.WeakReference
 import java.util.*
 
 
@@ -277,6 +278,10 @@ class GameActivity : AppCompatActivity() {
                 pathHexagon.fillColor = ContextCompat.getColor(mContext, R.color.colorLightRed)
             }
         }
+
+        if (!myMove && game.gameMode == GameMode.HumanVsComputer && game.gameState == GameState.Running) {
+            computerMoveInBackground()
+        }
     }
 
     private fun initReadySwitch(swReady: Switch, checked: Boolean) {
@@ -287,15 +292,15 @@ class GameActivity : AppCompatActivity() {
 
     private fun checkNewGame() {
         val game = GameHelper.mGame!!
+        val playWhitetoken = if (game.playesWhite == game.myFcmToken) {
+            game.hisFcmToken
+        } else {
+            game.myFcmToken
+        }
 
         when {
             game.gameMode == GameMode.HumanVsHumanInternet -> {
                 if (!game.whiteReady || !game.blackReady) return
-                val playWhitetoken = if (game.playesWhite == game.myFcmToken) {
-                    game.hisFcmToken
-                } else {
-                    game.myFcmToken
-                }
                 GameHelper.mGame = GameInfo(game.myName, game.myFcmToken, game.hisName, game.hisFcmToken, playWhitetoken, game.gameMode, game.gameLevel)
             }
             game.gameMode == GameMode.HumanVsHumanLocal -> {
@@ -304,6 +309,7 @@ class GameActivity : AppCompatActivity() {
             }
             game.gameMode == GameMode.HumanVsComputer -> {
                 if (!game.whiteReady && !game.blackReady) return
+                GameHelper.mGame = GameInfo(game.myName, game.myFcmToken, game.hisName, game.hisFcmToken, playWhitetoken, game.gameMode, game.gameLevel)
             }
         }
 
@@ -374,6 +380,11 @@ class GameActivity : AppCompatActivity() {
                 }
             }
             game.gameMode == GameMode.HumanVsComputer -> {
+                if (game.playerWhite == game.myName) {
+                    tvStone.setTextColor(ContextCompat.getColor(mContext, R.color.colorWhite))
+                } else {
+                    tvStone.setTextColor(ContextCompat.getColor(mContext, R.color.colorBlack))
+                }
             }
         }
 
@@ -389,7 +400,7 @@ class GameActivity : AppCompatActivity() {
                     if (game.gameMode == GameMode.HumanVsHumanInternet) getString(R.string.fa_share_square) else getString(R.string.fa_arrow_down),
                     ContextCompat.getColor(this, R.color.colorIcon),
                     Typeface.DEFAULT,
-                    if (game.gameMode == GameMode.HumanVsHumanInternet) getString(R.string.send) else getString(R.string.apply),
+                    if (game.gameMode == GameMode.HumanVsHumanInternet) getString(R.string.send) else getString(R.string.confirm),
                     ContextCompat.getColor(this, R.color.colorPrimary))
             btnSend.setOnClickListener { sendMove() }
         } else {
@@ -411,6 +422,7 @@ class GameActivity : AppCompatActivity() {
                 game.move(fieldNr, if (movesPlayed % 2 == 0) game.myFcmToken else game.hisFcmToken)
             }
             game.gameMode == GameMode.HumanVsComputer -> {
+                game.move(fieldNr, game.myFcmToken)
             }
         }
 
@@ -597,6 +609,27 @@ class GameActivity : AppCompatActivity() {
             val fieldNr = params[0]!!
             FcmSender.sendMove(fieldNr, FcmSender.mHisFcmToken)
             return null
+        }
+    }
+
+    private fun computerMoveInBackground() {
+        val game = GameHelper.mGame!!
+        AsyncComputerMoveInBackgroundTask(this).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, game)
+    }
+
+    private class AsyncComputerMoveInBackgroundTask internal constructor(context: GameActivity) : AsyncTask<GameInfo, Void, Void>() {
+        private val activityWeakReference: WeakReference<GameActivity> = WeakReference(context)
+
+        override fun doInBackground(vararg params: GameInfo): Void? {
+            val game = params[0]
+            computerMove(game)
+            return null
+        }
+
+        override fun onPostExecute(nothing: Void?) {
+            val activity = activityWeakReference.get() ?: return
+            SoundPlayer.playSound(activity, "sonar")
+            activity.showGameData()
         }
     }
 }

@@ -17,7 +17,8 @@ class GameInfo(var myName: String, var myFcmToken: String, var hisName: String, 
     var whiteReady: Boolean
     var blackReady: Boolean
     var gameState: GameState
-
+    var score: Int
+    var computerSimulation: Boolean
 
     init {
         for (i in 0..60) {
@@ -37,6 +38,8 @@ class GameInfo(var myName: String, var myFcmToken: String, var hisName: String, 
         this.whiteReady = true
         this.blackReady = true
         this.gameState = GameState.Running
+        this.score = 0
+        this.computerSimulation = false
     }
 
     private fun get3(): List<List<Int>> {
@@ -117,13 +120,24 @@ class GameInfo(var myName: String, var myFcmToken: String, var hisName: String, 
         )
     }
 
+    fun ring1(fieldNr: Int): Boolean {
+        val ring = listOf(0, 1, 2, 3, 4, 10, 17, 25, 34, 42, 49, 55, 60, 59, 58, 57, 56, 50, 43, 35, 26, 18, 11, 5)
+        return ring.contains(fieldNr)
+    }
+
+    fun ring2(fieldNr: Int): Boolean {
+        val ring = listOf(6, 7, 8, 9, 16, 24, 33, 41, 48, 54, 53, 52, 51, 44, 36, 27, 19, 12)
+        return ring.contains(fieldNr)
+    }
+
+    fun ring3(fieldNr: Int): Boolean {
+        val ring = listOf(13, 14, 15, 23, 32, 40, 47, 46, 45, 37, 28, 20)
+        return ring.contains(fieldNr)
+    }
+
     fun movesPlayed(): Int {
-        var nr = 0
-        for (f in fields) {
-            if (f.fieldState == FieldState.White || f.fieldState == FieldState.Black)
-                nr++
-        }
-        return nr
+        val nrMoves = fields.count { f -> f.fieldState == FieldState.White || f.fieldState == FieldState.Black }
+        return nrMoves
     }
 
     fun myMove(): Boolean {
@@ -161,13 +175,7 @@ class GameInfo(var myName: String, var myFcmToken: String, var hisName: String, 
     private fun testGameEnd(): GameState {
         val gameState = GameState.Running
 
-        var boardFull = true
-        for (field in this.fields) {
-            if (field.fieldState == FieldState.Empty) {
-                boardFull = false
-                break
-            }
-        }
+        val boardFull = !this.fields.any { f -> f.fieldState == FieldState.Empty }
 
         for (g5 in get5()) {
             if (this.fields[g5[0]].fieldState == FieldState.White &&
@@ -226,8 +234,10 @@ class GameInfo(var myName: String, var myFcmToken: String, var hisName: String, 
         val points3 = this.winningFields3.size
 
         if (boardFull) {
-            GameHelper.mPointsWhite++
-            GameHelper.mPointsBlack++
+            if (!this.computerSimulation) {
+                GameHelper.mPointsWhite++
+                GameHelper.mPointsBlack++
+            }
             return GameState.DrawBoardFull
         }
 
@@ -236,35 +246,45 @@ class GameInfo(var myName: String, var myFcmToken: String, var hisName: String, 
         }
 
         if (points3 == points45) {
-            GameHelper.mPointsWhite += points3
-            GameHelper.mPointsBlack += points3
+            if (!this.computerSimulation) {
+                GameHelper.mPointsWhite += points3
+                GameHelper.mPointsBlack += points3
+            }
             return GameState.DrawByWinAndLose
         }
 
         if (this.fields[lastMove].fieldState == FieldState.White && points3 > points45) {
-            GameHelper.mPointsBlack += points3
-            GameHelper.mPointsWhite += points45
+            if (!this.computerSimulation) {
+                GameHelper.mPointsBlack += points3
+                GameHelper.mPointsWhite += points45
+            }
             this.winner = this.playerBlack
             return GameState.BlackWins
         }
 
         if (this.fields[lastMove].fieldState == FieldState.Black && points3 > points45) {
-            GameHelper.mPointsWhite += points3
-            GameHelper.mPointsBlack += points45
+            if (!this.computerSimulation) {
+                GameHelper.mPointsWhite += points3
+                GameHelper.mPointsBlack += points45
+            }
             this.winner = this.playerWhite
             return GameState.WhiteWins
         }
 
         if (this.fields[lastMove].fieldState == FieldState.White && points45 > points3) {
-            GameHelper.mPointsWhite += points45
-            GameHelper.mPointsBlack += points3
+            if (!this.computerSimulation) {
+                GameHelper.mPointsWhite += points45
+                GameHelper.mPointsBlack += points3
+            }
             this.winner = this.playerWhite
             return GameState.WhiteWins
         }
 
         if (this.fields[lastMove].fieldState == FieldState.Black && points45 > points3) {
-            GameHelper.mPointsBlack += points45
-            GameHelper.mPointsWhite += points3
+            if (!this.computerSimulation) {
+                GameHelper.mPointsBlack += points45
+                GameHelper.mPointsWhite += points3
+            }
             this.winner = this.playerBlack
             return GameState.BlackWins
         }

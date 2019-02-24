@@ -95,7 +95,9 @@
     <string name="Expert">Expert</string>
     <string name="modehvhl">In local mode you play against another person on the same device.</string>
     <string name="modehvhi">In this mode you play against another person over the internet, each player plays on his own device.</string>
-    <string name="coming_soon">Playing against the computer is not yet implemented</string>
-    <string name="apply">Apply</string>
+    <string name="coming_soon">Playing level \'Intermediate\' and \'Expert\' are not yet implemented</string>
+    <string name="confirm">Confirm</string>
+    <string name="computer">Computer</string>
+    <string name="ComputerReserved">Computer is a reserved name</string>
 </resources>
 
