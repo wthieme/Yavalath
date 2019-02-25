@@ -177,7 +177,7 @@ class GameInfo(var myName: String, var myFcmToken: String, var hisName: String, 
 
         val boardFull = !this.fields.any { f -> f.fieldState == FieldState.Empty }
 
-        for (g5 in get5()) {
+        for (g5 in this.get5()) {
             if (this.fields[g5[0]].fieldState == FieldState.White &&
                     this.fields[g5[1]].fieldState == FieldState.White &&
                     this.fields[g5[2]].fieldState == FieldState.White &&
@@ -195,7 +195,7 @@ class GameInfo(var myName: String, var myFcmToken: String, var hisName: String, 
             }
         }
 
-        for (g4 in get4()) {
+        for (g4 in this.get4()) {
             if (this.fields[g4[0]].fieldState == FieldState.White &&
                     this.fields[g4[1]].fieldState == FieldState.White &&
                     this.fields[g4[2]].fieldState == FieldState.White &&
@@ -213,7 +213,7 @@ class GameInfo(var myName: String, var myFcmToken: String, var hisName: String, 
             }
         }
 
-        for (g3 in get3()) {
+        for (g3 in this.get3()) {
             if (this.fields[g3[0]].fieldState == FieldState.Black &&
                     this.fields[g3[1]].fieldState == FieldState.Black &&
                     this.fields[g3[2]].fieldState == FieldState.Black &&
@@ -300,5 +300,29 @@ class GameInfo(var myName: String, var myFcmToken: String, var hisName: String, 
         }
         return true
     }
+
+    fun boardScore(color: FieldState) : Int {
+        var score = 0
+        for (g4 in this.get4()) {
+            val fieldStates = listOf(this.fields[g4[0]].fieldState, this.fields[g4[1]].fieldState, this.fields[g4[2]].fieldState, this.fields[g4[3]].fieldState)
+            val aantalEmpty = fieldStates.count { f -> f == FieldState.Empty }
+            val aantalOk = fieldStates.count { f -> f == color }
+            val aantalNOk = fieldStates.count { f -> f != color && f != FieldState.Empty }
+            if (aantalEmpty == 1 && aantalOk == 3) {
+                score += 4
+            }
+            if (aantalEmpty == 2 && aantalOk == 2) {
+                score += 1
+            }
+            if (aantalEmpty == 1 && aantalNOk == 3) {
+                score -= 4
+            }
+            if (aantalEmpty == 2 && aantalNOk == 2) {
+                score -= 1
+            }
+        }
+        return score
+    }
 }
+
 

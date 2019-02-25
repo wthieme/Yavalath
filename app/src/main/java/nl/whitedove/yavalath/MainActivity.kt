@@ -218,7 +218,7 @@ class MainActivity : AppCompatActivity() {
     private fun startHumanToComputer() {
         if (!checkName1(this)) return
         val gameLevel = Helper.getGameLevel(mContext)
-        if (gameLevel == GameLevel.Intermediate || gameLevel == GameLevel.Expert) {
+        if (gameLevel == GameLevel.Expert) {
             val builder = AlertDialog.Builder(this)
             builder.setMessage(getString(R.string.coming_soon))
                     .setCancelable(false)

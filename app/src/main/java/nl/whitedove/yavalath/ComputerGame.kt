@@ -1,7 +1,14 @@
 package nl.whitedove.yavalath
 
-
 fun computerMove(currentGame: GameInfo) {
+    val best = bestGames(currentGame)
+    val bestGame = best.first()
+    val bestFieldNr = bestGame.lastMove
+    currentGame.move(bestFieldNr, currentGame.hisFcmToken)
+    return
+}
+
+private fun bestGames(currentGame: GameInfo): List<GameInfo> {
     val emptyFields = currentGame.fields.filter { f -> f.fieldState == FieldState.Empty }
     val computerHasWhite = currentGame.playesWhite == currentGame.hisFcmToken
     val games = ArrayList<GameInfo>()
@@ -28,13 +35,17 @@ fun computerMove(currentGame: GameInfo) {
                 newgame.score = 0
             }
             newgame.gameState == GameState.Running -> {
-                var up = 24
+                var up = 5
                 when {
-                    newgame.ring1(emptyField.nr) -> up = 15
-                    newgame.ring2(emptyField.nr) -> up = 18
-                    newgame.ring3(emptyField.nr) -> up = 21
+                    newgame.ring1(emptyField.nr) -> up = 4
+                    newgame.ring2(emptyField.nr) -> up = 3
+                    newgame.ring3(emptyField.nr) -> up = 2
                 }
                 newgame.score = Helper.randomNrInRange(1, up)
+                if (currentGame.gameLevel == GameLevel.Intermediate) {
+                    val bonus = newgame.boardScore(if (computerHasWhite) FieldState.White else FieldState.Black)
+                    newgame.score += bonus
+                }
             }
         }
 
@@ -60,20 +71,9 @@ fun computerMove(currentGame: GameInfo) {
                 newgame.score = 0
             }
             newgame.gameState == GameState.Running -> {
-                var up = 24
-                when {
-                    newgame.ring1(emptyField.nr) -> up = 15
-                    newgame.ring2(emptyField.nr) -> up = 18
-                    newgame.ring3(emptyField.nr) -> up = 21
-                }
-                newgame.score = Helper.randomNrInRange(1, up)
             }
         }
         games.add(newgame)
     }
-    // find the highest scoring move and apply that move
-
-    val bestGame = games.toList().sortedByDescending { g -> g.score }.first()
-    val bestFieldNr = bestGame.lastMove
-    currentGame.move(bestFieldNr, currentGame.hisFcmToken)
+    return games.toList().sortedByDescending { g -> g.score }
 }

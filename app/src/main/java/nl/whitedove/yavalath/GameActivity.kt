@@ -170,6 +170,10 @@ class GameActivity : AppCompatActivity() {
         val movesPlayed = game.movesPlayed()
         val myMove = game.myMove()
 
+        if (game.gameMode != GameMode.HumanVsHumanLocal && myMove && movesPlayed > 0) {
+            SoundPlayer.playSound(mContext, "sonar")
+        }
+
         tvPlayerWhite.text = String.format(getString(R.string.PlayerWhite), game.playerWhite, GameHelper.mPointsWhite.toString())
         tvPlayerBlack.text = String.format(getString(R.string.PlayerBlack), game.playerBlack, GameHelper.mPointsBlack.toString())
 
@@ -529,7 +533,6 @@ class GameActivity : AppCompatActivity() {
             mReceiverMove = object : BroadcastReceiver() {
                 override fun onReceive(context: Context, intent: Intent) {
                     fcmActive()
-                    SoundPlayer.playSound(mContext, "sonar")
                     setOnline()
                     showGameData()
                 }
@@ -628,7 +631,6 @@ class GameActivity : AppCompatActivity() {
 
         override fun onPostExecute(nothing: Void?) {
             val activity = activityWeakReference.get() ?: return
-            SoundPlayer.playSound(activity, "sonar")
             activity.showGameData()
         }
     }
