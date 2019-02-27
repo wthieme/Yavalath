@@ -10,7 +10,6 @@ import android.location.LocationManager
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
-import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.text.Editable
 import android.text.Spannable
@@ -26,7 +25,7 @@ import java.util.*
 
 class MainActivity : AppCompatActivity() {
     private var mContext: Context = this
-    private val MY_PERMISSIONS_REQUEST_LOCATION = 1
+    private val mMyPermissionsRequestLocation = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -188,7 +187,6 @@ class MainActivity : AppCompatActivity() {
                 ContextCompat.getColor(this, R.color.colorPrimary))
         btnStartComputer.setOnClickListener { startHumanToComputer() }
 
-
         if (Helper.DEBUG)
             tvDebug.visibility = View.VISIBLE
         else
@@ -200,9 +198,9 @@ class MainActivity : AppCompatActivity() {
         llHumanVsHumanLocal.visibility = View.GONE
         llHumanVsComputer.visibility = View.GONE
         val duration = 500
-        to.setAlpha(0.0f)
-        to.setVisibility(View.VISIBLE)
-        to.animate().alpha(1.0f).setDuration(duration.toLong())
+        to.alpha = 0.0f
+        to.visibility = View.VISIBLE
+        to.animate().alpha(1.0f).duration = duration.toLong()
     }
 
     private fun showRulesDialog() {
@@ -218,15 +216,6 @@ class MainActivity : AppCompatActivity() {
     private fun startHumanToComputer() {
         if (!checkName1(this)) return
         val gameLevel = Helper.getGameLevel(mContext)
-        if (gameLevel == GameLevel.Expert) {
-            val builder = AlertDialog.Builder(this)
-            builder.setMessage(getString(R.string.coming_soon))
-                    .setCancelable(false)
-                    .setPositiveButton(getString(R.string.OK)) { _, _ -> answerOk() }
-            val alert = builder.create()
-            alert.show()
-            return
-        }
         val token1 = UUID.randomUUID().toString()
         val token2 = UUID.randomUUID().toString()
         GameHelper.mGame = GameInfo(Helper.getName1(mContext), token1, getString(R.string.computer), token2, token1, GameMode.HumanVsComputer, gameLevel)
@@ -238,8 +227,6 @@ class MainActivity : AppCompatActivity() {
         this.overridePendingTransition(R.anim.slide_in, R.anim.slide_out)
         this.finish()
     }
-
-    private fun answerOk() {}
 
     private fun startHumanToHuman() {
         if (!checkName1(this)) return
@@ -345,7 +332,7 @@ class MainActivity : AppCompatActivity() {
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this,
                     arrayOf(android.Manifest.permission.ACCESS_COARSE_LOCATION),
-                    MY_PERMISSIONS_REQUEST_LOCATION)
+                    mMyPermissionsRequestLocation)
             return
         }
 
@@ -362,9 +349,9 @@ class MainActivity : AppCompatActivity() {
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>,
                                             grantResults: IntArray) {
         when (requestCode) {
-            MY_PERMISSIONS_REQUEST_LOCATION -> {
+            mMyPermissionsRequestLocation -> {
                 // If request is cancelled, the result arrays are empty.
-                if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     initLocation()
                 } else {
                     Helper.showMessage(this, "Without location permission the country will be unknown in the player list")

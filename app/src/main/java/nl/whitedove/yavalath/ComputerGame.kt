@@ -1,14 +1,13 @@
 package nl.whitedove.yavalath
 
 fun computerMove(currentGame: GameInfo) {
-    val best = bestGames(currentGame)
-    val bestGame = best.first()
+    val bestGame = bestGame(currentGame)
     val bestFieldNr = bestGame.lastMove
     currentGame.move(bestFieldNr, currentGame.hisFcmToken)
     return
 }
 
-private fun bestGames(currentGame: GameInfo): List<GameInfo> {
+private fun bestGame(currentGame: GameInfo): GameInfo {
     val emptyFields = currentGame.fields.filter { f -> f.fieldState == FieldState.Empty }
     val computerHasWhite = currentGame.playesWhite == currentGame.hisFcmToken
     val games = ArrayList<GameInfo>()
@@ -19,20 +18,21 @@ private fun bestGames(currentGame: GameInfo): List<GameInfo> {
             newgame.fields[field.nr].fieldState = field.fieldState
         }
 
+        var myScore = 0
         // Put my stone on this empty field and check if I win, this field scores 100
         newgame.move(emptyField.nr, newgame.hisFcmToken)
         when {
             newgame.gameState == GameState.WhiteWins -> {
-                newgame.score = if (computerHasWhite) 100 else -100
+                myScore = if (computerHasWhite) 100 else -100
             }
             newgame.gameState == GameState.BlackWins -> {
-                newgame.score = if (computerHasWhite) -100 else 100
+                myScore = if (computerHasWhite) -100 else 100
             }
             newgame.gameState == GameState.DrawByWinAndLose -> {
-                newgame.score = 0
+                myScore = 0
             }
             newgame.gameState == GameState.DrawBoardFull -> {
-                newgame.score = 0
+                myScore = 0
             }
             newgame.gameState == GameState.Running -> {
                 var up = 5
@@ -41,39 +41,54 @@ private fun bestGames(currentGame: GameInfo): List<GameInfo> {
                     newgame.ring2(emptyField.nr) -> up = 3
                     newgame.ring3(emptyField.nr) -> up = 2
                 }
-                newgame.score = Helper.randomNrInRange(1, up)
-                if (currentGame.gameLevel == GameLevel.Intermediate) {
-                    val bonus = newgame.boardScore(if (computerHasWhite) FieldState.White else FieldState.Black)
-                    newgame.score += bonus
+                myScore = Helper.randomNrInRange(1, up)
+                when {
+                    currentGame.gameLevel == GameLevel.Intermediate -> {
+                        val bonus = newgame.boardScore(if (computerHasWhite) FieldState.White else FieldState.Black)
+                        myScore += bonus
+                    }
+                    currentGame.gameLevel == GameLevel.Expert -> {
+                        val malus = newgame.loseInOne(if (computerHasWhite) FieldState.White else FieldState.Black)
+                        myScore += malus
+                    }
                 }
             }
         }
 
-        if (newgame.score == 100) {
+        if (myScore == 100) {
             // We win, so break out of the loop
+            newgame.score = myScore
             games.add(newgame)
             break
         }
 
+        var hisScore = 0
         // Put his stone on this empty field and check if he wins, this field scores 50
         newgame.move(emptyField.nr, newgame.myFcmToken)
         when {
             newgame.gameState == GameState.WhiteWins -> {
-                newgame.score = if (computerHasWhite) -50 else 50
+                hisScore = if (computerHasWhite) -50 else 50
             }
             newgame.gameState == GameState.BlackWins -> {
-                newgame.score = if (computerHasWhite) 50 else -50
+                hisScore = if (computerHasWhite) 50 else -50
             }
             newgame.gameState == GameState.DrawByWinAndLose -> {
-                newgame.score = 0
+                hisScore = 0
             }
             newgame.gameState == GameState.DrawBoardFull -> {
-                newgame.score = 0
+                hisScore = 0
             }
             newgame.gameState == GameState.Running -> {
+                hisScore = 0
             }
         }
+        newgame.score = if (myScore > hisScore) myScore else hisScore
         games.add(newgame)
     }
-    return games.toList().sortedByDescending { g -> g.score }
+    val bestGames = games.toList().sortedByDescending { g -> g.score }
+    val bestScore = bestGames.first().score
+    val equalBestGames = bestGames.filter { g -> g.score == bestScore }
+    val randomnr = Helper.randomNrInRange(0, equalBestGames.count() - 1)
+    return bestGames[randomnr]
 }
+
