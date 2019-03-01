@@ -67,10 +67,10 @@ private fun bestGame(currentGame: GameInfo): GameInfo {
         newgame.move(emptyField.nr, newgame.myFcmToken)
         when {
             newgame.gameState == GameState.WhiteWins -> {
-                hisScore = if (computerHasWhite) -50 else 50
+                hisScore = if (computerHasWhite) -100 else 100
             }
             newgame.gameState == GameState.BlackWins -> {
-                hisScore = if (computerHasWhite) 50 else -50
+                hisScore = if (computerHasWhite) 100 else -100
             }
             newgame.gameState == GameState.DrawByWinAndLose -> {
                 hisScore = 0
@@ -82,7 +82,12 @@ private fun bestGame(currentGame: GameInfo): GameInfo {
                 hisScore = 0
             }
         }
-        newgame.score = if (myScore > hisScore) myScore else hisScore
+        // Don't play the losing move
+        if (myScore == -100 && hisScore == 100) {
+            newgame.score = 0
+        } else {
+            newgame.score = if (myScore >= hisScore) myScore else hisScore
+        }
         games.add(newgame)
     }
     val bestGames = games.toList().sortedByDescending { g -> g.score }

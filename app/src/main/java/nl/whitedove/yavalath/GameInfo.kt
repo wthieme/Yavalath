@@ -19,6 +19,8 @@ class GameInfo(var myName: String, var myFcmToken: String, var hisName: String, 
     var gameState: GameState
     var score: Int
     var computerSimulation: Boolean
+    var pointsWhite: Int
+    var pointsBlack: Int
 
     init {
         for (i in 0..60) {
@@ -40,6 +42,8 @@ class GameInfo(var myName: String, var myFcmToken: String, var hisName: String, 
         this.gameState = GameState.Running
         this.score = 0
         this.computerSimulation = false
+        this.pointsWhite = 0
+        this.pointsBlack = 0
     }
 
     private fun get3(): List<List<Int>> {
@@ -173,6 +177,9 @@ class GameInfo(var myName: String, var myFcmToken: String, var hisName: String, 
 
     private fun testGameEnd(): GameState {
         val gameState = GameState.Running
+        this.winningFields3 = ArrayList()
+        this.winningFields4 = ArrayList()
+        this.winningFields5 = ArrayList()
 
         val boardFull = !this.fields.any { f -> f.fieldState == FieldState.Empty }
 
@@ -236,6 +243,8 @@ class GameInfo(var myName: String, var myFcmToken: String, var hisName: String, 
             if (!this.computerSimulation) {
                 GameHelper.mPointsWhite++
                 GameHelper.mPointsBlack++
+                this.pointsBlack = 1
+                this.pointsWhite = 1
             }
             return GameState.DrawBoardFull
         }
@@ -248,6 +257,8 @@ class GameInfo(var myName: String, var myFcmToken: String, var hisName: String, 
             if (!this.computerSimulation) {
                 GameHelper.mPointsWhite += points3
                 GameHelper.mPointsBlack += points3
+                this.pointsBlack = points3
+                this.pointsWhite = points3
             }
             return GameState.DrawByWinAndLose
         }
@@ -256,6 +267,8 @@ class GameInfo(var myName: String, var myFcmToken: String, var hisName: String, 
             if (!this.computerSimulation) {
                 GameHelper.mPointsBlack += points3
                 GameHelper.mPointsWhite += points45
+                this.pointsBlack = points3
+                this.pointsWhite = points45
             }
             this.winner = this.playerBlack
             return GameState.BlackWins
@@ -265,6 +278,8 @@ class GameInfo(var myName: String, var myFcmToken: String, var hisName: String, 
             if (!this.computerSimulation) {
                 GameHelper.mPointsWhite += points3
                 GameHelper.mPointsBlack += points45
+                this.pointsWhite = points3
+                this.pointsBlack = points45
             }
             this.winner = this.playerWhite
             return GameState.WhiteWins
@@ -274,6 +289,8 @@ class GameInfo(var myName: String, var myFcmToken: String, var hisName: String, 
             if (!this.computerSimulation) {
                 GameHelper.mPointsWhite += points45
                 GameHelper.mPointsBlack += points3
+                this.pointsWhite = points45
+                this.pointsBlack = points3
             }
             this.winner = this.playerWhite
             return GameState.WhiteWins
@@ -283,6 +300,8 @@ class GameInfo(var myName: String, var myFcmToken: String, var hisName: String, 
             if (!this.computerSimulation) {
                 GameHelper.mPointsBlack += points45
                 GameHelper.mPointsWhite += points3
+                this.pointsBlack = points45
+                this.pointsWhite = points3
             }
             this.winner = this.playerBlack
             return GameState.BlackWins
@@ -325,7 +344,6 @@ class GameInfo(var myName: String, var myFcmToken: String, var hisName: String, 
 
     fun loseInOne(compColor: FieldState): Int {
         val lastMove = this.lastMove
-        var malus = 0
         val listMoves = listOf(Pair(0, 1), Pair(0, 2), Pair(1, 2), Pair(2, 1), Pair(3, 1), Pair(3, 2))
         for (g4 in this.get4()) {
             val fieldStates = listOf(this.fields[g4[0]].fieldState, this.fields[g4[1]].fieldState, this.fields[g4[2]].fieldState, this.fields[g4[3]].fieldState)
@@ -338,22 +356,19 @@ class GameInfo(var myName: String, var myFcmToken: String, var hisName: String, 
                         this.move(this.fields[g4[listMove.first]].nr, this.myFcmToken)
                         this.move(this.fields[g4[listMove.second]].nr, this.hisFcmToken)
                         val state = this.gameState
-                        this.winningFields3 = ArrayList()
-                        this.winningFields4 = ArrayList()
-                        this.winningFields5 = ArrayList()
                         this.fields[g4[listMove.first]].fieldState = FieldState.Empty
                         this.fields[g4[listMove.second]].fieldState = FieldState.Empty
                         this.gameState = GameState.Running
                         this.lastMove = lastMove
                         if ((state == GameState.BlackWins && compColor == FieldState.White) ||
                                 (state == GameState.WhiteWins && compColor == FieldState.Black)) {
-                            malus -= 25
+                            return -25
                         }
                     }
                 }
             }
         }
-        return malus
+        return 0
     }
 }
 

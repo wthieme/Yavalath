@@ -187,21 +187,90 @@ class GameActivity : AppCompatActivity() {
             swReady.visibility = View.VISIBLE
             game.whiteReady = false
             game.blackReady = false
-            tvToMove.text = getString(R.string.draw)
+            tvWhiteWin.visibility = View.VISIBLE
+            tvWhitePoints.visibility = View.VISIBLE
+            tvBlackWin.visibility = View.VISIBLE
+            tvBlackPoints.visibility = View.VISIBLE
+            tvToMove.text = ""
+
+            FontManager.setIconAndText(tvWhiteWin,
+                    iconFont,
+                    getString(R.string.fa_meh),
+                    ContextCompat.getColor(this, R.color.colorPrimary),
+                    Typeface.DEFAULT,
+                    game.playerWhite,
+                    ContextCompat.getColor(mContext, R.color.colorPrimary))
+
+            FontManager.setIconAndText(tvBlackWin,
+                    iconFont,
+                    getString(R.string.fa_meh),
+                    ContextCompat.getColor(this, R.color.colorPrimary),
+                    Typeface.DEFAULT,
+                    game.playerBlack,
+                    ContextCompat.getColor(mContext, R.color.colorPrimary))
+
+            tvWhitePoints.text = String.format(getString(R.string.pluspoints), game.pointsWhite.toString())
+            tvBlackPoints.text = String.format(getString(R.string.pluspoints), game.pointsBlack.toString())
             initReadySwitch(swReady, false)
         }
+
         if (game.gameState == GameState.Running) {
             tvReady.visibility = View.GONE
             swReady.visibility = View.GONE
+            tvWhiteWin.visibility = View.GONE
+            tvWhitePoints.visibility = View.GONE
+            tvBlackWin.visibility = View.GONE
+            tvBlackPoints.visibility = View.GONE
             tvToMove.text = String.format(getString(R.string.to_move), game.playerToMove)
         }
 
         if (game.gameState == GameState.WhiteWins || game.gameState == GameState.BlackWins) {
+            tvWhiteWin.visibility = View.VISIBLE
+            tvWhitePoints.visibility = View.VISIBLE
+            tvBlackWin.visibility = View.VISIBLE
+            tvBlackPoints.visibility = View.VISIBLE
             tvReady.visibility = View.VISIBLE
             swReady.visibility = View.VISIBLE
             game.whiteReady = false
             game.blackReady = false
-            tvToMove.text = String.format(getString(R.string.wins), game.winner)
+            tvToMove.text = ""
+
+            if (game.gameState == GameState.WhiteWins) {
+                FontManager.setIconAndText(tvWhiteWin,
+                        iconFont,
+                        getString(R.string.fa_smile),
+                        ContextCompat.getColor(this, R.color.colorGreen),
+                        Typeface.DEFAULT,
+                        game.playerWhite,
+                        ContextCompat.getColor(mContext, R.color.colorPrimary))
+                FontManager.setIconAndText(tvBlackWin,
+                        iconFont,
+                        getString(R.string.fa_frown),
+                        ContextCompat.getColor(this, R.color.colorRed),
+                        Typeface.DEFAULT,
+                        game.playerBlack,
+                        ContextCompat.getColor(mContext, R.color.colorPrimary))
+            }
+
+            if (game.gameState == GameState.BlackWins) {
+                FontManager.setIconAndText(tvWhiteWin,
+                        iconFont,
+                        getString(R.string.fa_frown),
+                        ContextCompat.getColor(this, R.color.colorRed),
+                        Typeface.DEFAULT,
+                        game.playerWhite,
+                        ContextCompat.getColor(mContext, R.color.colorPrimary))
+                FontManager.setIconAndText(tvBlackWin,
+                        iconFont,
+                        getString(R.string.fa_smile),
+                        ContextCompat.getColor(this, R.color.colorGreen),
+                        Typeface.DEFAULT,
+                        game.playerBlack,
+                        ContextCompat.getColor(mContext, R.color.colorPrimary))
+            }
+            tvWhitePoints.text = String.format(getString(R.string.pluspoints), game.pointsWhite.toString())
+            tvBlackPoints.text = String.format(getString(R.string.pluspoints), game.pointsBlack.toString())
+
             initReadySwitch(swReady, false)
         }
 
