@@ -10,6 +10,7 @@ import android.widget.BaseAdapter
 import android.widget.TextView
 import org.joda.time.DateTime
 import org.joda.time.Minutes
+import java.util.*
 
 internal class CustomListAdapterPlayers(private val context: Context, private val listData: List<PlayerInfo>) : BaseAdapter() {
     private val layoutInflater: LayoutInflater
@@ -56,7 +57,13 @@ internal class CustomListAdapterPlayers(private val context: Context, private va
             else -> holder.tvLastActive!!.text = String.format(mContext.getString(R.string.minutesAgo), Math.abs(Minutes.minutesBetween(nu, player.lastActive).minutes))
         }
 
-        holder.tvCountry!!.text = player.country
+        val loc = Locale("", player.country)
+        var country = mContext.getString(R.string.CountryUnknown)
+        if (player.country != "") {
+            country = loc.getDisplayCountry()
+        }
+
+        holder.tvCountry!!.text = country
         var env = "1.0"
         var icon = mContext.getString(R.string.fa_os_unknown)
         var col = ContextCompat.getColor(mContext, R.color.colorBlue)
@@ -67,7 +74,7 @@ internal class CustomListAdapterPlayers(private val context: Context, private va
             col = ContextCompat.getColor(mContext, R.color.colorGreen)
             env = player.platform.replace("android", "", true).trim()
         }
-        if (player.platform.startsWith("ios",true)) {
+        if (player.platform.startsWith("ios", true)) {
             iconFont = FontManager.getTypeface(context, FontManager.FONTAWESOME_BRANDS)
             icon = mContext.getString(R.string.fa_os_ios)
             col = ContextCompat.getColor(mContext, R.color.colorDisabled)

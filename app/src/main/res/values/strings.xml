@@ -46,7 +46,7 @@
     <string name="Yes">Yes</string>
     <string name="No">No</string>
     <string name="InviteText">Do you accept the invitation from %s to play a game of Yavalath?</string>
-    <string name="invite_not_accepted">%s declined your invitation</string>
+    <string name="invite_not_accepted">Your invitation is declined</string>
     <string name="cant_play_self">You can\'t play Yavalath with yourself</string>
     <string name="PlayerWhite">%s - %s</string>
     <string name="White">White</string>
@@ -97,7 +97,6 @@
     <string name="Expert">Expert</string>
     <string name="modehvhl">In local mode you play against another person on the same device.</string>
     <string name="modehvhi">In this mode you play against another person over the internet, each player plays on his own device.</string>
-    <string name="coming_soon">Playing level \'Expert\' not yet implemented</string>
     <string name="confirm">Confirm</string>
     <string name="computer">Computer</string>
     <string name="ComputerReserved">Computer is a reserved name</string>

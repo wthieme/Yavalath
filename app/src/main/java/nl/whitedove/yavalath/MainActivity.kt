@@ -257,7 +257,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun createPlayer() {
         val name = Helper.getName1(mContext)
-        val country = LocationHelper.getCountry(mContext)
+        val country = LocationHelper.getCountryCode(mContext)
         Database.createOrUpdatePlayer(name, country)
     }
 

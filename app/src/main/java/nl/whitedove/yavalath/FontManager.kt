@@ -12,6 +12,7 @@ import android.widget.TextView
 
 internal object FontManager {
     val FONTAWESOME_SOLID = "fa-solid-900.ttf"
+    val FONTAWESOME_REGULAR = "fa-regular-400.ttf"
     val FONTAWESOME_BRANDS = "fa-brands-400.ttf"
 
     fun getTypeface(context: Context, font: String): Typeface {

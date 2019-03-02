@@ -133,8 +133,7 @@ class PlayerListActivity : AppCompatActivity() {
     }
 
     private fun answerNo() {
-        val notAccepted = String.format(getString(R.string.invite_not_accepted), Helper.getName1(this))
-        inviteNokInBackground(notAccepted)
+        inviteNokInBackground()
     }
 
     private fun initReceivers() {
@@ -177,9 +176,8 @@ class PlayerListActivity : AppCompatActivity() {
                         mInviteCount = 0
                     }
 
-                    val err = intent.getStringExtra(FcmNames.Error)
                     val builder = AlertDialog.Builder(mContext)
-                    builder.setMessage(err)
+                    builder.setMessage(getString(R.string.invite_not_accepted))
                             .setCancelable(false)
                             .setPositiveButton(getString(R.string.OK)) { _, _ -> answerOk() }
 
@@ -306,16 +304,15 @@ class PlayerListActivity : AppCompatActivity() {
         }
     }
 
-    private fun inviteNokInBackground(notAccepted: String) {
-        AsyncNokInBackgroundTask().execute(notAccepted)
+    private fun inviteNokInBackground() {
+        AsyncNokInBackgroundTask().execute()
     }
 
-    private class AsyncNokInBackgroundTask internal constructor() : AsyncTask<String, Void, Void>() {
+    private class AsyncNokInBackgroundTask internal constructor() : AsyncTask<Void, Void, Void>() {
 
-        override fun doInBackground(vararg params: String): Void? {
-            val result = params[0]
+        override fun doInBackground(vararg params: Void?): Void? {
             val guid = mGuid
-            FcmSender.sendInviteNok(guid, result, FcmSender.mHisFcmToken)
+            FcmSender.sendInviteNok(guid, FcmSender.mHisFcmToken)
             return null
         }
     }

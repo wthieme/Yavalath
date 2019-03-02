@@ -166,7 +166,8 @@ class GameActivity : AppCompatActivity() {
         val game = GameHelper.mGame!!
         val res = this.resources
         val packname = this.packageName
-        val iconFont = FontManager.getTypeface(this, FontManager.FONTAWESOME_SOLID)
+        val stoneFont = FontManager.getTypeface(this, FontManager.FONTAWESOME_SOLID)
+        val iconFont = FontManager.getTypeface(this, FontManager.FONTAWESOME_REGULAR)
         val movesPlayed = game.movesPlayed()
         val myMove = game.myMove()
 
@@ -196,7 +197,7 @@ class GameActivity : AppCompatActivity() {
             FontManager.setIconAndText(tvWhiteWin,
                     iconFont,
                     getString(R.string.fa_meh),
-                    ContextCompat.getColor(this, R.color.colorPrimary),
+                    ContextCompat.getColor(this, R.color.colorTextDisabled),
                     Typeface.DEFAULT,
                     game.playerWhite,
                     ContextCompat.getColor(mContext, R.color.colorPrimary))
@@ -204,7 +205,7 @@ class GameActivity : AppCompatActivity() {
             FontManager.setIconAndText(tvBlackWin,
                     iconFont,
                     getString(R.string.fa_meh),
-                    ContextCompat.getColor(this, R.color.colorPrimary),
+                    ContextCompat.getColor(this, R.color.colorTextDisabled),
                     Typeface.DEFAULT,
                     game.playerBlack,
                     ContextCompat.getColor(mContext, R.color.colorPrimary))
@@ -286,7 +287,7 @@ class GameActivity : AppCompatActivity() {
             val vector = VectorChildFinder(this, R.drawable.hexagon, ivHexagon)
             val pathHexagon = vector.findPathByName("path_hexagon")
             pathHexagon.fillColor = ContextCompat.getColor(mContext, R.color.colorLightYellow)
-            FontManager.markAsIconContainer(tvStone, iconFont)
+            FontManager.markAsIconContainer(tvStone, stoneFont)
             val field = game.fields[i]
             tvStone.visibility = View.VISIBLE
 

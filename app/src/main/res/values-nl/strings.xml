@@ -1,0 +1,105 @@
+<resources>
+    <string name="app_name">Yavalath</string>
+    <string name="NoInternet">Geen internet connectie</string>
+    <string name="app_makers">Door Wilhelm Thieme</string>
+    <string name="enter_name">Geef naam</string>
+    <string name="enter">Enter</string>
+    <string name="momentAgo">een moment geleden</string>
+    <string name="minuteAgo">1 minuten geleden</string>
+    <string name="minutesAgo">%s minuten geleden</string>
+    <string name="About">Info</string>
+    <string name="fa_sign_in_alt">&#xf2f6;</string>
+    <string name="fa_bolt">&#xf0e7;</string>
+    <string name="fa_circle">&#xf111;</string>
+    <string name="fa_check">&#xf058;</string>
+    <string name="fa_nok">&#xf057;</string>
+    <string name="fa_bars">&#xf0c9;</string>
+    <string name="fa_sync">&#xf021;</string>
+    <string name="fa_arrow_left">&#xf060;</string>
+    <string name="fa_acorn">&#xf6ae;</string>
+    <string name="fa_heart">&#xf004;</string>
+    <string name="fa_star">&#xf005;</string>
+    <string name="fa_share_square">&#xf14d;</string>
+    <string name="fa_os_android">&#xf17b;</string>
+    <string name="fa_os_ios">&#xf179;</string>
+    <string name="fa_os_unknown">&#xf059;</string>
+    <string name="fa_play">&#xf04b;</string>
+    <string name="fa_arrow_down">&#xf063;</string>
+    <string name="fa_smile">&#xf118;</string>
+    <string name="fa_frown">&#xf119;</string>
+    <string name="fa_meh">&#xf11a;</string>
+    <string name="CountryUnknown">Onbekend</string>
+    <string name="NameMustNotBeEmpty">Naam mag niet leeg zijn</string>
+    <string name="Name1MustNotBeEmpty">Naam 1 mag niet leeg zijn</string>
+    <string name="Name2MustNotBeEmpty">Name 2 mag niet leeg zijn</string>
+    <string name="back">Terug</string>
+    <string name="no_players_found">Geen spelers</string>
+    <string name="Inviting">%s wordt uitgenodigd voor een spelletje Yavalath</string>
+    <string name="InviteTimeOut">%s heeft niet geantwoord</string>
+    <string name="active_time">00:00</string>
+    <string name="Version">Versie</string>
+    <string name="VersionNr">V1.0</string>
+    <string name="about_copyright">Copyright &#169; 2018 Wilhelm Thieme.</string>
+    <string name="OK">OK</string>
+    <string name="players_ready_for_a_game_of_yavalath">Beschikbare Yavalath spelers</string>
+    <string name="Title">YesNoTitle</string>
+    <string name="Yes">Ja</string>
+    <string name="No">Nee</string>
+    <string name="InviteText">Wil je een spelletje Yavalath spelen tegen %s</string>
+    <string name="invite_not_accepted">De uitnodiging is niet geaccepteerd</string>
+    <string name="cant_play_self">Je kan Yavalath niet tegen jezelf spelen</string>
+    <string name="PlayerWhite">%s - %s</string>
+    <string name="White">Wit</string>
+    <string name="Black">Zwart</string>
+    <string name="PlayerBlack">%s - %s</string>
+    <string name="vs">vs</string>
+    <string name="to_move">%s aan de beurt</string>
+    <string name="cant_play_same_name">Je kan niet spelen tegen een speler met dezelfde naam</string>
+    <string name="AbandonText">Wil je stoppen met dit spel?</string>
+    <string name="left_game">%s heeft het spel verlaten</string>
+    <string name="OfflineText">%s is niet online, wat wil je doen?</string>
+    <string name="Wait">Wachten</string>
+    <string name="Quit">Stoppen</string>
+    <string name="wins">%s wint het spel!</string>
+    <string name="timems">%s:%s</string>
+    <string name="timehms">%s:%s:%s</string>
+    <string name="nr_of_moves">0</string>
+    <string name="Rules">Regels</string>
+    <string name="RulesTitle">The regels van Yavalath</string>
+    <string name="clickRules"><u>Klik om de spelregels van <b>Yavalath</b></u> te zien</string>
+    <string name="RulesTxt"><b><i>Yavalath</i></b> is a bordspel voor 2 spelers.
+        \n\nDe ene speler speelt met de witte stenen en de andere met de zwarte. Als je aan de beurt bent leg je een steen op een vrij vakje op het bord.
+        \n\nDaarna is de andere persoon aan de beurt.
+        \n\nHet doel van het spel is om \'4 op een rij\' te krijgen
+        \n\n<b>Maar wees voorzichtig!</b>
+        \n\nAls je \'3 op een rij\' krijgt verlies je.
+        \n\nVeel plezier met het spelen!
+</string>
+    <string name="send">Stuur</string>
+    <string name="new_game">Nieuw spel</string>
+    <string name="ReadyToStart">Opnieuw spelen?</string>
+    <string name="no">N</string>
+    <string name="yes">Y</string>
+    <string name="draw">Gelijkspel!</string>
+    <string name="Environment">Omgeving</string>
+    <string name="Device">Toestel</string>
+    <string name="Player">Speler</string>
+    <string name="debug_version">Debug versie</string>
+    <string name="enter_name1">Geef naam 1</string>
+    <string name="enter_name2">Geef naam 2</string>
+    <string name="Start">Start</string>
+    <string name="rH2HInternet">Mens vs Mens - Internet</string>
+    <string name="H2HLocal">Mens vs Mens - Lokaal</string>
+    <string name="HumanVsComputer">Mens vs Computer</string>
+    <string name="modehvc">In deze mode speel je tegen de computer</string>
+    <string name="easy">Makkelijk</string>
+    <string name="Intermediate">Gemiddeld</string>
+    <string name="Expert">Moeilijk</string>
+    <string name="modehvhl">In lokale mode speel je tegen een ander persoon op hetzelfde toestel.</string>
+    <string name="modehvhi">In deze mode speel je tegen een ander via internet, iedere speler speelt op zijn eigen toestel.</string>
+    <string name="confirm">Ok</string>
+    <string name="computer">Computer</string>
+    <string name="ComputerReserved">Computer is a gereserveerde naam</string>
+    <string name="pluspoints">+%s</string>
+</resources>
+

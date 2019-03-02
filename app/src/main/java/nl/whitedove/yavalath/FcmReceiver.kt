@@ -44,8 +44,7 @@ class FcmReceiver : FirebaseMessagingService() {
 
         if (rt === FcmNames.ResponseType.InviteNOk) {
             val guid = data[FcmNames.UUID] as String
-            val err = data[FcmNames.Error] as String
-            receiveInviteNOk(guid, err)
+            receiveInviteNOk(guid)
             return
         }
 
@@ -103,10 +102,9 @@ class FcmReceiver : FirebaseMessagingService() {
         sendBroadcast(intent)
     }
 
-    private fun receiveInviteNOk(guid : String, error: String) {
+    private fun receiveInviteNOk(guid : String) {
         val intent = Intent(FcmNames.ResponseType.InviteNOk.enumToString())
         intent.putExtra(FcmNames.UUID, guid)
-        intent.putExtra(FcmNames.Error, error)
         sendBroadcast(intent)
     }
 

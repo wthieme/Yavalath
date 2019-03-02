@@ -83,10 +83,9 @@ internal object FcmSender {
         FcmSender.sendMessage(FcmNames.ResponseType.Pong, data, toToken)
     }
 
-    fun sendInviteNok(guid: String, result: String, toToken: String) {
+    fun sendInviteNok(guid: String, toToken: String) {
         val data = HashMap<String, Any>()
         data[FcmNames.UUID] = guid
-        data[FcmNames.Error] = result
         FcmSender.sendMessage(FcmNames.ResponseType.InviteNOk, data, toToken)
     }
 

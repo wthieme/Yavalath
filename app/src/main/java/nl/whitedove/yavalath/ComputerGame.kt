@@ -42,15 +42,15 @@ private fun bestGame(currentGame: GameInfo): GameInfo {
                     newgame.ring3(emptyField.nr) -> up = 2
                 }
                 myScore = Helper.randomNrInRange(1, up)
-                when {
-                    currentGame.gameLevel == GameLevel.Intermediate -> {
-                        val bonus = newgame.boardScore(if (computerHasWhite) FieldState.White else FieldState.Black)
-                        myScore += bonus
-                    }
-                    currentGame.gameLevel == GameLevel.Expert -> {
-                        val malus = newgame.loseInOne(if (computerHasWhite) FieldState.White else FieldState.Black)
-                        myScore += malus
-                    }
+                if (currentGame.gameLevel == GameLevel.Intermediate || currentGame.gameLevel == GameLevel.Expert) {
+                    val bonus = newgame.boardScore(if (computerHasWhite) FieldState.White else FieldState.Black)
+                    myScore += bonus
+                }
+                if (currentGame.gameLevel == GameLevel.Expert) {
+                    val bonus = newgame.winInOne(if (computerHasWhite) FieldState.White else FieldState.Black)
+                    myScore += bonus
+                    val malus = newgame.loseInOne(if (computerHasWhite) FieldState.White else FieldState.Black)
+                    myScore += malus
                 }
             }
         }
@@ -90,6 +90,7 @@ private fun bestGame(currentGame: GameInfo): GameInfo {
         }
         games.add(newgame)
     }
+
     val bestGames = games.toList().sortedByDescending { g -> g.score }
     val bestScore = bestGames.first().score
     val equalBestGames = bestGames.filter { g -> g.score == bestScore }

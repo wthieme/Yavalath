@@ -12,7 +12,6 @@ internal object FcmNames {
     const val Data = "data"
     const val Priority = "priority"
     const val High = "high"
-    const val Error = "error"
     const val Name = "name"
     const val FcmToken = "fcmToken"
     const val FieldNr = "fieldNr"
