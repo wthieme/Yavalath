@@ -42,15 +42,14 @@ private fun bestGame(currentGame: GameInfo): GameInfo {
                     newgame.ring3(emptyField.nr) -> up = 2
                 }
                 myScore = Helper.randomNrInRange(1, up)
+
                 if (currentGame.gameLevel == GameLevel.Intermediate || currentGame.gameLevel == GameLevel.Expert) {
-                    val bonus = newgame.boardScore(if (computerHasWhite) FieldState.White else FieldState.Black)
-                    myScore += bonus
+                    myScore += newgame.winInOne(if (computerHasWhite) FieldState.White else FieldState.Black)
+                    myScore += newgame.boardScore(if (computerHasWhite) FieldState.White else FieldState.Black)
                 }
                 if (currentGame.gameLevel == GameLevel.Expert) {
-                    val bonus = newgame.winInOne(if (computerHasWhite) FieldState.White else FieldState.Black)
-                    myScore += bonus
-                    val malus = newgame.loseInOne(if (computerHasWhite) FieldState.White else FieldState.Black)
-                    myScore += malus
+                    myScore += newgame.possibleWinInTwo(if (computerHasWhite) FieldState.White else FieldState.Black)
+                    myScore += newgame.loseInTwo(if (computerHasWhite) FieldState.White else FieldState.Black)
                 }
             }
         }

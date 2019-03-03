@@ -19,7 +19,7 @@ import java.util.*
 
 internal object Helper {
 
-    val DEBUG = true
+    val DEBUG = false
     private val mRandom = Random()
     var mCurrentBestLocation: Location? = null
     const val ONE_MINUTE = 1000L * 60L

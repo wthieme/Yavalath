@@ -95,7 +95,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun afterTextChanged(s: Editable) {
-                Helper.setName1(mContext, etNameH2HInternet.text.toString())
+                Helper.setName1(mContext, etNameH2HInternet.text.toString().trim())
             }
         })
 
@@ -119,7 +119,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun afterTextChanged(s: Editable) {
-                Helper.setName1(mContext, etNameH2HLocal1.text.toString())
+                Helper.setName1(mContext, etNameH2HLocal1.text.toString().trim())
             }
         })
 
@@ -133,7 +133,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun afterTextChanged(s: Editable) {
-                Helper.setName2(mContext, etNameH2HLocal2.text.toString())
+                Helper.setName2(mContext, etNameH2HLocal2.text.toString().trim())
             }
         })
 
@@ -174,7 +174,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun afterTextChanged(s: Editable) {
-                Helper.setName1(mContext, etNameComputer.text.toString())
+                Helper.setName1(mContext, etNameComputer.text.toString().trim())
             }
         })
 
@@ -275,6 +275,10 @@ class MainActivity : AppCompatActivity() {
             Helper.showMessage(context, getString(R.string.ComputerReserved))
             return false
         }
+        if (nick.length < 3 || nick.length > 10) {
+            Helper.showMessage(context, getString(R.string.lengthnotbetween3and10))
+            return false
+        }
         return true
     }
 
@@ -282,6 +286,10 @@ class MainActivity : AppCompatActivity() {
         val nick2 = Helper.getName2(context)
         if (nick2.isEmpty()) {
             Helper.showMessage(context, getString(R.string.Name2MustNotBeEmpty))
+            return false
+        }
+        if (nick2.length < 3 || nick2.length > 10) {
+            Helper.showMessage(context, getString(R.string.lengthnotbetween3and10))
             return false
         }
         return true

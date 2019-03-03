@@ -166,13 +166,48 @@ class GameActivity : AppCompatActivity() {
         val game = GameHelper.mGame!!
         val res = this.resources
         val packname = this.packageName
-        val stoneFont = FontManager.getTypeface(this, FontManager.FONTAWESOME_SOLID)
-        val iconFont = FontManager.getTypeface(this, FontManager.FONTAWESOME_REGULAR)
+        val solidFont = FontManager.getTypeface(this, FontManager.FONTAWESOME_SOLID)
+        val regularFont = FontManager.getTypeface(this, FontManager.FONTAWESOME_REGULAR)
         val movesPlayed = game.movesPlayed()
         val myMove = game.myMove()
 
         if (game.gameMode != GameMode.HumanVsHumanLocal && myMove && movesPlayed > 0) {
             SoundPlayer.playSound(mContext, "sonar")
+        }
+
+        if (game.gameMode == GameMode.HumanVsHumanInternet) {
+            tvOnline.visibility = View.VISIBLE
+        } else {
+            tvOnline.visibility = View.GONE
+        }
+
+        tvStar1.visibility = View.GONE
+        tvStar2.visibility = View.GONE
+        tvStar3.visibility = View.GONE
+
+        if (game.gameMode == GameMode.HumanVsComputer) {
+
+            FontManager.markAsIconContainer(tvStar1, solidFont)
+            FontManager.markAsIconContainer(tvStar2, solidFont)
+            FontManager.markAsIconContainer(tvStar3, solidFont)
+
+            when {
+                game.gameLevel == GameLevel.Easy -> {
+                    tvStar1.visibility = View.VISIBLE
+                    tvStar2.visibility = View.GONE
+                    tvStar3.visibility = View.GONE
+                }
+                game.gameLevel == GameLevel.Intermediate -> {
+                    tvStar1.visibility = View.VISIBLE
+                    tvStar2.visibility = View.VISIBLE
+                    tvStar3.visibility = View.GONE
+                }
+                game.gameLevel == GameLevel.Expert -> {
+                    tvStar1.visibility = View.VISIBLE
+                    tvStar2.visibility = View.VISIBLE
+                    tvStar3.visibility = View.VISIBLE
+                }
+            }
         }
 
         tvPlayerWhite.text = String.format(getString(R.string.PlayerWhite), game.playerWhite, GameHelper.mPointsWhite.toString())
@@ -195,7 +230,7 @@ class GameActivity : AppCompatActivity() {
             tvToMove.text = ""
 
             FontManager.setIconAndText(tvWhiteWin,
-                    iconFont,
+                    regularFont,
                     getString(R.string.fa_meh),
                     ContextCompat.getColor(this, R.color.colorTextDisabled),
                     Typeface.DEFAULT,
@@ -203,7 +238,7 @@ class GameActivity : AppCompatActivity() {
                     ContextCompat.getColor(mContext, R.color.colorPrimary))
 
             FontManager.setIconAndText(tvBlackWin,
-                    iconFont,
+                    regularFont,
                     getString(R.string.fa_meh),
                     ContextCompat.getColor(this, R.color.colorTextDisabled),
                     Typeface.DEFAULT,
@@ -238,14 +273,14 @@ class GameActivity : AppCompatActivity() {
 
             if (game.gameState == GameState.WhiteWins) {
                 FontManager.setIconAndText(tvWhiteWin,
-                        iconFont,
+                        regularFont,
                         getString(R.string.fa_smile),
                         ContextCompat.getColor(this, R.color.colorGreen),
                         Typeface.DEFAULT,
                         game.playerWhite,
                         ContextCompat.getColor(mContext, R.color.colorPrimary))
                 FontManager.setIconAndText(tvBlackWin,
-                        iconFont,
+                        regularFont,
                         getString(R.string.fa_frown),
                         ContextCompat.getColor(this, R.color.colorRed),
                         Typeface.DEFAULT,
@@ -255,14 +290,14 @@ class GameActivity : AppCompatActivity() {
 
             if (game.gameState == GameState.BlackWins) {
                 FontManager.setIconAndText(tvWhiteWin,
-                        iconFont,
+                        regularFont,
                         getString(R.string.fa_frown),
                         ContextCompat.getColor(this, R.color.colorRed),
                         Typeface.DEFAULT,
                         game.playerWhite,
                         ContextCompat.getColor(mContext, R.color.colorPrimary))
                 FontManager.setIconAndText(tvBlackWin,
-                        iconFont,
+                        regularFont,
                         getString(R.string.fa_smile),
                         ContextCompat.getColor(this, R.color.colorGreen),
                         Typeface.DEFAULT,
@@ -287,7 +322,7 @@ class GameActivity : AppCompatActivity() {
             val vector = VectorChildFinder(this, R.drawable.hexagon, ivHexagon)
             val pathHexagon = vector.findPathByName("path_hexagon")
             pathHexagon.fillColor = ContextCompat.getColor(mContext, R.color.colorLightYellow)
-            FontManager.markAsIconContainer(tvStone, stoneFont)
+            FontManager.markAsIconContainer(tvStone, solidFont)
             val field = game.fields[i]
             tvStone.visibility = View.VISIBLE
 

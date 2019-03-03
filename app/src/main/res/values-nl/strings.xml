@@ -65,9 +65,9 @@
     <string name="timehms">%s:%s:%s</string>
     <string name="nr_of_moves">0</string>
     <string name="Rules">Regels</string>
-    <string name="RulesTitle">The regels van Yavalath</string>
+    <string name="RulesTitle">De regels van Yavalath</string>
     <string name="clickRules"><u>Klik om de spelregels van <b>Yavalath</b></u> te zien</string>
-    <string name="RulesTxt"><b><i>Yavalath</i></b> is a bordspel voor 2 spelers.
+    <string name="RulesTxt"><b><i>Yavalath</i></b> is een bordspel voor 2 spelers.
         \n\nDe ene speler speelt met de witte stenen en de andere met de zwarte. Als je aan de beurt bent leg je een steen op een vrij vakje op het bord.
         \n\nDaarna is de andere persoon aan de beurt.
         \n\nHet doel van het spel is om \'4 op een rij\' te krijgen
@@ -101,5 +101,6 @@
     <string name="computer">Computer</string>
     <string name="ComputerReserved">Computer is a gereserveerde naam</string>
     <string name="pluspoints">+%s</string>
+    <string name="lengthnotbetween3and10">Een naam moet tussen de 3 en 10 tekens lang zijn</string>
 </resources>
 

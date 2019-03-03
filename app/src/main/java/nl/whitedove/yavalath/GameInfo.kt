@@ -342,7 +342,34 @@ class GameInfo(var myName: String, var myFcmToken: String, var hisName: String, 
         return score
     }
 
-    fun loseInOne(compColor: FieldState): Int {
+    fun winInOne(compColor: FieldState): Int {
+        val lastMove = this.lastMove
+        val listMoves = listOf(0, 1, 2, 3)
+        for (g4 in this.get4()) {
+            val fieldStates = listOf(this.fields[g4[0]].fieldState, this.fields[g4[1]].fieldState, this.fields[g4[2]].fieldState, this.fields[g4[3]].fieldState)
+            val aantalCompColor = fieldStates.count { f -> f == compColor }
+            val aantalNotCompColor = fieldStates.count { f -> f != compColor && f != FieldState.Empty }
+            if (aantalCompColor == 3 && aantalNotCompColor == 0) {
+                for (listMove in listMoves) {
+                    if (fieldStates[listMove] == FieldState.Empty) {
+                        // Put my (human) stone on the first field and then his (computer) stone on the second field
+                        this.move(this.fields[g4[listMove]].nr, this.myFcmToken)
+                        val state = this.gameState
+                        this.fields[g4[listMove]].fieldState = FieldState.Empty
+                        this.gameState = GameState.Running
+                        this.lastMove = lastMove
+                        if ((state == GameState.BlackWins && compColor == FieldState.Black) ||
+                                (state == GameState.WhiteWins && compColor == FieldState.White)) {
+                            return 75
+                        }
+                    }
+                }
+            }
+        }
+        return 0
+    }
+
+    fun loseInTwo(compColor: FieldState): Int {
         val lastMove = this.lastMove
         val listMoves = listOf(Pair(0, 1), Pair(0, 2), Pair(1, 2), Pair(2, 1), Pair(3, 1), Pair(3, 2))
         for (g4 in this.get4()) {
@@ -371,7 +398,7 @@ class GameInfo(var myName: String, var myFcmToken: String, var hisName: String, 
         return 0
     }
 
-    fun winInOne(compColor: FieldState): Int {
+    fun possibleWinInTwo(compColor: FieldState): Int {
         val lastMove = this.lastMove
         val listMoves = listOf(Pair(0, 1), Pair(0, 2), Pair(1, 2), Pair(2, 1), Pair(3, 1), Pair(3, 2))
         for (g4 in this.get4()) {
@@ -383,15 +410,19 @@ class GameInfo(var myName: String, var myFcmToken: String, var hisName: String, 
                     if (fieldStates[listMove.first] == FieldState.Empty && fieldStates[listMove.second] == FieldState.Empty) {
                         // Put my (human) stone on the first field and then his (computer) stone on the second field
                         this.move(this.fields[g4[listMove.first]].nr, this.hisFcmToken)
-                        this.move(this.fields[g4[listMove.second]].nr, this.myFcmToken)
-                        val state = this.gameState
+                        var state = this.gameState
+                        if (state == GameState.Running) {
+                            // Only do the second move if the game is still running
+                            this.move(this.fields[g4[listMove.second]].nr, this.myFcmToken)
+                            state = this.gameState
+                        }
                         this.fields[g4[listMove.first]].fieldState = FieldState.Empty
                         this.fields[g4[listMove.second]].fieldState = FieldState.Empty
                         this.gameState = GameState.Running
                         this.lastMove = lastMove
                         if ((state == GameState.BlackWins && compColor == FieldState.Black) ||
                                 (state == GameState.WhiteWins && compColor == FieldState.White)) {
-                            return 25
+                            return 15
                         }
                     }
                 }
@@ -399,6 +430,4 @@ class GameInfo(var myName: String, var myFcmToken: String, var hisName: String, 
         }
         return 0
     }
-
 }
-

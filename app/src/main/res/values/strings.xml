@@ -101,5 +101,6 @@
     <string name="computer">Computer</string>
     <string name="ComputerReserved">Computer is a reserved name</string>
     <string name="pluspoints">+%s</string>
+    <string name="lengthnotbetween3and10">A name must be between 3 and 10 characters long</string>
 </resources>
 

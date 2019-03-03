@@ -65,7 +65,7 @@
 
     <TextView
         android:id="@+id/tvMaker"
-        android:layout_width="250dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/llVersion"
         android:layout_centerHorizontal="true"
