@@ -124,6 +124,21 @@ class GameInfo(var myName: String, var myFcmToken: String, var hisName: String, 
         )
     }
 
+    private fun get7(): List<List<Int>> {
+        val vertDown = listOf(
+                listOf(0, 1, 19, 21, 6, 12, 13), listOf(1, 2, 20, 22, 7, 13, 14), listOf(2, 3, 21, 23, 8, 14, 15), listOf(3, 4, 22, 24, 9, 15, 16),
+                listOf(5, 6, 27, 29, 12, 19, 20), listOf(6, 7, 28, 30, 13, 20, 21), listOf(7, 8, 29, 31, 14, 21, 22), listOf(8, 9, 30, 32, 15, 22, 23), listOf(9, 10, 31, 33, 16, 23, 24),
+                listOf(11, 12, 35, 37, 19, 27, 28), listOf(12, 13, 36, 38, 20, 28, 29), listOf(13, 14, 37, 39, 21, 29, 30), listOf(14, 15, 30, 38, 22, 30, 31), listOf(15, 16, 39, 41, 23, 31, 32), listOf(16, 17, 40, 42, 24, 32, 33),
+                listOf(19, 20, 43, 45, 28, 36, 37), listOf(20, 21, 44, 46, 29, 37, 38), listOf(21, 22, 45, 47, 30, 38, 39), listOf(22, 23, 46, 48, 31, 39, 40), listOf(23, 24, 47, 49, 32, 40, 41),
+                listOf(28, 29, 50, 52, 37, 44, 45), listOf(29, 30, 51, 53, 38, 45, 46), listOf(30, 31, 52, 54, 39, 46, 47), listOf(31, 32, 53, 55, 40, 47, 48),
+                listOf(37, 38, 56, 58, 45, 51, 52), listOf(38, 39, 57, 59, 46, 52, 53), listOf(39, 40, 58, 60, 47, 53, 54))
+
+        val vertUp = vertDown.map { it.map { 60 - it } }
+
+        val samen = vertDown + vertUp
+        return samen
+    }
+
     fun ring1(fieldNr: Int): Boolean {
         val ring = listOf(0, 1, 2, 3, 4, 10, 17, 25, 34, 42, 49, 55, 60, 59, 58, 57, 56, 50, 43, 35, 26, 18, 11, 5)
         return ring.contains(fieldNr)
@@ -429,5 +444,33 @@ class GameInfo(var myName: String, var myFcmToken: String, var hisName: String, 
             }
         }
         return 0
+    }
+
+    fun winBy2RowsOf4(compColor: FieldState): Int {
+        var returnVal = 0
+        for (g7 in this.get7()) {
+            val fieldStates = listOf(this.fields[g7[0]].fieldState, this.fields[g7[1]].fieldState, this.fields[g7[2]].fieldState,
+                    this.fields[g7[3]].fieldState, this.fields[g7[4]].fieldState, this.fields[g7[5]].fieldState, this.fields[g7[6]].fieldState)
+
+            if (fieldStates[0] == compColor &&
+                    fieldStates[1] == compColor &&
+                    fieldStates[2] == compColor &&
+                    fieldStates[3] == FieldState.Empty &&
+                    fieldStates[4] == FieldState.Empty &&
+                    fieldStates[5] == compColor &&
+                    fieldStates[6] == compColor) {
+                return 75
+            }
+
+            val aantalCompColor = fieldStates.count { f -> f == compColor }
+            val aantalNotCompColor = fieldStates.count { f -> f != compColor && f != FieldState.Empty }
+            if (aantalCompColor >= 2 && aantalNotCompColor == 0 &&
+                    fieldStates[3] == FieldState.Empty &&
+                    fieldStates[4] == FieldState.Empty &&
+                    aantalCompColor < returnVal) {
+                returnVal = aantalCompColor
+            }
+        }
+        return returnVal
     }
 }

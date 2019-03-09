@@ -184,28 +184,39 @@ class GameActivity : AppCompatActivity() {
         tvStar1.visibility = View.GONE
         tvStar2.visibility = View.GONE
         tvStar3.visibility = View.GONE
+        tvStar4.visibility = View.GONE
 
         if (game.gameMode == GameMode.HumanVsComputer) {
 
             FontManager.markAsIconContainer(tvStar1, solidFont)
             FontManager.markAsIconContainer(tvStar2, solidFont)
             FontManager.markAsIconContainer(tvStar3, solidFont)
+            FontManager.markAsIconContainer(tvStar4, solidFont)
 
             when {
                 game.gameLevel == GameLevel.Easy -> {
                     tvStar1.visibility = View.VISIBLE
                     tvStar2.visibility = View.GONE
                     tvStar3.visibility = View.GONE
+                    tvStar4.visibility = View.GONE
                 }
                 game.gameLevel == GameLevel.Intermediate -> {
                     tvStar1.visibility = View.VISIBLE
                     tvStar2.visibility = View.VISIBLE
                     tvStar3.visibility = View.GONE
+                    tvStar4.visibility = View.GONE
                 }
                 game.gameLevel == GameLevel.Expert -> {
                     tvStar1.visibility = View.VISIBLE
                     tvStar2.visibility = View.VISIBLE
                     tvStar3.visibility = View.VISIBLE
+                    tvStar4.visibility = View.GONE
+                }
+                game.gameLevel == GameLevel.Extreme -> {
+                    tvStar1.visibility = View.VISIBLE
+                    tvStar2.visibility = View.VISIBLE
+                    tvStar3.visibility = View.VISIBLE
+                    tvStar4.visibility = View.VISIBLE
                 }
             }
         }

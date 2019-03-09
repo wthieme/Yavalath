@@ -95,6 +95,7 @@
     <string name="easy">Makkelijk</string>
     <string name="Intermediate">Gemiddeld</string>
     <string name="Expert">Moeilijk</string>
+    <string name="Extreme">Extreem</string>
     <string name="modehvhl">In lokale mode speel je tegen een ander persoon op hetzelfde toestel.</string>
     <string name="modehvhi">In deze mode speel je tegen een ander via internet, iedere speler speelt op zijn eigen toestel.</string>
     <string name="confirm">Ok</string>

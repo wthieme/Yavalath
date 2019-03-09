@@ -151,6 +151,7 @@ class MainActivity : AppCompatActivity() {
             GameLevel.Easy -> rbEasy.isChecked = true
             GameLevel.Intermediate -> rbIntermediate.isChecked = true
             GameLevel.Expert -> rbExpert.isChecked = true
+            GameLevel.Extreme -> rbExtreme.isChecked = true
         }
 
         rgLevel.setOnCheckedChangeListener { _, checkedId ->
@@ -161,6 +162,8 @@ class MainActivity : AppCompatActivity() {
                     Helper.setGameLevel(mContext, GameLevel.Intermediate)
                 R.id.rbExpert ->
                     Helper.setGameLevel(mContext, GameLevel.Expert)
+                R.id.rbExtreme ->
+                    Helper.setGameLevel(mContext, GameLevel.Extreme)
             }
         }
 

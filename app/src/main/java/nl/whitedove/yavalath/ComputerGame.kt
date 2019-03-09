@@ -19,7 +19,7 @@ private fun bestGame(currentGame: GameInfo): GameInfo {
         }
 
         var myScore = 0
-        // Put my stone on this empty field and check if I win, this field scores 100
+        // Put my stone on this empty field and check if I win
         newgame.move(emptyField.nr, newgame.hisFcmToken)
         when {
             newgame.gameState == GameState.WhiteWins -> {
@@ -43,13 +43,16 @@ private fun bestGame(currentGame: GameInfo): GameInfo {
                 }
                 myScore = Helper.randomNrInRange(1, up)
 
-                if (currentGame.gameLevel == GameLevel.Intermediate || currentGame.gameLevel == GameLevel.Expert) {
+                if (currentGame.gameLevel.value >= GameLevel.Intermediate.value) {
                     myScore += newgame.winInOne(if (computerHasWhite) FieldState.White else FieldState.Black)
                     myScore += newgame.boardScore(if (computerHasWhite) FieldState.White else FieldState.Black)
                 }
-                if (currentGame.gameLevel == GameLevel.Expert) {
+                if (currentGame.gameLevel.value >= GameLevel.Expert.value) {
                     myScore += newgame.possibleWinInTwo(if (computerHasWhite) FieldState.White else FieldState.Black)
                     myScore += newgame.loseInTwo(if (computerHasWhite) FieldState.White else FieldState.Black)
+                }
+                if (currentGame.gameLevel.value >= GameLevel.Extreme.value) {
+                    myScore += newgame.winBy2RowsOf4(if (computerHasWhite) FieldState.White else FieldState.Black)
                 }
             }
         }
@@ -62,7 +65,7 @@ private fun bestGame(currentGame: GameInfo): GameInfo {
         }
 
         var hisScore = 0
-        // Put his stone on this empty field and check if he wins, this field scores 50
+        // Put his stone on this empty field and check if he wins
         newgame.move(emptyField.nr, newgame.myFcmToken)
         when {
             newgame.gameState == GameState.WhiteWins -> {
@@ -82,7 +85,7 @@ private fun bestGame(currentGame: GameInfo): GameInfo {
             }
         }
         // Don't play the losing move
-        if (myScore == -100 && hisScore == 100) {
+        if (myScore == -100) {
             newgame.score = 0
         } else {
             newgame.score = if (myScore >= hisScore) myScore else hisScore

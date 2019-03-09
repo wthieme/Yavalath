@@ -4,7 +4,7 @@ import android.annotation.SuppressLint
 import java.util.*
 
 enum class GameLevel(val value: Int) {
-    Easy(1), Intermediate(2), Expert(3);
+    Easy(1), Intermediate(2), Expert(3), Extreme (4);
 
     companion object {
         @SuppressLint("UseSparseArrays")

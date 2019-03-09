@@ -53,6 +53,17 @@
         android:textSize="14sp" />
 
     <TextView
+        android:id="@+id/tvStar4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toEndOf="@id/tvStar3"
+        android:layout_alignBaseline="@+id/tvYavalath"
+        android:layout_marginStart="2dp"
+        android:text="@string/fa_star"
+        android:textColor="@color/colorOrange"
+        android:textSize="14sp" />
+
+    <TextView
         android:id="@+id/tvFcmBolt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
