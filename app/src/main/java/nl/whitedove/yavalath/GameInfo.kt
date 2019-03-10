@@ -128,14 +128,44 @@ class GameInfo(var myName: String, var myFcmToken: String, var hisName: String, 
         val vertDown = listOf(
                 listOf(0, 1, 19, 21, 6, 12, 13), listOf(1, 2, 20, 22, 7, 13, 14), listOf(2, 3, 21, 23, 8, 14, 15), listOf(3, 4, 22, 24, 9, 15, 16),
                 listOf(5, 6, 27, 29, 12, 19, 20), listOf(6, 7, 28, 30, 13, 20, 21), listOf(7, 8, 29, 31, 14, 21, 22), listOf(8, 9, 30, 32, 15, 22, 23), listOf(9, 10, 31, 33, 16, 23, 24),
-                listOf(11, 12, 35, 37, 19, 27, 28), listOf(12, 13, 36, 38, 20, 28, 29), listOf(13, 14, 37, 39, 21, 29, 30), listOf(14, 15, 30, 38, 22, 30, 31), listOf(15, 16, 39, 41, 23, 31, 32), listOf(16, 17, 40, 42, 24, 32, 33),
+                listOf(11, 12, 35, 37, 19, 27, 28), listOf(12, 13, 36, 38, 20, 28, 29), listOf(13, 14, 37, 39, 21, 29, 30), listOf(14, 15, 38, 40, 22, 30, 31), listOf(15, 16, 39, 41, 23, 31, 32), listOf(16, 17, 40, 42, 24, 32, 33),
                 listOf(19, 20, 43, 45, 28, 36, 37), listOf(20, 21, 44, 46, 29, 37, 38), listOf(21, 22, 45, 47, 30, 38, 39), listOf(22, 23, 46, 48, 31, 39, 40), listOf(23, 24, 47, 49, 32, 40, 41),
                 listOf(28, 29, 50, 52, 37, 44, 45), listOf(29, 30, 51, 53, 38, 45, 46), listOf(30, 31, 52, 54, 39, 46, 47), listOf(31, 32, 53, 55, 40, 47, 48),
                 listOf(37, 38, 56, 58, 45, 51, 52), listOf(38, 39, 57, 59, 46, 52, 53), listOf(39, 40, 58, 60, 47, 53, 54))
 
         val vertUp = vertDown.map { it.map { 60 - it } }
 
-        val samen = vertDown + vertUp
+        val rightDown = listOf(
+                listOf(4, 10, 7, 22, 9, 8, 15), listOf(10, 17, 14, 31, 16, 15, 23), listOf(17, 25, 22, 40, 24, 23, 32), listOf(25, 34, 31, 48, 33, 32, 41),
+                listOf(3, 9, 6, 21, 8, 7, 14), listOf(9, 16, 13, 30, 15, 14, 22), listOf(16, 24, 21, 39, 23, 22, 31), listOf(24, 33, 30, 47, 32, 31, 40), listOf(33, 42, 39, 54, 41, 40, 48),
+                listOf(2, 8, 5, 20, 7, 6, 13), listOf(8, 15, 12, 29, 14, 13, 21), listOf(15, 23, 20, 38, 22, 21, 30), listOf(23, 32, 29, 46, 31, 30, 39), listOf(32, 41, 38, 53, 40, 39, 47), listOf(41, 49, 46, 59, 48, 47, 54),
+                listOf(7, 14, 11, 28, 13, 12, 20), listOf(14, 22, 19, 37, 21, 20, 29), listOf(22, 31, 28, 45, 30, 29, 38), listOf(31, 40, 37, 52, 39, 38, 46), listOf(40, 48, 45, 58, 47, 46, 53),
+                listOf(13, 21, 18, 36, 20, 19, 28), listOf(21, 30, 27, 44, 29, 28, 37), listOf(30, 39, 36, 51, 38, 37, 45), listOf(39, 47, 44, 57, 46, 45, 52),
+                listOf(20, 29, 26, 43, 28, 27, 36), listOf(29, 38, 35, 50, 37, 36, 44), listOf(38, 46, 43, 56, 45, 44, 51))
+
+        val rightUp = rightDown.map { it.map { 60 - it } }
+
+        val leftDown = listOf(
+                listOf(26, 18, 44, 29, 27, 36, 28), listOf(18, 11, 37, 21, 19, 28, 20), listOf(11, 5, 29, 14, 12, 20, 13), listOf(5, 0, 21, 8, 6, 13, 7),
+                listOf(35, 27, 45, 30, 36, 44, 48), listOf(27, 19, 45, 30, 28, 37, 29), listOf(19, 12, 38, 22, 20, 29, 21), listOf(12, 6, 30, 15, 13, 21, 14), listOf(6, 1, 22, 9, 7, 14, 8),
+                listOf(43, 36, 57, 46, 44, 51, 45), listOf(36, 28, 46, 31, 37, 45, 49), listOf(28, 20, 46, 31, 29, 38, 30), listOf(20, 13, 39, 23, 21, 30, 22), listOf(13, 7, 31, 16, 14, 22, 15), listOf(7, 2, 23, 10, 8, 15, 9),
+                listOf(44, 37, 58, 47, 45, 52, 46), listOf(37, 29, 47, 32, 28, 46, 50), listOf(29, 21, 47, 32, 30, 39, 31), listOf(21, 14, 40, 24, 22, 31, 23), listOf(14, 8, 32, 17, 15, 23, 16),
+                listOf(45, 38, 59, 48, 46, 53, 47), listOf(38, 30, 48, 33, 29, 47, 51), listOf(30, 22, 48, 33, 31, 40, 32), listOf(22, 15, 41, 25, 23, 32, 24),
+                listOf(46, 39, 60, 49, 47, 54, 48), listOf(39, 31, 49, 34, 30, 48, 52), listOf(31, 23, 49, 34, 32, 41, 33))
+
+        val leftUp = leftDown.map { it.map { 60 - it } }
+
+        val veeDown = listOf(
+                listOf(0, 1, 14, 21, 3, 2, 8), listOf(1, 2, 15, 22, 4, 3, 9),
+                listOf(5, 6, 21, 29, 8, 7, 14), listOf(6, 7, 22, 30, 9, 8, 15), listOf(7, 8, 23, 31, 10, 9, 16),
+                listOf(11, 12, 29, 37, 14, 13, 21), listOf(12, 13, 30, 38, 15, 14, 22), listOf(13, 14, 31, 39, 16, 15, 23), listOf(14, 15, 32, 40, 17, 16, 24),
+                //TODO hier verder
+                listOf(19, 20, 43, 45, 28, 36, 37), listOf(20, 21, 44, 46, 29, 37, 38), listOf(21, 22, 45, 47, 30, 38, 39), listOf(22, 23, 46, 48, 31, 39, 40), listOf(23, 24, 47, 49, 32, 40, 41),
+                listOf(28, 29, 50, 52, 37, 44, 45), listOf(29, 30, 51, 53, 38, 45, 46), listOf(30, 31, 52, 54, 39, 46, 47), listOf(31, 32, 53, 55, 40, 47, 48),
+                listOf(37, 38, 56, 58, 45, 51, 52), listOf(38, 39, 57, 59, 46, 52, 53), listOf(39, 40, 58, 60, 47, 53, 54))
+
+        val veeUp = veeDown.map { it.map { 60 - it } }
+        val samen = vertDown + vertUp + rightDown + rightUp + leftDown + leftUp + veeDown + veeUp
         return samen
     }
 
@@ -362,20 +392,21 @@ class GameInfo(var myName: String, var myFcmToken: String, var hisName: String, 
         val listMoves = listOf(0, 1, 2, 3)
         for (g4 in this.get4()) {
             val fieldStates = listOf(this.fields[g4[0]].fieldState, this.fields[g4[1]].fieldState, this.fields[g4[2]].fieldState, this.fields[g4[3]].fieldState)
-            val aantalCompColor = fieldStates.count { f -> f == compColor }
-            val aantalNotCompColor = fieldStates.count { f -> f != compColor && f != FieldState.Empty }
-            if (aantalCompColor == 3 && aantalNotCompColor == 0) {
-                for (listMove in listMoves) {
-                    if (fieldStates[listMove] == FieldState.Empty) {
-                        // Put my (human) stone on the first field and then his (computer) stone on the second field
-                        this.move(this.fields[g4[listMove]].nr, this.myFcmToken)
-                        val state = this.gameState
-                        this.fields[g4[listMove]].fieldState = FieldState.Empty
-                        this.gameState = GameState.Running
-                        this.lastMove = lastMove
-                        if ((state == GameState.BlackWins && compColor == FieldState.Black) ||
-                                (state == GameState.WhiteWins && compColor == FieldState.White)) {
-                            return 75
+            if (g4.contains(lastMove)) {
+                val aantalCompColor = fieldStates.count { f -> f == compColor }
+                val aantalNotCompColor = fieldStates.count { f -> f != compColor && f != FieldState.Empty }
+                if (aantalCompColor == 3 && aantalNotCompColor == 0) {
+                    for (listMove in listMoves) {
+                        if (fieldStates[listMove] == FieldState.Empty) {
+                            this.move(this.fields[g4[listMove]].nr, this.myFcmToken)
+                            val state = this.gameState
+                            this.fields[g4[listMove]].fieldState = FieldState.Empty
+                            this.gameState = GameState.Running
+                            this.lastMove = lastMove
+                            if ((state == GameState.BlackWins && compColor == FieldState.Black) ||
+                                    (state == GameState.WhiteWins && compColor == FieldState.White)) {
+                                return 75
+                            }
                         }
                     }
                 }
@@ -396,8 +427,13 @@ class GameInfo(var myName: String, var myFcmToken: String, var hisName: String, 
                     if (fieldStates[listMove.first] == FieldState.Empty && fieldStates[listMove.second] == FieldState.Empty) {
                         // Put my (human) stone on the first field and then his (computer) stone on the second field
                         this.move(this.fields[g4[listMove.first]].nr, this.myFcmToken)
-                        this.move(this.fields[g4[listMove.second]].nr, this.hisFcmToken)
-                        val state = this.gameState
+                        // Second move only if the game is still running after the first move
+                        var state = this.gameState
+                        if (state == GameState.Running) {
+                            // Only do the second move if the game is still running
+                            this.move(this.fields[g4[listMove.second]].nr, this.hisFcmToken)
+                            state = this.gameState
+                        }
                         this.fields[g4[listMove.first]].fieldState = FieldState.Empty
                         this.fields[g4[listMove.second]].fieldState = FieldState.Empty
                         this.gameState = GameState.Running
@@ -448,27 +484,31 @@ class GameInfo(var myName: String, var myFcmToken: String, var hisName: String, 
 
     fun winBy2RowsOf4(compColor: FieldState): Int {
         var returnVal = 0
+        val factor = 3
         for (g7 in this.get7()) {
             val fieldStates = listOf(this.fields[g7[0]].fieldState, this.fields[g7[1]].fieldState, this.fields[g7[2]].fieldState,
                     this.fields[g7[3]].fieldState, this.fields[g7[4]].fieldState, this.fields[g7[5]].fieldState, this.fields[g7[6]].fieldState)
 
-            if (fieldStates[0] == compColor &&
-                    fieldStates[1] == compColor &&
-                    fieldStates[2] == compColor &&
-                    fieldStates[3] == FieldState.Empty &&
-                    fieldStates[4] == FieldState.Empty &&
-                    fieldStates[5] == compColor &&
-                    fieldStates[6] == compColor) {
-                return 75
-            }
+            if (g7.contains(this.lastMove)) {
+                if (fieldStates[0] == compColor &&
+                        fieldStates[1] == compColor &&
+                        fieldStates[2] == compColor &&
+                        fieldStates[3] == compColor &&
+                        fieldStates[4] == compColor &&
+                        fieldStates[5] == FieldState.Empty &&
+                        fieldStates[6] == FieldState.Empty) {
+                    return 75
+                }
 
-            val aantalCompColor = fieldStates.count { f -> f == compColor }
-            val aantalNotCompColor = fieldStates.count { f -> f != compColor && f != FieldState.Empty }
-            if (aantalCompColor >= 2 && aantalNotCompColor == 0 &&
-                    fieldStates[3] == FieldState.Empty &&
-                    fieldStates[4] == FieldState.Empty &&
-                    aantalCompColor < returnVal) {
-                returnVal = aantalCompColor
+                val aantalCompColor = fieldStates.count { f -> f == compColor }
+                val aantalNotCompColor = fieldStates.count { f -> f != compColor && f != FieldState.Empty }
+                if (aantalCompColor > 1 && aantalNotCompColor == 0 &&
+                        fieldStates[4] == FieldState.Empty &&
+                        fieldStates[5] == FieldState.Empty &&
+                        fieldStates[6] == FieldState.Empty &&
+                        factor * aantalCompColor > returnVal) {
+                    returnVal = factor * aantalCompColor
+                }
             }
         }
         return returnVal

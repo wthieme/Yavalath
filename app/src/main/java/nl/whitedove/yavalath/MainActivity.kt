@@ -19,6 +19,9 @@ import android.text.style.ClickableSpan
 import android.view.View
 import android.widget.PopupMenu
 import android.widget.TextView
+import com.warkiz.widget.IndicatorSeekBar
+import com.warkiz.widget.OnSeekChangeListener
+import com.warkiz.widget.SeekParams
 import kotlinx.android.synthetic.main.content_main.*
 import java.util.*
 
@@ -148,38 +151,71 @@ class MainActivity : AppCompatActivity() {
 
         val level = Helper.getGameLevel(mContext)
         when (level) {
-            GameLevel.Easy -> rbEasy.isChecked = true
-            GameLevel.Intermediate -> rbIntermediate.isChecked = true
-            GameLevel.Expert -> rbExpert.isChecked = true
-            GameLevel.Extreme -> rbExtreme.isChecked = true
-        }
+            GameLevel.Easy -> {
+                sbLevel.setProgress(0f)
+                tvLevel.text = String.format(getString(R.string.Level), getString(R.string.Easy))
+            }
 
-        rgLevel.setOnCheckedChangeListener { _, checkedId ->
-            when (checkedId) {
-                R.id.rbEasy ->
-                    Helper.setGameLevel(mContext, GameLevel.Easy)
-                R.id.rbIntermediate ->
-                    Helper.setGameLevel(mContext, GameLevel.Intermediate)
-                R.id.rbExpert ->
-                    Helper.setGameLevel(mContext, GameLevel.Expert)
-                R.id.rbExtreme ->
-                    Helper.setGameLevel(mContext, GameLevel.Extreme)
+            GameLevel.Intermediate -> {
+                sbLevel.setProgress(33f)
+                tvLevel.text = String.format(getString(R.string.Level), getString(R.string.Intermediate))
+            }
+
+            GameLevel.Expert -> {
+                sbLevel.setProgress(67f)
+                tvLevel.text = String.format(getString(R.string.Level), getString(R.string.Expert))
+            }
+            GameLevel.Extreme -> {
+                sbLevel.setProgress(100f)
+                tvLevel.text = String.format(getString(R.string.Level), getString(R.string.Extreme))
             }
         }
+
+        sbLevel.onSeekChangeListener =
+                object
+                    : OnSeekChangeListener {
+                    override fun onStopTrackingTouch(seekBar: IndicatorSeekBar?) {
+                    }
+
+                    override fun onStartTrackingTouch(seekBar: IndicatorSeekBar?) {
+                    }
+
+                    override fun onSeeking(seekParams: SeekParams) {
+                        when (seekParams.progress) {
+                            0 -> {
+                                Helper.setGameLevel(mContext, GameLevel.Easy)
+                                tvLevel.text = String.format(getString(R.string.Level), getString(R.string.Easy))
+                            }
+                            33 -> {
+                                Helper.setGameLevel(mContext, GameLevel.Intermediate)
+                                tvLevel.text = String.format(getString(R.string.Level), getString(R.string.Intermediate))
+                            }
+                            67 -> {
+                                Helper.setGameLevel(mContext, GameLevel.Expert)
+                                tvLevel.text = String.format(getString(R.string.Level), getString(R.string.Expert))
+                            }
+                            100 -> {
+                                Helper.setGameLevel(mContext, GameLevel.Extreme)
+                                tvLevel.text = String.format(getString(R.string.Level), getString(R.string.Extreme))
+                            }
+                        }
+                    }
+                }
 
         etNameComputer.setText(name1)
 
-        etNameComputer.addTextChangedListener(object : TextWatcher {
-            override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
-            }
+        etNameComputer.addTextChangedListener(
+                object : TextWatcher {
+                    override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {
+                    }
 
-            override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
-            }
+                    override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {
+                    }
 
-            override fun afterTextChanged(s: Editable) {
-                Helper.setName1(mContext, etNameComputer.text.toString().trim())
-            }
-        })
+                    override fun afterTextChanged(s: Editable) {
+                        Helper.setName1(mContext, etNameComputer.text.toString().trim())
+                    }
+                })
 
         FontManager.setIconAndText(btnStartComputer,
                 iconFont,
@@ -188,12 +224,14 @@ class MainActivity : AppCompatActivity() {
                 Typeface.DEFAULT,
                 getString(R.string.Start),
                 ContextCompat.getColor(this, R.color.colorPrimary))
+
         btnStartComputer.setOnClickListener { startHumanToComputer() }
 
         if (Helper.DEBUG)
             tvDebug.visibility = View.VISIBLE
         else
-            tvDebug.visibility = View.GONE
+            tvDebug
+                    .visibility = View.GONE
     }
 
     private fun modeChanged(to: View) {

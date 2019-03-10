@@ -1,5 +1,6 @@
 package nl.whitedove.yavalath
 
+import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
 import org.joda.time.DateTime
 import org.joda.time.format.ISODateTimeFormat
@@ -19,6 +20,7 @@ internal object Database {
         const val lastActive = "lastActive"
         const val device = "device"
         const val platform = "platform"
+        const val timestamp = "timestamp"
     }
 
     private fun getCollectionName(): String {
@@ -81,6 +83,7 @@ internal object Database {
         val platform = Helper.getAndroidVersion()
         doc[Names.platform] = platform
         doc[Names.lastActive] = DateTime.now().toString()
+        doc[Names.timestamp] = FieldValue.serverTimestamp()
         db.collection(getCollectionName()).document(token).set(doc)
         mPlayer = PlayerInfo(name, token, country, DateTime.now(), device, platform)
     }

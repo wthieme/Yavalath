@@ -91,11 +91,11 @@
     <string name="rH2HInternet">Mens vs Mens - Internet</string>
     <string name="H2HLocal">Mens vs Mens - Lokaal</string>
     <string name="HumanVsComputer">Mens vs Computer</string>
-    <string name="modehvc">In deze mode speel je tegen de computer</string>
-    <string name="easy">Makkelijk</string>
-    <string name="Intermediate">Gemiddeld</string>
-    <string name="Expert">Moeilijk</string>
-    <string name="Extreme">Extreem</string>
+    <string name="Modehvc">In deze mode speel je tegen de computer</string>
+    <string name="Easy">makkelijk</string>
+    <string name="Intermediate">gemiddeld</string>
+    <string name="Expert">moeilijk</string>
+    <string name="Extreme">extreem</string>
     <string name="modehvhl">In lokale mode speel je tegen een ander persoon op hetzelfde toestel.</string>
     <string name="modehvhi">In deze mode speel je tegen een ander via internet, iedere speler speelt op zijn eigen toestel.</string>
     <string name="confirm">Ok</string>
@@ -103,5 +103,6 @@
     <string name="ComputerReserved">Computer is a gereserveerde naam</string>
     <string name="pluspoints">+%s</string>
     <string name="lengthnotbetween3and10">Een naam moet tussen de 3 en 10 tekens lang zijn</string>
+    <string name="Level">Niveau %s</string>
 </resources>
 
