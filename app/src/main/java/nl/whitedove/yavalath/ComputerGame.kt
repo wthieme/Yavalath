@@ -10,6 +10,7 @@ fun computerMove(currentGame: GameInfo) {
 private fun bestGame(currentGame: GameInfo): GameInfo {
     val emptyFields = currentGame.fields.filter { f -> f.fieldState == FieldState.Empty }
     val computerHasWhite = currentGame.playesWhite == currentGame.hisFcmToken
+    val compColor = if (computerHasWhite) FieldState.White else FieldState.Black
     val games = ArrayList<GameInfo>()
     for (emptyField in emptyFields) {
         val newgame = GameInfo(currentGame.myName, currentGame.myFcmToken, currentGame.hisName, currentGame.hisFcmToken, currentGame.playesWhite, currentGame.gameMode, currentGame.gameLevel)
@@ -42,17 +43,18 @@ private fun bestGame(currentGame: GameInfo): GameInfo {
                     newgame.ring3(emptyField.nr) -> up = 2
                 }
                 myScore = Helper.randomNrInRange(1, up)
-
                 if (currentGame.gameLevel.value >= GameLevel.Intermediate.value) {
-                    myScore += newgame.winInOne(if (computerHasWhite) FieldState.White else FieldState.Black)
-                    myScore += newgame.boardScore(if (computerHasWhite) FieldState.White else FieldState.Black)
+                    myScore += newgame.winInOne(compColor)
+                    myScore += newgame.boardScore(compColor)
                 }
                 if (currentGame.gameLevel.value >= GameLevel.Expert.value) {
-                    myScore += newgame.possibleWinInTwo(if (computerHasWhite) FieldState.White else FieldState.Black)
-                    myScore += newgame.loseInTwo(if (computerHasWhite) FieldState.White else FieldState.Black)
+                    myScore += newgame.possibleWinInTwo(compColor)
+                    myScore += newgame.loseInTwo(compColor)
                 }
                 if (currentGame.gameLevel.value >= GameLevel.Extreme.value) {
-                    myScore += newgame.winBy2RowsOf4(if (computerHasWhite) FieldState.White else FieldState.Black)
+                    val winScore = newgame.winBy2RowsOf4(compColor)
+                    val loseScore = newgame.loseBy2RowsOf4(compColor)
+                    myScore += if (winScore > loseScore) winScore else loseScore
                 }
             }
         }

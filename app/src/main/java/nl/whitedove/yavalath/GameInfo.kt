@@ -159,13 +159,54 @@ class GameInfo(var myName: String, var myFcmToken: String, var hisName: String, 
                 listOf(0, 1, 14, 21, 3, 2, 8), listOf(1, 2, 15, 22, 4, 3, 9),
                 listOf(5, 6, 21, 29, 8, 7, 14), listOf(6, 7, 22, 30, 9, 8, 15), listOf(7, 8, 23, 31, 10, 9, 16),
                 listOf(11, 12, 29, 37, 14, 13, 21), listOf(12, 13, 30, 38, 15, 14, 22), listOf(13, 14, 31, 39, 16, 15, 23), listOf(14, 15, 32, 40, 17, 16, 24),
-                //TODO hier verder
-                listOf(19, 20, 43, 45, 28, 36, 37), listOf(20, 21, 44, 46, 29, 37, 38), listOf(21, 22, 45, 47, 30, 38, 39), listOf(22, 23, 46, 48, 31, 39, 40), listOf(23, 24, 47, 49, 32, 40, 41),
-                listOf(28, 29, 50, 52, 37, 44, 45), listOf(29, 30, 51, 53, 38, 45, 46), listOf(30, 31, 52, 54, 39, 46, 47), listOf(31, 32, 53, 55, 40, 47, 48),
-                listOf(37, 38, 56, 58, 45, 51, 52), listOf(38, 39, 57, 59, 46, 52, 53), listOf(39, 40, 58, 60, 47, 53, 54))
+                listOf(18, 19, 37, 44, 21, 20, 29), listOf(19, 20, 21, 38, 45, 22, 21, 30), listOf(20, 21, 39, 46, 23, 22, 31), listOf(21, 22, 40, 47, 24, 23, 32), listOf(22, 23, 41, 48, 25, 24, 33),
+                listOf(26, 27, 44, 50, 29, 28, 37), listOf(27, 28, 45, 51, 30, 29, 38), listOf(28, 29, 46, 52, 31, 30, 39), listOf(29, 30, 47, 53, 32, 31, 40), listOf(30, 31, 48, 54, 33, 32, 41), listOf(31, 32, 49, 55, 34, 33, 42),
+                listOf(35, 36, 51, 56, 38, 37, 45), listOf(36, 37, 52, 57, 39, 38, 46), listOf(37, 38, 53, 58, 40, 39, 47), listOf(38, 39, 54, 59, 41, 40, 48), listOf(39, 40, 55, 60, 42, 41, 49))
 
         val veeUp = veeDown.map { it.map { 60 - it } }
-        val samen = vertDown + vertUp + rightDown + rightUp + leftDown + leftUp + veeDown + veeUp
+
+        val rightVeeDown = listOf(
+                listOf(4, 10, 23, 22, 25, 17, 24), listOf(10, 17, 32, 31, 34, 25, 33),
+                listOf(3, 9, 22, 21, 24, 16, 23), listOf(9, 16, 31, 30, 33, 24, 32), listOf(16, 24, 40, 39, 42, 33, 41),
+                listOf(2, 8, 21, 20, 23, 15, 22), listOf(8, 15, 30, 29, 32, 23, 31), listOf(15, 23, 39, 38, 41, 32, 40), listOf(23, 32, 47, 46, 49, 41, 48),
+                listOf(1, 7, 20, 19, 22, 14, 21), listOf(7, 14, 29, 28, 31, 22, 30), listOf(14, 22, 38, 37, 40, 31, 39), listOf(22, 31, 46, 45, 48, 40, 47), listOf(31, 40, 53, 52, 55, 48, 54),
+                listOf(0, 6, 19, 18, 21, 13, 20), listOf(6, 13, 28, 27, 30, 21, 29), listOf(13, 21, 37, 36, 39, 30, 38), listOf(21, 30, 45, 44, 47, 39, 46), listOf(30, 39, 52, 51, 54, 47, 53), listOf(39, 47, 58, 57, 60, 54, 59),
+                listOf(5, 12, 27, 26, 29, 20, 28), listOf(12, 20, 36, 35, 38, 29, 37), listOf(20, 29, 44, 43, 46, 38, 45), listOf(29, 38, 51, 50, 53, 46, 52), listOf(38, 46, 57, 56, 59, 53, 58))
+
+        val rightVeeUp = rightVeeDown.map { it.map { 60 - it } }
+
+        val leftVeeDown = listOf(
+                listOf(26, 18, 20, 29, 5, 11, 12), listOf(18, 11, 13, 21, 0, 5, 6),
+                listOf(35, 27, 29, 38, 12, 19, 20), listOf(27, 19, 21, 30, 6, 12, 13), listOf(19, 12, 14, 22, 1, 6, 7),
+                listOf(43, 36, 38, 46, 20, 28, 29), listOf(36, 28, 30, 39, 13, 20, 21), listOf(28, 20, 22, 31, 7, 13, 14), listOf(20, 13, 15, 23, 2, 7, 8),
+                listOf(50, 44, 46, 53, 29, 37, 38), listOf(44, 37, 39, 47, 21, 29, 30), listOf(37, 29, 31, 40, 14, 21, 22), listOf(29, 21, 23, 32, 8, 14, 15), listOf(21, 14, 16, 24, 3, 8, 9),
+                listOf(56, 51, 53, 59, 38, 45, 46), listOf(51, 45, 46, 54, 30, 38, 39), listOf(45, 38, 40, 48, 22, 30, 31), listOf(38, 30, 32, 41, 15, 22, 23), listOf(30, 22, 24, 33, 9, 15, 16), listOf(22, 15, 17, 25, 4, 9, 10),
+                listOf(57, 52, 54, 60, 39, 46, 47), listOf(52, 46, 47, 55, 31, 39, 40), listOf(46, 39, 41, 49, 23, 31, 32), listOf(39, 31, 33, 42, 16, 23, 24), listOf(31, 23, 25, 34, 10, 16, 17))
+
+        val leftVeeUp = leftVeeDown.map { it.map { 60 - it } }
+
+        val line = listOf(
+                listOf(11, 12, 16, 17, 14, 13, 15),
+                listOf(18, 19, 23, 24, 21, 20, 22), listOf(19, 20, 24, 25, 22, 21, 23),
+                listOf(26, 27, 31, 32, 29, 28, 30), listOf(27, 28, 32, 33, 30, 29, 31), listOf(28, 29, 33, 34, 31, 30, 32),
+                listOf(35, 36, 40, 41, 38, 37, 39), listOf(36, 37, 41, 42, 39, 38, 40),
+                listOf(43, 44, 48, 49, 46, 45, 47))
+
+        val rightLine = listOf(
+                listOf(2, 8, 41, 49, 23, 15, 32),
+                listOf(1, 7, 40, 48, 22, 14, 31), listOf(7, 14, 48, 55, 31, 22, 40),
+                listOf(0, 6, 39, 47, 21, 13, 30), listOf(6, 13, 47, 54, 30, 21, 39), listOf(13, 21, 54, 60, 39, 30, 47),
+                listOf(5, 12, 46, 53, 29, 20, 38), listOf(12, 20, 53, 59, 38, 29, 46),
+                listOf(11, 19, 52, 58, 37, 28, 45))
+
+        val leftLine = listOf(
+                listOf(43, 36, 7, 2, 20, 28, 13),
+                listOf(50, 44, 14, 8, 29, 37, 21), listOf(44, 37, 8, 3, 21, 29, 14),
+                listOf(56, 51, 22, 15, 38, 45, 30), listOf(51, 45, 15, 9, 30, 38, 22), listOf(45, 38, 9, 4, 22, 30, 15),
+                listOf(57, 52, 23, 16, 39, 46, 31), listOf(52, 46, 16, 10, 31, 39, 23),
+                listOf(58, 53, 24, 17, 40, 47, 32))
+
+        val samen = vertDown + vertUp + rightDown + rightUp + leftDown + leftUp + veeDown + veeUp + rightVeeDown + rightVeeUp + leftVeeDown + leftVeeUp + line + rightLine + leftLine
         return samen
     }
 
@@ -405,7 +446,7 @@ class GameInfo(var myName: String, var myFcmToken: String, var hisName: String, 
                             this.lastMove = lastMove
                             if ((state == GameState.BlackWins && compColor == FieldState.Black) ||
                                     (state == GameState.WhiteWins && compColor == FieldState.White)) {
-                                return 75
+                                return 60
                             }
                         }
                     }
@@ -497,7 +538,7 @@ class GameInfo(var myName: String, var myFcmToken: String, var hisName: String, 
                         fieldStates[4] == compColor &&
                         fieldStates[5] == FieldState.Empty &&
                         fieldStates[6] == FieldState.Empty) {
-                    return 75
+                    return 40
                 }
 
                 val aantalCompColor = fieldStates.count { f -> f == compColor }
@@ -512,5 +553,47 @@ class GameInfo(var myName: String, var myFcmToken: String, var hisName: String, 
             }
         }
         return returnVal
+    }
+
+    fun loseBy2RowsOf4(compColor: FieldState): Int {
+        val humanColor = if (compColor == FieldState.White) FieldState.Black else FieldState.White
+        val lastMove = this.lastMove
+        for (g7 in this.get7()) {
+            val fieldStates = listOf(this.fields[g7[0]].fieldState, this.fields[g7[1]].fieldState, this.fields[g7[2]].fieldState,
+                    this.fields[g7[3]].fieldState, this.fields[g7[4]].fieldState, this.fields[g7[5]].fieldState, this.fields[g7[6]].fieldState)
+
+            if (g7.contains(this.lastMove)) {
+                if (fieldStates[0] == humanColor &&
+                        fieldStates[1] == humanColor &&
+                        fieldStates[2] == humanColor &&
+                        fieldStates[3] == humanColor &&
+                        fieldStates[4] == compColor &&
+                        fieldStates[5] == FieldState.Empty &&
+                        fieldStates[6] == FieldState.Empty) {
+                    return 50
+                }
+
+                if (fieldStates[0] == humanColor &&
+                        fieldStates[1] == humanColor &&
+                        fieldStates[2] == humanColor &&
+                        fieldStates[3] == humanColor &&
+                        fieldStates[4] == FieldState.Empty &&
+                        fieldStates[5] == compColor &&
+                        fieldStates[6] == FieldState.Empty) {
+                    return 45
+                }
+
+                if (fieldStates[0] == humanColor &&
+                        fieldStates[1] == humanColor &&
+                        fieldStates[2] == humanColor &&
+                        fieldStates[3] == humanColor &&
+                        fieldStates[4] == FieldState.Empty &&
+                        fieldStates[5] == FieldState.Empty &&
+                        fieldStates[6] == compColor) {
+                    return 45
+                }
+            }
+        }
+        return 0
     }
 }
