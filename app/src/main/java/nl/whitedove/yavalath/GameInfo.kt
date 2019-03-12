@@ -159,7 +159,7 @@ class GameInfo(var myName: String, var myFcmToken: String, var hisName: String, 
                 listOf(0, 1, 14, 21, 3, 2, 8), listOf(1, 2, 15, 22, 4, 3, 9),
                 listOf(5, 6, 21, 29, 8, 7, 14), listOf(6, 7, 22, 30, 9, 8, 15), listOf(7, 8, 23, 31, 10, 9, 16),
                 listOf(11, 12, 29, 37, 14, 13, 21), listOf(12, 13, 30, 38, 15, 14, 22), listOf(13, 14, 31, 39, 16, 15, 23), listOf(14, 15, 32, 40, 17, 16, 24),
-                listOf(18, 19, 37, 44, 21, 20, 29), listOf(19, 20, 21, 38, 45, 22, 21, 30), listOf(20, 21, 39, 46, 23, 22, 31), listOf(21, 22, 40, 47, 24, 23, 32), listOf(22, 23, 41, 48, 25, 24, 33),
+                listOf(18, 19, 37, 44, 21, 20, 29), listOf(19, 20, 38, 45, 22, 21, 30), listOf(20, 21, 39, 46, 23, 22, 31), listOf(21, 22, 40, 47, 24, 23, 32), listOf(22, 23, 41, 48, 25, 24, 33),
                 listOf(26, 27, 44, 50, 29, 28, 37), listOf(27, 28, 45, 51, 30, 29, 38), listOf(28, 29, 46, 52, 31, 30, 39), listOf(29, 30, 47, 53, 32, 31, 40), listOf(30, 31, 48, 54, 33, 32, 41), listOf(31, 32, 49, 55, 34, 33, 42),
                 listOf(35, 36, 51, 56, 38, 37, 45), listOf(36, 37, 52, 57, 39, 38, 46), listOf(37, 38, 53, 58, 40, 39, 47), listOf(38, 39, 54, 59, 41, 40, 48), listOf(39, 40, 55, 60, 42, 41, 49))
 
@@ -185,6 +185,18 @@ class GameInfo(var myName: String, var myFcmToken: String, var hisName: String, 
 
         val leftVeeUp = leftVeeDown.map { it.map { 60 - it } }
 
+        val wideDown = listOf(
+                listOf(0, 1, 16, 24, 3, 2, 9), listOf(1, 2, 17, 25, 4, 3, 10),
+                listOf(5, 6, 23, 32, 8, 7, 15), listOf(6, 7, 24, 34, 9, 8, 16), listOf(7, 8, 25, 34, 10, 9, 17),
+                listOf(11, 12, 31, 40, 14, 13, 22), listOf(12, 13, 32, 41, 15, 14, 23), listOf(13, 14, 33, 42, 16, 15, 24),
+                listOf(18, 19, 39, 47, 21, 20, 30), listOf(19, 20, 40, 48, 22, 21, 31), listOf(20, 21, 41, 49, 23, 22, 32),
+                listOf(26, 27, 46, 53, 29, 28, 38), listOf(27, 28, 47, 54, 30, 29, 39), listOf(28, 29, 48, 55, 31, 30, 40),
+                listOf(35, 36, 53, 59, 38, 37, 46), listOf(36, 37, 54, 60, 39, 38, 47))
+
+        val wideUp = wideDown.map { it.map { 60 - it } }
+
+        // TODO hier gebleven
+
         val line = listOf(
                 listOf(11, 12, 16, 17, 14, 13, 15),
                 listOf(18, 19, 23, 24, 21, 20, 22), listOf(19, 20, 24, 25, 22, 21, 23),
@@ -206,7 +218,7 @@ class GameInfo(var myName: String, var myFcmToken: String, var hisName: String, 
                 listOf(57, 52, 23, 16, 39, 46, 31), listOf(52, 46, 16, 10, 31, 39, 23),
                 listOf(58, 53, 24, 17, 40, 47, 32))
 
-        val samen = vertDown + vertUp + rightDown + rightUp + leftDown + leftUp + veeDown + veeUp + rightVeeDown + rightVeeUp + leftVeeDown + leftVeeUp + line + rightLine + leftLine
+        val samen = vertDown + vertUp + rightDown + rightUp + leftDown + leftUp + veeDown + veeUp + rightVeeDown + rightVeeUp + leftVeeDown + leftVeeUp + line + rightLine + leftLine + wideDown + wideUp
         return samen
     }
 
@@ -525,7 +537,7 @@ class GameInfo(var myName: String, var myFcmToken: String, var hisName: String, 
 
     fun winBy2RowsOf4(compColor: FieldState): Int {
         var returnVal = 0
-        val factor = 3
+        val factor = 6
         for (g7 in this.get7()) {
             val fieldStates = listOf(this.fields[g7[0]].fieldState, this.fields[g7[1]].fieldState, this.fields[g7[2]].fieldState,
                     this.fields[g7[3]].fieldState, this.fields[g7[4]].fieldState, this.fields[g7[5]].fieldState, this.fields[g7[6]].fieldState)
@@ -538,7 +550,7 @@ class GameInfo(var myName: String, var myFcmToken: String, var hisName: String, 
                         fieldStates[4] == compColor &&
                         fieldStates[5] == FieldState.Empty &&
                         fieldStates[6] == FieldState.Empty) {
-                    return 40
+                    return 50
                 }
 
                 val aantalCompColor = fieldStates.count { f -> f == compColor }
@@ -570,7 +582,7 @@ class GameInfo(var myName: String, var myFcmToken: String, var hisName: String, 
                         fieldStates[4] == compColor &&
                         fieldStates[5] == FieldState.Empty &&
                         fieldStates[6] == FieldState.Empty) {
-                    return 50
+                    return 40
                 }
 
                 if (fieldStates[0] == humanColor &&
@@ -580,7 +592,7 @@ class GameInfo(var myName: String, var myFcmToken: String, var hisName: String, 
                         fieldStates[4] == FieldState.Empty &&
                         fieldStates[5] == compColor &&
                         fieldStates[6] == FieldState.Empty) {
-                    return 45
+                    return 35
                 }
 
                 if (fieldStates[0] == humanColor &&
@@ -590,7 +602,7 @@ class GameInfo(var myName: String, var myFcmToken: String, var hisName: String, 
                         fieldStates[4] == FieldState.Empty &&
                         fieldStates[5] == FieldState.Empty &&
                         fieldStates[6] == compColor) {
-                    return 45
+                    return 35
                 }
             }
         }
