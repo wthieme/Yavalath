@@ -741,7 +741,7 @@ class GameActivity : AppCompatActivity() {
 
         override fun doInBackground(vararg params: GameInfo): Void? {
             val game = params[0]
-            computerMove(game)
+            ComputerGame.move(game)
             return null
         }
 
