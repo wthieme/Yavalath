@@ -3,7 +3,6 @@ package nl.whitedove.yavalath
 import android.content.Context
 import android.location.Address
 import android.location.Geocoder
-import android.preference.PreferenceManager
 import java.io.IOException
 
 internal object LocationHelper {
