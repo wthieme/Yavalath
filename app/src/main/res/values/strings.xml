@@ -39,7 +39,7 @@
     <string name="active_time">00:00</string>
     <string name="Version">Version</string>
     <string name="VersionNr">V1.0</string>
-    <string name="about_copyright">Copyright &#169; 2018 Wilhelm Thieme.</string>
+    <string name="about_copyright">Copyright &#169; 2019 Wilhelm Thieme.</string>
     <string name="OK">OK</string>
     <string name="players_ready_for_a_game_of_yavalath">Players ready for a game of Yavalath</string>
     <string name="Title">YesNoTitle</string>
@@ -104,5 +104,10 @@
     <string name="pluspoints">+%s</string>
     <string name="lengthnotbetween3and10">A name must be between 3 and 10 characters long</string>
     <string name="Level">Level %s</string>
+    <string name="privacy">Privacy Policy</string>
+    <string name="PrivacuUrl">https://wthieme.github.io/privacyyavalath_en.html</string>
+    <string name="PrivacyTxt">Loading privacy policy ...</string>
+    <string name="ErrorLoadingPrivacy">Error loading privacy policy</string>
+
 </resources>
 

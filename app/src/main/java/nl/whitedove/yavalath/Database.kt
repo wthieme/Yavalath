@@ -33,6 +33,7 @@ internal object Database {
     fun getPlayers(callback: Runnable) {
         val players = ArrayList<PlayerInfo>()
         val db = FirebaseFirestore.getInstance()
+        val fmt = ISODateTimeFormat.dateTime()
         db.collection(getCollectionName())
                 .get()
                 .addOnCompleteListener { task ->
@@ -50,7 +51,6 @@ internal object Database {
                             if (doc[Database.Names.platform] != null) {
                                 platform = doc[Database.Names.platform] as String
                             }
-                            val fmt = ISODateTimeFormat.dateTime()
                             val lastActive = fmt.parseDateTime(doc[Database.Names.lastActive] as String)
                             players.add(PlayerInfo(naam, token, country, lastActive, device, platform))
                         }

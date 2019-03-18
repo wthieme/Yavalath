@@ -10,6 +10,7 @@ import android.net.ConnectivityManager
 import android.os.Build
 import android.preference.PreferenceManager
 import android.support.v4.content.ContextCompat
+import android.text.Html
 import android.text.TextUtils
 import android.view.WindowManager
 import android.widget.TextView
@@ -205,4 +206,10 @@ internal object Helper {
                 })
     }
 
+    fun setHtmlText(view: TextView, htmlTxt: String) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+            view.text = Html.fromHtml(htmlTxt, Html.FROM_HTML_MODE_LEGACY)
+        else
+            view.text = Html.fromHtml(htmlTxt)
+    }
 }

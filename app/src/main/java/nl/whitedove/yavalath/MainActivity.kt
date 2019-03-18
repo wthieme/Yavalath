@@ -249,12 +249,17 @@ class MainActivity : AppCompatActivity() {
         Helper.showDialog(rd, false)
     }
 
+    private fun showPrivacyDialog() {
+        val pd = PrivacyDialog(this)
+        Helper.showDialog(pd, false)
+    }
+
     private fun showAboutDialog() {
         val ad = AboutDialog(this)
         Helper.showDialog(ad, false)
     }
 
-    private fun startHumanToComputer() {
+        private fun startHumanToComputer() {
         if (!checkName1(this)) return
         val gameLevel = Helper.getGameLevel(mContext)
         val token1 = UUID.randomUUID().toString()
@@ -345,6 +350,11 @@ class MainActivity : AppCompatActivity() {
 
                 R.id.itRules -> {
                     showRulesDialog()
+                    return@OnMenuItemClickListener true
+                }
+
+                R.id.itPrivacy -> {
+                    showPrivacyDialog()
                     return@OnMenuItemClickListener true
                 }
 
