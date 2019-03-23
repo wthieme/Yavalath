@@ -1,0 +1,491 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBackground"
+    android:clipChildren="false"
+    android:keepScreenOn="true"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tvFcmBolt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="10dp"
+        android:alpha="0"
+        android:padding="10sp"
+        android:text="@string/fa_bolt"
+        android:textAlignment="center"
+        android:textColor="@color/colorYellow"
+        android:textSize="16sp" />
+
+    <Button
+        android:id="@+id/btnBack"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/rounded_button"
+        android:text="@string/back"
+        android:textAllCaps="false"
+        android:textColor="@color/colorTint"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/tvHighScoreTitel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btnBack"
+        android:layout_marginTop="10dp"
+        android:text="@string/high_scores"
+        android:textAlignment="center"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvEasy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvHighScoreTitel"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="20dp"
+        android:text="@string/Easy"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvEasyGold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvEasy"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"
+        android:text="@string/fa_trophy"
+        android:textColor="@color/colorGold"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/tvEasyGoldScore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/tvEasyGold"
+        android:layout_toEndOf="@+id/tvEasyGold"
+        android:layout_marginStart="5dp"
+        android:text="@string/time000000"
+        android:textColor="@color/colorPrimary"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/tvEasyGoldWinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvEasyGold"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="10dp"
+        android:text="@string/white_dove"
+        android:textColor="@color/colorPrimary"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/tvEasySilver"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toStartOf="@+id/tvEasySilverScore"
+        android:layout_marginEnd="5dp"
+        android:layout_alignBaseline="@+id/tvEasyGold"
+        android:text="@string/fa_trophy"
+        android:textColor="@color/colorSilver"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/tvEasySilverScore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/tvEasySilver"
+        android:layout_centerInParent="true"
+        android:text="@string/time000000"
+        android:textColor="@color/colorPrimary"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/tvEasySilverWinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvEasyGold"
+        android:layout_alignBaseline="@+id/tvEasyGoldWinner"
+        android:layout_centerInParent="true"
+        android:text="@string/white_dove"
+        android:textColor="@color/colorPrimary"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/tvEasyBronze"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvEasy"
+        android:layout_toStartOf="@+id/tvEasyBronzeScore"
+        android:layout_alignBaseline="@+id/tvEasyGold"
+        android:layout_marginEnd="5dp"
+        android:text="@string/fa_trophy"
+        android:textColor="@color/colorBronze"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/tvEasyBronzeScore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/tvEasyGold"
+        android:layout_marginEnd="10dp"
+        android:layout_alignParentEnd="true"
+        android:text="@string/time000000"
+        android:textColor="@color/colorPrimary"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/tvEasyBronzeWinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvEasySilver"
+        android:layout_marginEnd="10dp"
+        android:layout_alignBaseline="@+id/tvEasyGoldWinner"
+        android:layout_alignParentEnd="true"
+        android:text="@string/white_dove"
+        android:textColor="@color/colorPrimary"
+        android:textSize="16sp" />
+
+
+    <TextView
+        android:id="@+id/tvIntermediate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvEasyBronzeWinner"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="20dp"
+        android:text="@string/Intermediate"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvIntermediateGold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvIntermediate"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"
+        android:text="@string/fa_trophy"
+        android:textColor="@color/colorGold"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/tvIntermediateGoldScore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/tvIntermediateGold"
+        android:layout_toEndOf="@+id/tvIntermediateGold"
+        android:layout_marginStart="5dp"
+        android:text="@string/time000000"
+        android:textColor="@color/colorPrimary"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/tvIntermediateGoldWinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvIntermediateGold"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="10dp"
+        android:text="@string/white_dove"
+        android:textColor="@color/colorPrimary"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/tvIntermediateSilver"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toStartOf="@+id/tvIntermediateSilverScore"
+        android:layout_marginEnd="5dp"
+        android:layout_alignBaseline="@+id/tvIntermediateGold"
+        android:text="@string/fa_trophy"
+        android:textColor="@color/colorSilver"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/tvIntermediateSilverScore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/tvIntermediateSilver"
+        android:layout_centerInParent="true"
+        android:text="@string/time000000"
+        android:textColor="@color/colorPrimary"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/tvIntermediateSilverWinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvIntermediateGold"
+        android:layout_alignBaseline="@+id/tvIntermediateGoldWinner"
+        android:layout_centerInParent="true"
+        android:text="@string/white_dove"
+        android:textColor="@color/colorPrimary"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/tvIntermediateBronze"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvIntermediate"
+        android:layout_toStartOf="@+id/tvIntermediateBronzeScore"
+        android:layout_alignBaseline="@+id/tvIntermediateGold"
+        android:layout_marginEnd="5dp"
+        android:text="@string/fa_trophy"
+        android:textColor="@color/colorBronze"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/tvIntermediateBronzeScore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/tvIntermediateGold"
+        android:layout_marginEnd="10dp"
+        android:layout_alignParentEnd="true"
+        android:text="@string/time000000"
+        android:textColor="@color/colorPrimary"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/tvIntermediateBronzeWinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvIntermediateSilver"
+        android:layout_marginEnd="10dp"
+        android:layout_alignBaseline="@+id/tvIntermediateGoldWinner"
+        android:layout_alignParentEnd="true"
+        android:text="@string/white_dove"
+        android:textColor="@color/colorPrimary"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/tvExpert"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvIntermediateGoldWinner"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="20dp"
+        android:text="@string/Expert"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvExpertGold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvExpert"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"
+        android:text="@string/fa_trophy"
+        android:textColor="@color/colorGold"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/tvExpertGoldScore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/tvExpertGold"
+        android:layout_toEndOf="@+id/tvExpertGold"
+        android:layout_marginStart="5dp"
+        android:text="@string/time000000"
+        android:textColor="@color/colorPrimary"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/tvExpertGoldWinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvExpertGold"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="10dp"
+        android:text="@string/white_dove"
+        android:textColor="@color/colorPrimary"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/tvExpertSilver"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toStartOf="@+id/tvExpertSilverScore"
+        android:layout_marginEnd="5dp"
+        android:layout_alignBaseline="@+id/tvExpertGold"
+        android:text="@string/fa_trophy"
+        android:textColor="@color/colorSilver"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/tvExpertSilverScore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/tvExpertSilver"
+        android:layout_centerInParent="true"
+        android:text="@string/time000000"
+        android:textColor="@color/colorPrimary"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/tvExpertSilverWinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvExpertGold"
+        android:layout_alignBaseline="@+id/tvExpertGoldWinner"
+        android:layout_centerInParent="true"
+        android:text="@string/white_dove"
+        android:textColor="@color/colorPrimary"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/tvExpertBronze"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvExpert"
+        android:layout_toStartOf="@+id/tvExpertBronzeScore"
+        android:layout_alignBaseline="@+id/tvExpertGold"
+        android:layout_marginEnd="5dp"
+        android:text="@string/fa_trophy"
+        android:textColor="@color/colorBronze"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/tvExpertBronzeScore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/tvExpertGold"
+        android:layout_marginEnd="10dp"
+        android:layout_alignParentEnd="true"
+        android:text="@string/time000000"
+        android:textColor="@color/colorPrimary"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/tvExpertBronzeWinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvExpertSilver"
+        android:layout_marginEnd="10dp"
+        android:layout_alignBaseline="@+id/tvExpertGoldWinner"
+        android:layout_alignParentEnd="true"
+        android:text="@string/white_dove"
+        android:textColor="@color/colorPrimary"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/tvExtreme"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvExpertBronzeWinner"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="20dp"
+        android:text="@string/Extreme"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tvExtremeGold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvExtreme"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"
+        android:text="@string/fa_trophy"
+        android:textColor="@color/colorGold"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/tvExtremeGoldScore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/tvExtremeGold"
+        android:layout_toEndOf="@+id/tvExtremeGold"
+        android:layout_marginStart="5dp"
+        android:text="@string/time000000"
+        android:textColor="@color/colorPrimary"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/tvExtremeGoldWinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvExtremeGold"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="10dp"
+        android:text="@string/white_dove"
+        android:textColor="@color/colorPrimary"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/tvExtremeSilver"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toStartOf="@+id/tvExtremeSilverScore"
+        android:layout_marginEnd="5dp"
+        android:layout_alignBaseline="@+id/tvExtremeGold"
+        android:text="@string/fa_trophy"
+        android:textColor="@color/colorSilver"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/tvExtremeSilverScore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/tvExtremeSilver"
+        android:layout_centerInParent="true"
+        android:text="@string/time000000"
+        android:textColor="@color/colorPrimary"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/tvExtremeSilverWinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvExtremeGold"
+        android:layout_alignBaseline="@+id/tvExtremeGoldWinner"
+        android:layout_centerInParent="true"
+        android:text="@string/white_dove"
+        android:textColor="@color/colorPrimary"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/tvExtremeBronze"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvExtreme"
+        android:layout_toStartOf="@+id/tvExtremeBronzeScore"
+        android:layout_alignBaseline="@+id/tvExtremeGold"
+        android:layout_marginEnd="5dp"
+        android:text="@string/fa_trophy"
+        android:textColor="@color/colorBronze"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/tvExtremeBronzeScore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/tvExtremeGold"
+        android:layout_marginEnd="10dp"
+        android:layout_alignParentEnd="true"
+        android:text="@string/time000000"
+        android:textColor="@color/colorPrimary"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/tvExtremeBronzeWinner"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvExtremeSilver"
+        android:layout_marginEnd="10dp"
+        android:layout_alignBaseline="@+id/tvExtremeGoldWinner"
+        android:layout_alignParentEnd="true"
+        android:text="@string/white_dove"
+        android:textColor="@color/colorPrimary"
+        android:textSize="16sp" />
+
+</RelativeLayout>

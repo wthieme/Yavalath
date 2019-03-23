@@ -32,12 +32,12 @@ internal object Helper {
         }
     }
 
-    fun testInternet(ctx: Context): Boolean {
+    fun testInternet(context: Context): Boolean {
         val result: Boolean
-        val cm = ctx.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val netInfo = cm.activeNetworkInfo
         result = netInfo != null && netInfo.isConnected
-        if (!result) Helper.showMessage(ctx, ctx.getString(R.string.NoInternet))
+        if (!result) Helper.showMessage(context, context.getString(R.string.NoInternet), ContextCompat.getColor(context, R.color.colorLightRed))
         return result
     }
 
@@ -123,13 +123,13 @@ internal object Helper {
         editor.apply()
     }
 
-    fun showMessage(context: Context, melding: String) {
+    fun showMessage(context: Context, melding: String, color: Int) {
         Helper.log(melding)
-        val duration = Toast.LENGTH_SHORT
+        val duration = Toast.LENGTH_LONG
         val toast = Toast.makeText(context, melding, duration)
-        toast.view.setBackgroundColor(ContextCompat.getColor(context, R.color.colorDisabled))
+        toast.view.setBackgroundColor(color)
         val text = toast.view.findViewById(android.R.id.message) as TextView
-        text.setTextColor(ContextCompat.getColor(context, R.color.colorWhite))
+        text.setTextColor(ContextCompat.getColor(context, R.color.colorPrimary))
         toast.show()
     }
 

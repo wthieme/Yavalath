@@ -297,6 +297,11 @@ class GameActivity : AppCompatActivity() {
                         Typeface.DEFAULT,
                         game.playerBlack,
                         ContextCompat.getColor(mContext, R.color.colorPrimary))
+
+                if (game.gameMode==GameMode.HumanVsComputer && game.playerWhite == game.myName)
+                {
+                    GameHelper.registerWin(mContext, game.myName, game.gameLevel)
+                }
             }
 
             if (game.gameState == GameState.BlackWins) {
@@ -314,7 +319,13 @@ class GameActivity : AppCompatActivity() {
                         Typeface.DEFAULT,
                         game.playerBlack,
                         ContextCompat.getColor(mContext, R.color.colorPrimary))
+
+                if (game.gameMode==GameMode.HumanVsComputer && game.playerBlack == game.myName)
+                {
+                    GameHelper.registerWin(mContext, game.myName, game.gameLevel)
+                }
             }
+
             tvWhitePoints.text = String.format(getString(R.string.pluspoints), game.pointsWhite.toString())
             tvBlackPoints.text = String.format(getString(R.string.pluspoints), game.pointsBlack.toString())
 

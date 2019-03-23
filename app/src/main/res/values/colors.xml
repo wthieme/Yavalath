@@ -26,4 +26,7 @@
     <color name="colorWhite">#ffffff</color>
     <color name="colorBlack">#000000</color>
     <color name="colorTint">#CF001F</color>
+    <color name="colorGold">#d6af36</color>
+    <color name="colorSilver">#a7a7ad</color>
+    <color name="colorBronze">#a77044</color>
 </resources>

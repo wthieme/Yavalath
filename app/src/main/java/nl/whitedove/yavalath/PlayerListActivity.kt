@@ -12,7 +12,6 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.view.View
-import android.widget.TextView
 import kotlinx.android.synthetic.main.player_list_activity.*
 import java.util.*
 
@@ -33,7 +32,7 @@ class PlayerListActivity : AppCompatActivity() {
         fcmActive()
         val aantal = Database.TIMEOUT - mInviteCount
         val s = aantal.toString()
-        tvInviting.text = String.format(mInvited + " %s", s)
+        tvInviting.text = String.format("$mInvited %s", s)
     }
 
     private val runnableTimeOut: Runnable = Runnable {
@@ -89,11 +88,11 @@ class PlayerListActivity : AppCompatActivity() {
     }
 
     private fun initDb() {
-        Database.setListener(Runnable { getPlayers() })
+        Database.setListenerOnPlayers(Runnable { getPlayers() })
     }
 
     private fun fcmActive() {
-        Helper.fcmActive(mContext, findViewById<View>(R.id.tvFcmBolt) as TextView)
+        Helper.fcmActive(mContext, tvFcmBolt)
     }
 
     private fun getPlayers() {
@@ -117,8 +116,8 @@ class PlayerListActivity : AppCompatActivity() {
         val builder = AlertDialog.Builder(this)
         builder.setMessage(title)
                 .setCancelable(false)
-                .setPositiveButton(getString(R.string.Yes), { _, _ -> answerYes(playerName) })
-                .setNegativeButton(getString(R.string.No), { _, _ -> answerNo() })
+                .setPositiveButton(getString(R.string.Yes)) { _, _ -> answerYes(playerName) }
+                .setNegativeButton(getString(R.string.No)) { _, _ -> answerNo() }
         val alert = builder.create()
         alert.show()
     }

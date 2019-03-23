@@ -248,37 +248,55 @@
             android:textAlignment="center"
             android:textSize="16sp" />
 
-        <EditText
-            android:id="@+id/etNameComputer"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_marginTop="20dp"
-            android:layout_weight="1"
-            android:width="200dp"
-            android:hint="@string/enter_name"
-            android:inputType="text"
-            android:maxLength="10"
-            android:maxLines="1"
-            android:textAlignment="center"
-            android:textIsSelectable="false"
-            android:textSize="24sp" />
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <EditText
+                android:id="@+id/etNameComputer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:width="200dp"
+                android:hint="@string/enter_name"
+                android:inputType="text"
+                android:maxLength="10"
+                android:maxLines="1"
+                android:textAlignment="center"
+                android:layout_centerHorizontal="true"
+                android:textIsSelectable="false"
+                android:textSize="24sp" />
+
+            <TextView
+                android:id="@+id/tvHighScore"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="20dp"
+                android:layout_alignBaseline="@+id/etNameComputer"
+                android:text="@string/fa_trophy"
+                android:layout_alignParentEnd="true"
+                android:textColor="@color/colorYellow"
+                android:textSize="30sp" />
+
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/tvLevel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/Level"
-            android:textColor="@color/colorPrimary"
             android:layout_marginTop="20dp"
+            android:text="@string/Level"
             android:textAlignment="center"
+            android:textColor="@color/colorPrimary"
             android:textSize="16sp" />
 
         <com.warkiz.widget.IndicatorSeekBar
             android:id="@+id/sbLevel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
             android:layout_marginStart="10dp"
+            android:layout_marginTop="5dp"
             android:layout_marginEnd="10dp"
             app:isb_indicator_color="@color/colorOrange"
             app:isb_indicator_text_color="@color/colorAccent"

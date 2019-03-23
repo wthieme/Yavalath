@@ -28,6 +28,7 @@
     <string name="fa_smile">&#xf118;</string>
     <string name="fa_frown">&#xf119;</string>
     <string name="fa_meh">&#xf11a;</string>
+    <string name="fa_trophy">&#xf091;</string>
     <string name="CountryUnknown">Onbekend</string>
     <string name="NameMustNotBeEmpty">Naam mag niet leeg zijn</string>
     <string name="Name1MustNotBeEmpty">Naam 1 mag niet leeg zijn</string>
@@ -104,10 +105,16 @@
     <string name="pluspoints">+%s</string>
     <string name="lengthnotbetween3and10">Een naam moet tussen de 3 en 10 tekens lang zijn</string>
     <string name="Level">Niveau %s</string>
-    <string name="privacy">Privacy verklaring</string>
+    <string name="privacy">Privacyverklaring</string>
     <string name="PrivacuUrl">https://wthieme.github.io/privacyyavalath_nl.html</string>
-    <string name="PrivacyTxt">Privacy verklaring wordt geladen ...</string>
+    <string name="PrivacyTxt">Privacyverklaring wordt geladen ...</string>
     <string name="ErrorLoadingPrivacy">Fout tijdens laden privacy verklaring</string>
-
+    <string name="medal">%s medaille voor niveau %s</string>
+    <string name="gold">Gouden</string>
+    <string name="silver">Zilveren</string>
+    <string name="bronze">Bronzen</string>
+    <string name="high_scores">Hoogste scores</string>
+    <string name="time000000"> </string>
+    <string name="white_dove"> </string>
 </resources>
 

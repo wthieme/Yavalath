@@ -43,6 +43,8 @@ class MainActivity : AppCompatActivity() {
         val iconFont = FontManager.getTypeface(this, FontManager.FONTAWESOME_SOLID)
         FontManager.markAsIconContainer(tvMenu, iconFont)
         tvMenu.setOnClickListener { view -> menuClick(view) }
+        FontManager.markAsIconContainer(tvHighScore, iconFont)
+        tvHighScore.setOnClickListener { highScoreClick() }
 
         tvrulestxt.movementMethod = LinkMovementMethod.getInstance()
         tvrulestxt.setText(clickRules, TextView.BufferType.SPANNABLE)
@@ -230,8 +232,15 @@ class MainActivity : AppCompatActivity() {
         if (Helper.DEBUG)
             tvDebug.visibility = View.VISIBLE
         else
-            tvDebug
-                    .visibility = View.GONE
+            tvDebug.visibility = View.GONE
+    }
+
+    private fun highScoreClick() {
+        val intent = Intent(this, HighScoreActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+        this.startActivity(intent)
+        this.overridePendingTransition(R.anim.slide_in, R.anim.slide_out)
+        this.finish()
     }
 
     private fun modeChanged(to: View) {
@@ -259,7 +268,7 @@ class MainActivity : AppCompatActivity() {
         Helper.showDialog(ad, false)
     }
 
-        private fun startHumanToComputer() {
+    private fun startHumanToComputer() {
         if (!checkName1(this)) return
         val gameLevel = Helper.getGameLevel(mContext)
         val token1 = UUID.randomUUID().toString()
@@ -314,15 +323,15 @@ class MainActivity : AppCompatActivity() {
     private fun checkName1(context: Context): Boolean {
         val nick = Helper.getName1(context)
         if (nick.isEmpty()) {
-            Helper.showMessage(context, getString(R.string.NameMustNotBeEmpty))
+            Helper.showMessage(context, getString(R.string.NameMustNotBeEmpty), ContextCompat.getColor(this, R.color.colorLightRed))
             return false
         }
         if (nick.equals(getString(R.string.computer), true)) {
-            Helper.showMessage(context, getString(R.string.ComputerReserved))
+            Helper.showMessage(context, getString(R.string.ComputerReserved), ContextCompat.getColor(this, R.color.colorLightRed))
             return false
         }
         if (nick.length < 3 || nick.length > 10) {
-            Helper.showMessage(context, getString(R.string.lengthnotbetween3and10))
+            Helper.showMessage(context, getString(R.string.lengthnotbetween3and10), ContextCompat.getColor(this, R.color.colorLightRed))
             return false
         }
         return true
@@ -331,11 +340,11 @@ class MainActivity : AppCompatActivity() {
     private fun checkName2(context: Context): Boolean {
         val nick2 = Helper.getName2(context)
         if (nick2.isEmpty()) {
-            Helper.showMessage(context, getString(R.string.Name2MustNotBeEmpty))
+            Helper.showMessage(context, getString(R.string.Name2MustNotBeEmpty), ContextCompat.getColor(this, R.color.colorLightRed))
             return false
         }
         if (nick2.length < 3 || nick2.length > 10) {
-            Helper.showMessage(context, getString(R.string.lengthnotbetween3and10))
+            Helper.showMessage(context, getString(R.string.lengthnotbetween3and10), ContextCompat.getColor(this, R.color.colorLightRed))
             return false
         }
         return true
@@ -413,7 +422,8 @@ class MainActivity : AppCompatActivity() {
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     initLocation()
                 } else {
-                    Helper.showMessage(this, "Without location permission the country will be unknown in the player list")
+                    Helper.showMessage(this, "Without location permission the country will be unknown in the player list",
+                            ContextCompat.getColor(this, R.color.colorLightYellow))
                 }
             }
         }

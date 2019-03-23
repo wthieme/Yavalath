@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.content.Context
 import android.os.AsyncTask
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.view.View
 import android.view.Window
 import android.widget.Button
@@ -64,8 +65,11 @@ internal class PrivacyDialog(context: Context) : Dialog(context), View.OnClickLi
     }
 
     private fun toonPrivacyTxt(privacyTxt: String) {
-        if (privacyTxt == "")
-            Helper.showMessage(mContext, mContext.getString(R.string.ErrorLoadingPrivacy))
+        if (privacyTxt == "") {
+            Helper.showMessage(mContext,
+                    mContext.getString(R.string.ErrorLoadingPrivacy),
+                    ContextCompat.getColor(mContext, R.color.colorLightYellow))
+        }
         else {
             val startIndex = privacyTxt.indexOf("<h2>")
             val endIndex = privacyTxt.indexOf("</h2>")
