@@ -92,7 +92,7 @@
     <string name="rH2HInternet">Human vs Human - Internet</string>
     <string name="H2HLocal">Human vs Human - Local</string>
     <string name="HumanVsComputer">Human vs Computer</string>
-    <string name="Modehvc">In this mode you play against the computer</string>
+    <string name="Modehvc">In this mode you play against the computer. Win 3 games and beat the high score.</string>
     <string name="Easy">easy</string>
     <string name="Intermediate">intermediate</string>
     <string name="Expert">hard</string>
@@ -114,7 +114,7 @@
     <string name="silver">Silver</string>
     <string name="bronze">Bronze</string>
     <string name="high_scores">High scores</string>
-    <string name="time000000"> </string>
-    <string name="white_dove"> </string>
+    <string name="time000000">00:00:00</string>
+    <string name="white_dove">Speler</string>
 </resources>
 

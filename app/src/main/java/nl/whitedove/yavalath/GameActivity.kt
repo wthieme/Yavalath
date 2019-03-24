@@ -298,9 +298,8 @@ class GameActivity : AppCompatActivity() {
                         game.playerBlack,
                         ContextCompat.getColor(mContext, R.color.colorPrimary))
 
-                if (game.gameMode==GameMode.HumanVsComputer && game.playerWhite == game.myName)
-                {
-                    GameHelper.registerWin(mContext, game.myName, game.gameLevel)
+                if (game.gameMode == GameMode.HumanVsComputer && game.playerWhite == game.myName) {
+                    GameHelper.registerWin(mContext, game)
                 }
             }
 
@@ -320,9 +319,8 @@ class GameActivity : AppCompatActivity() {
                         game.playerBlack,
                         ContextCompat.getColor(mContext, R.color.colorPrimary))
 
-                if (game.gameMode==GameMode.HumanVsComputer && game.playerBlack == game.myName)
-                {
-                    GameHelper.registerWin(mContext, game.myName, game.gameLevel)
+                if (game.gameMode == GameMode.HumanVsComputer && game.playerBlack == game.myName) {
+                    GameHelper.registerWin(mContext, game)
                 }
             }
 

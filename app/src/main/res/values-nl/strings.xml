@@ -92,7 +92,7 @@
     <string name="rH2HInternet">Mens vs Mens - Internet</string>
     <string name="H2HLocal">Mens vs Mens - Lokaal</string>
     <string name="HumanVsComputer">Mens vs Computer</string>
-    <string name="Modehvc">In deze mode speel je tegen de computer</string>
+    <string name="Modehvc">In deze mode speel je tegen de computer. Win 3 spelletjes en verbeter de hoogste score.</string>
     <string name="Easy">makkelijk</string>
     <string name="Intermediate">gemiddeld</string>
     <string name="Expert">moeilijk</string>

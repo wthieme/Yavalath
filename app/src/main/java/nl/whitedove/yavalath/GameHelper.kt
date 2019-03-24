@@ -17,19 +17,21 @@ internal object GameHelper {
         mPointsWhite = 0
     }
 
-    fun registerWin(context: Context, playerName: String, level: GameLevel) {
+    fun registerWin(context: Context, game: GameInfo) {
 
         // Read the current wins
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
-        val key = "wins$level"
+        val key = "games${game.gameLevel}"
         val current = preferences.getString(key, "")
         val wins = ArrayList<DateTime>()
         if (!current.isNullOrEmpty()) {
             val winsAsListStrings = current.split(",")
             wins.addAll(winsAsListStrings.map { DateTime(it.trim().toLong()) })
         }
-        wins.add(DateTime.now())
-        if (wins.size > 3) {
+        wins.add(game.created) // Starttime game
+        wins.add(DateTime.now()) // Wintime game
+
+        while (wins.size > 6) {
             wins.removeAt(0)
         }
 
@@ -39,20 +41,20 @@ internal object GameHelper {
         editor.apply()
 
         // Check for highScore
-        if (wins.size == 3) {
-            val period = Period(wins[0], wins[2])
-            val score = wins[2].millis - wins[0].millis
+        if (wins.size == 6) {
+            val period = Period(wins[0], wins[5])
+            val score = wins[5].millis - wins[0].millis
             // A high score must be less the 24 hours
             if (period.hours < 24) {
-                Database.getHighScoreForPlayerAndLevel(playerName, score, level, Runnable { processScoreForPlayerAndLevel(context, playerName, score, level) })
-                Database.getHighScoreForLevel(level, score, Runnable { processScoreForLevel(context, level) })
+                Database.getHighScoreForPlayerAndLevel(game.myName, score, game.gameLevel, Runnable { processScoreForPlayerAndLevel(game.myName, score, game.gameLevel) })
+                Database.getHighScoreForLevel(game.gameLevel, score, Runnable { processScoreForLevel(context, game.gameLevel) })
             }
         }
     }
 
-    private fun processScoreForPlayerAndLevel(context: Context, playerName: String, score: Long, level: GameLevel) {
+    private fun processScoreForPlayerAndLevel(playerName: String, score: Long, level: GameLevel) {
         val highScoreCount = Database.mHighScoreForPlayerAndLevel.size
-        if (highScoreCount<3) {
+        if (highScoreCount < 3) {
             // New top3 score for player
             Database.addHighScore(HighScore(playerName, score, level, DateTime.now()))
         }
@@ -73,7 +75,7 @@ internal object GameHelper {
     }
 
     private fun processScoreForLevel(context: Context, level: GameLevel) {
-        val highScoreCount = Database.mHighScoreForLevel[level.value-1].size
+        val highScoreCount = Database.mHighScoreForLevel[level.value - 1].size
         if (highScoreCount >= 3) {
             return
         }

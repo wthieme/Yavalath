@@ -59,6 +59,11 @@ class HighScoreActivity : AppCompatActivity() {
         FontManager.markAsIconContainer(tvExtremeGold,iconFont)
         FontManager.markAsIconContainer(tvExtremeSilver,iconFont)
         FontManager.markAsIconContainer(tvExtremeBronze,iconFont)
+
+        tvEasy.text = getString(R.string.Easy).capitalize()
+        tvIntermediate.text = getString(R.string.Intermediate).capitalize()
+        tvExpert.text = getString(R.string.Expert).capitalize()
+        tvExtreme.text = getString(R.string.Extreme).capitalize()
     }
 
     private fun initDb() {
