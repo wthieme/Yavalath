@@ -46,16 +46,17 @@ internal object GameHelper {
             val score = wins[5].millis - wins[0].millis
             // A high score must be less the 24 hours
             if (period.hours < 24) {
-                Database.getHighScoreForPlayerAndLevel(game.myName, game.gameLevel, Runnable { processScoreForPlayerAndLevel(game.myName, score, game.gameLevel) })
-                Database.getHighScoreForLevel(game.gameLevel, score, Runnable { processScoreForLevel(context, game.gameLevel) })
+                Database.getHighScoreForPlayerAndLevel(game.myName, game.gameLevel, Runnable { processScoreForPlayerAndLevel(context, game.myName, score, game.gameLevel) })
             }
         }
     }
 
-    private fun processScoreForPlayerAndLevel(playerName: String, score: Long, level: GameLevel) {
+    private fun processScoreForPlayerAndLevel(context: Context, playerName: String, score: Long, level: GameLevel) {
         val highScore = Database.mHighScoreForPlayerAndLevel
         if (highScore == null || score < highScore.score) {
-            // New top score for player
+            // Check if we earned a medal
+            Database.getHighScoreForLevel(level, score, Runnable { processScoreForLevel(context, level) })
+            // Add new top score for player
             Database.addHighScore(HighScore(playerName, score, level, DateTime.now()))
             Database.deleteOldHighScoresForPlayerAndLevel(playerName, score, level)
         }
