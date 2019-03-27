@@ -13,8 +13,8 @@ internal object Database {
     var mPlayers: ArrayList<PlayerInfo> = ArrayList()
     private var mPlayer: PlayerInfo? = null
     var TIMEOUT = 30
-    var mHighScoreForLevel: Array<ArrayList<HighScore>> = Array(4) { i -> ArrayList<HighScore>() }
-    var mHighScoreForPlayerAndLevel: ArrayList<HighScore> = ArrayList()
+    var mHighScoreForLevel: Array<ArrayList<HighScore>> = Array(4) { ArrayList<HighScore>() }
+    var mHighScoreForPlayerAndLevel: HighScore? = null
 
     internal object PlayerNames {
         var collectionName = "players"
@@ -138,7 +138,7 @@ internal object Database {
         db.collection(getHighscoresCollectionName())
                 .whereEqualTo(HighScoreNames.level, level.toString())
                 .whereLessThan(HighScoreNames.score, myScore)
-                .orderBy(HighScoreNames.score,Query.Direction.ASCENDING)
+                .orderBy(HighScoreNames.score, Query.Direction.ASCENDING)
                 .limit(3)
                 .get()
                 .addOnCompleteListener { task ->
@@ -157,25 +157,26 @@ internal object Database {
                 }
     }
 
-    fun getHighScoreForPlayerAndLevel(playerName: String, myScore: Long, level: GameLevel, callback: Runnable) {
-        val highScores = ArrayList<HighScore>()
+    fun getHighScoreForPlayerAndLevel(playerName: String, level: GameLevel, callback: Runnable) {
         val db = FirebaseFirestore.getInstance()
         db.collection(getHighscoresCollectionName())
                 .whereEqualTo(HighScoreNames.playerName, playerName)
                 .whereEqualTo(HighScoreNames.level, level.toString())
-                .whereLessThan(HighScoreNames.score, myScore)
-                .limit(3)
+                .orderBy(HighScoreNames.score, Query.Direction.ASCENDING)
+                .limit(1)
                 .get()
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        for (document in task.result!!) {
+                        val results = task.result!!
+                        if (!results.isEmpty) {
+                            val document = results.first();
                             val doc = document.data
                             val score = doc[Database.HighScoreNames.score] as Long
                             val achievedDate = fmt.parseDateTime(doc[Database.HighScoreNames.achievedDate] as String)
-                            highScores.add(HighScore(playerName, score, level, achievedDate))
+                            mHighScoreForPlayerAndLevel = HighScore(playerName, score, level, achievedDate)
+                        } else {
+                            mHighScoreForPlayerAndLevel = null
                         }
-                        mHighScoreForPlayerAndLevel = ArrayList()
-                        mHighScoreForPlayerAndLevel.addAll(highScores)
                         callback.run()
                     }
                 }
@@ -189,5 +190,33 @@ internal object Database {
         doc[HighScoreNames.score] = highScore.score
         doc[HighScoreNames.achievedDate] = highScore.achievedDate.toString()
         db.collection(getHighscoresCollectionName()).document().set(doc)
+    }
+
+    fun deleteOldHighScoresForPlayerAndLevel(playerName: String, myScore: Long, level: GameLevel) {
+        val toDelete = ArrayList<String>()
+        val db = FirebaseFirestore.getInstance()
+        db.collection(getHighscoresCollectionName())
+                .whereEqualTo(HighScoreNames.playerName, playerName)
+                .whereEqualTo(HighScoreNames.level, level.toString())
+                .whereGreaterThan(HighScoreNames.score, myScore)
+                .get()
+                .addOnCompleteListener { task ->
+                    for (document in task.result!!) {
+                        toDelete.add(document.id)
+                    }
+                    deleteOldScores(toDelete)
+                }
+    }
+
+    fun deleteOldScores(toDelete: List<String>) {
+        val db = FirebaseFirestore.getInstance()
+        for (toDel in toDelete) {
+            db.collection(getHighscoresCollectionName()).document(toDel)
+                    .delete()
+                    .addOnCompleteListener { task ->
+                        if (task.isSuccessful) {
+                        }
+                    }
+        }
     }
 }

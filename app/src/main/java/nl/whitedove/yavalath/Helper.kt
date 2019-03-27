@@ -45,15 +45,6 @@ internal object Helper {
         return mRandom.nextInt(lower + upper + 1) + lower
     }
 
-    fun tryParseInt(value: String): Boolean {
-        return try {
-            Integer.parseInt(value)
-            true
-        } catch (e: NumberFormatException) {
-            false
-        }
-    }
-
     fun getFcmToken(cxt: Context): String {
         val preferences = PreferenceManager.getDefaultSharedPreferences(cxt)
         return preferences.getString(FcmNames.FcmToken, "")!!
@@ -207,9 +198,12 @@ internal object Helper {
     }
 
     fun setHtmlText(view: TextView, htmlTxt: String) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             view.text = Html.fromHtml(htmlTxt, Html.FROM_HTML_MODE_LEGACY)
-        else
+        }
+        else {
+            @Suppress("DEPRECATION")
             view.text = Html.fromHtml(htmlTxt)
+        }
     }
 }
