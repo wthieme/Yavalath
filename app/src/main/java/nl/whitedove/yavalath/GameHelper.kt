@@ -56,6 +56,7 @@ internal object GameHelper {
         if (highScore == null || score < highScore.score) {
             // Check if we earned a medal
             Database.getHighScoreForLevel(level, score, Runnable { processScoreForLevel(context, level) })
+
             // Add new top score for player
             Database.addHighScore(HighScore(playerName, score, level, DateTime.now()))
             Database.deleteOldHighScoresForPlayerAndLevel(playerName, score, level)

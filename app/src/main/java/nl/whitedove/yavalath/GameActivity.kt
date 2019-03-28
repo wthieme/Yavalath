@@ -132,8 +132,9 @@ class GameActivity : AppCompatActivity() {
     }
 
     private fun initTimer() {
-        val game = GameHelper.mGame!!
-        if (game.gameMode != GameMode.HumanVsHumanInternet) {
+
+        val game = GameHelper.mGame
+        if (game == null || game.gameMode != GameMode.HumanVsHumanInternet) {
             return
         }
 
