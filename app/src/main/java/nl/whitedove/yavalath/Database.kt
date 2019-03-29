@@ -5,8 +5,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import org.joda.time.DateTime
 import org.joda.time.format.ISODateTimeFormat
-import java.util.*
-import kotlin.collections.ArrayList
 
 internal object Database {
     val fmt = ISODateTimeFormat.dateTime()
@@ -14,6 +12,7 @@ internal object Database {
     private var mPlayer: PlayerInfo? = null
     var TIMEOUT = 30
     var mHighScoreForLevel: Array<ArrayList<HighScore>> = Array(4) { ArrayList<HighScore>() }
+    var mHighScoresForPlayer: ArrayList<HighScore> = ArrayList()
     var mHighScoreForPlayerAndLevel: HighScore? = null
 
     internal object PlayerNames {
@@ -32,7 +31,9 @@ internal object Database {
         const val level = "level"
         const val playerName = "playerName"
         const val score = "score"
+        // TODO remove achievedDate
         const val achievedDate = "achievedDate"
+        const val highScoreDate = "highScoreDate"
     }
 
     private fun getPlayersCollectionName(): String {
@@ -157,6 +158,28 @@ internal object Database {
                 }
     }
 
+    fun getHighScoreForPlayer(playerName: String, callback: Runnable) {
+        val highScores = ArrayList<HighScore>()
+        val db = FirebaseFirestore.getInstance()
+        db.collection(getHighscoresCollectionName())
+                .whereEqualTo(HighScoreNames.playerName, playerName)
+                .get()
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        for (document in task.result!!) {
+                            val doc = document.data
+                            val level = GameLevel.valueOf(doc[Database.HighScoreNames.level] as String)
+                            val score = doc[Database.HighScoreNames.score] as Long
+                            val achievedDate = fmt.parseDateTime(doc[Database.HighScoreNames.achievedDate] as String)
+                            highScores.add(HighScore(playerName, score, level, achievedDate))
+                        }
+                        mHighScoresForPlayer = ArrayList()
+                        mHighScoresForPlayer.addAll(highScores)
+                        callback.run()
+                    }
+                }
+    }
+
     fun getHighScoreForPlayerAndLevel(playerName: String, level: GameLevel, callback: Runnable) {
         val db = FirebaseFirestore.getInstance()
         db.collection(getHighscoresCollectionName())
@@ -169,7 +192,7 @@ internal object Database {
                     if (task.isSuccessful) {
                         val results = task.result!!
                         if (!results.isEmpty) {
-                            val document = results.first();
+                            val document = results.first()
                             val doc = document.data
                             val score = doc[Database.HighScoreNames.score] as Long
                             val achievedDate = fmt.parseDateTime(doc[Database.HighScoreNames.achievedDate] as String)
@@ -189,6 +212,7 @@ internal object Database {
         doc[HighScoreNames.level] = highScore.level
         doc[HighScoreNames.score] = highScore.score
         doc[HighScoreNames.achievedDate] = highScore.achievedDate.toString()
+        doc[HighScoreNames.highScoreDate] = highScore.achievedDate.millis
         db.collection(getHighscoresCollectionName()).document().set(doc)
     }
 
@@ -208,7 +232,7 @@ internal object Database {
                 }
     }
 
-    fun deleteOldScores(toDelete: List<String>) {
+    private fun deleteOldScores(toDelete: List<String>) {
         val db = FirebaseFirestore.getInstance()
         for (toDel in toDelete) {
             db.collection(getHighscoresCollectionName()).document(toDel)
@@ -218,5 +242,25 @@ internal object Database {
                         }
                     }
         }
+    }
+
+    fun removeExpiredHighScores() {
+        val toDelete: ArrayList<String> = ArrayList()
+        val db = FirebaseFirestore.getInstance()
+        val dtNu = DateTime.now()
+        db.collection(getHighscoresCollectionName())
+                .get()
+                .addOnCompleteListener { task ->
+                    for (document in task.result!!) {
+                        val doc = document.data
+                        //TODO use highScoreDate
+                        val achievedDate = fmt.parseDateTime(doc[Database.HighScoreNames.achievedDate] as String)
+
+                        if (achievedDate.isBefore(dtNu.minusDays(7))) {
+                            toDelete.add(document.id)
+                        }
+                    }
+                    deleteOldScores(toDelete)
+                }
     }
 }

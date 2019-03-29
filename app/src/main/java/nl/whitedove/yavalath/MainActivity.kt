@@ -7,6 +7,7 @@ import android.graphics.Typeface
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
+import android.os.AsyncTask
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
@@ -16,6 +17,7 @@ import android.text.Spannable
 import android.text.TextWatcher
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
+import android.util.Pair
 import android.view.View
 import android.widget.PopupMenu
 import android.widget.TextView
@@ -23,6 +25,7 @@ import com.warkiz.widget.IndicatorSeekBar
 import com.warkiz.widget.OnSeekChangeListener
 import com.warkiz.widget.SeekParams
 import kotlinx.android.synthetic.main.content_main.*
+import org.joda.time.DateTime
 import java.util.*
 
 
@@ -36,6 +39,7 @@ class MainActivity : AppCompatActivity() {
         FcmSender.mMyFcmToken = Helper.getFcmToken(mContext)
         initLocation()
         initViews()
+        removeExpiredHighScores()
     }
 
     private fun initViews() {
@@ -376,6 +380,19 @@ class MainActivity : AppCompatActivity() {
         })
 
         popup.show()
+    }
+
+    private fun removeExpiredHighScores() {
+        val cxt = applicationContext
+        val last = Helper.getLastRemoveHighScoresDate(cxt)
+        val nu = DateTime.now()
+        if (last.plusDays(1).isBefore(nu)) {
+            if (!Helper.testInternet(cxt)) {
+                return
+            }
+            Database.removeExpiredHighScores()
+            Helper.setLastRemoveHighScoresDate(cxt, DateTime.now())
+        }
     }
 
     private fun initLocation() {

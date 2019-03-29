@@ -116,5 +116,6 @@
     <string name="high_scores">Hoogste scores</string>
     <string name="time000000"> </string>
     <string name="white_dove"> </string>
+    <string name="youScore">U: %s</string>
 </resources>
 

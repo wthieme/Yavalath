@@ -47,18 +47,18 @@ class HighScoreActivity : AppCompatActivity() {
                 getString(R.string.back),
                 ContextCompat.getColor(this, R.color.colorPrimary))
 
-        FontManager.markAsIconContainer(tvEasyGold,iconFont)
-        FontManager.markAsIconContainer(tvEasySilver,iconFont)
-        FontManager.markAsIconContainer(tvEasyBronze,iconFont)
-        FontManager.markAsIconContainer(tvIntermediateGold,iconFont)
-        FontManager.markAsIconContainer(tvIntermediateSilver,iconFont)
-        FontManager.markAsIconContainer(tvIntermediateBronze,iconFont)
-        FontManager.markAsIconContainer(tvExpertGold,iconFont)
-        FontManager.markAsIconContainer(tvExpertSilver,iconFont)
-        FontManager.markAsIconContainer(tvExpertBronze,iconFont)
-        FontManager.markAsIconContainer(tvExtremeGold,iconFont)
-        FontManager.markAsIconContainer(tvExtremeSilver,iconFont)
-        FontManager.markAsIconContainer(tvExtremeBronze,iconFont)
+        FontManager.markAsIconContainer(tvEasyGold, iconFont)
+        FontManager.markAsIconContainer(tvEasySilver, iconFont)
+        FontManager.markAsIconContainer(tvEasyBronze, iconFont)
+        FontManager.markAsIconContainer(tvIntermediateGold, iconFont)
+        FontManager.markAsIconContainer(tvIntermediateSilver, iconFont)
+        FontManager.markAsIconContainer(tvIntermediateBronze, iconFont)
+        FontManager.markAsIconContainer(tvExpertGold, iconFont)
+        FontManager.markAsIconContainer(tvExpertSilver, iconFont)
+        FontManager.markAsIconContainer(tvExpertBronze, iconFont)
+        FontManager.markAsIconContainer(tvExtremeGold, iconFont)
+        FontManager.markAsIconContainer(tvExtremeSilver, iconFont)
+        FontManager.markAsIconContainer(tvExtremeBronze, iconFont)
 
         tvEasy.text = getString(R.string.Easy).capitalize()
         tvIntermediate.text = getString(R.string.Intermediate).capitalize()
@@ -76,70 +76,91 @@ class HighScoreActivity : AppCompatActivity() {
 
     private fun getHighScores() {
         fcmActive()
+        val player = Helper.getName1(mContext)
         val score = 1000L * 60L * 60L * 24L
         Database.getHighScoreForLevel(GameLevel.Easy, score, Runnable { toonHighScores(GameLevel.Easy, Database.mHighScoreForLevel[0]) })
         Database.getHighScoreForLevel(GameLevel.Intermediate, score, Runnable { toonHighScores(GameLevel.Intermediate, Database.mHighScoreForLevel[1]) })
         Database.getHighScoreForLevel(GameLevel.Expert, score, Runnable { toonHighScores(GameLevel.Expert, Database.mHighScoreForLevel[2]) })
         Database.getHighScoreForLevel(GameLevel.Extreme, score, Runnable { toonHighScores(GameLevel.Extreme, Database.mHighScoreForLevel[3]) })
+        Database.getHighScoreForPlayer(player, Runnable { toonYourScore(Database.mHighScoresForPlayer) })
+    }
+
+    private fun toonYourScore(scores: ArrayList<HighScore>) {
+        for (score in scores) {
+            when (score.level) {
+                GameLevel.Easy -> {
+                    tvEasyYou.text = String.format(getString(R.string.youScore), GameHelper.scoreToString(score.score))
+                }
+                GameLevel.Intermediate -> {
+                    tvIntermediateYou.text = String.format(getString(R.string.youScore), GameHelper.scoreToString(score.score))
+                }
+                GameLevel.Expert -> {
+                    tvExpertYou.text = String.format(getString(R.string.youScore), GameHelper.scoreToString(score.score))
+                }
+                GameLevel.Extreme -> {
+                    tvExtremeYou.text = String.format(getString(R.string.youScore), GameHelper.scoreToString(score.score))
+                }
+            }
+        }
     }
 
     private fun toonHighScores(level: GameLevel, scores: ArrayList<HighScore>) {
 
         when (level) {
             GameLevel.Easy -> {
-                if (scores.size>0) {
+                if (scores.size > 0) {
                     tvEasyGoldScore.text = GameHelper.scoreToString(scores[0].score)
                     tvEasyGoldWinner.text = scores[0].playerName
                 }
-                if (scores.size>1) {
+                if (scores.size > 1) {
                     tvEasySilverScore.text = GameHelper.scoreToString(scores[1].score)
                     tvEasySilverWinner.text = scores[1].playerName
                 }
-                if (scores.size>2){
+                if (scores.size > 2) {
                     tvEasyBronzeScore.text = GameHelper.scoreToString(scores[2].score)
-                    tvEasyBronzeWinner.text= scores[2].playerName
+                    tvEasyBronzeWinner.text = scores[2].playerName
                 }
             }
             GameLevel.Intermediate -> {
-                if (scores.size>0) {
+                if (scores.size > 0) {
                     tvIntermediateGoldScore.text = GameHelper.scoreToString(scores[0].score)
                     tvIntermediateGoldWinner.text = scores[0].playerName
                 }
-                if (scores.size>1) {
+                if (scores.size > 1) {
                     tvIntermediateSilverScore.text = GameHelper.scoreToString(scores[1].score)
                     tvIntermediateSilverWinner.text = scores[1].playerName
                 }
-                if (scores.size>2){
+                if (scores.size > 2) {
                     tvIntermediateBronzeScore.text = GameHelper.scoreToString(scores[2].score)
-                    tvIntermediateBronzeWinner.text= scores[2].playerName
+                    tvIntermediateBronzeWinner.text = scores[2].playerName
                 }
             }
             GameLevel.Expert -> {
-                if (scores.size>0) {
+                if (scores.size > 0) {
                     tvExpertGoldScore.text = GameHelper.scoreToString(scores[0].score)
                     tvExpertGoldWinner.text = scores[0].playerName
                 }
-                if (scores.size>1) {
+                if (scores.size > 1) {
                     tvExpertSilverScore.text = GameHelper.scoreToString(scores[1].score)
                     tvExpertSilverWinner.text = scores[1].playerName
                 }
-                if (scores.size>2){
+                if (scores.size > 2) {
                     tvExpertBronzeScore.text = GameHelper.scoreToString(scores[2].score)
-                    tvExpertBronzeWinner.text= scores[2].playerName
+                    tvExpertBronzeWinner.text = scores[2].playerName
                 }
             }
             GameLevel.Extreme -> {
-                if (scores.size>0) {
+                if (scores.size > 0) {
                     tvExtremeGoldScore.text = GameHelper.scoreToString(scores[0].score)
                     tvExtremeGoldWinner.text = scores[0].playerName
                 }
-                if (scores.size>1) {
+                if (scores.size > 1) {
                     tvExtremeSilverScore.text = GameHelper.scoreToString(scores[1].score)
                     tvExtremeSilverWinner.text = scores[1].playerName
                 }
-                if (scores.size>2){
+                if (scores.size > 2) {
                     tvExtremeBronzeScore.text = GameHelper.scoreToString(scores[2].score)
-                    tvExtremeBronzeWinner.text= scores[2].playerName
+                    tvExtremeBronzeWinner.text = scores[2].playerName
                 }
             }
         }

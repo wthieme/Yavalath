@@ -55,12 +55,24 @@
         android:textStyle="bold" />
 
     <TextView
+        android:id="@+id/tvEasyYou"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/tvEasy"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_toEndOf="@+id/tvEasy"
+        android:text=""
+        android:textColor="@color/colorPrimary"
+        android:textSize="14sp" />
+
+    <TextView
         android:id="@+id/tvEasyGold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvEasy"
-        android:layout_marginTop="10dp"
         android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
         android:text="@string/fa_trophy"
         android:textColor="@color/colorGold"
         android:textSize="20sp" />
@@ -70,8 +82,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/tvEasyGold"
-        android:layout_toEndOf="@+id/tvEasyGold"
         android:layout_marginStart="5dp"
+        android:layout_toEndOf="@+id/tvEasyGold"
         android:text="@string/time000000"
         android:textColor="@color/colorPrimary"
         android:textSize="14sp" />
@@ -81,8 +93,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvEasyGold"
-        android:layout_marginTop="5dp"
         android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
         android:text="@string/white_dove"
         android:textColor="@color/colorPrimary"
         android:textSize="16sp" />
@@ -91,8 +103,8 @@
         android:id="@+id/tvEasySilver"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/tvEasySilverWinner"
         android:layout_alignBaseline="@+id/tvEasyGold"
+        android:layout_alignStart="@+id/tvEasySilverWinner"
         android:text="@string/fa_trophy"
         android:textColor="@color/colorSilver"
         android:textSize="20sp" />
@@ -124,9 +136,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvEasy"
-        android:layout_toStartOf="@+id/tvEasyBronzeScore"
         android:layout_alignBaseline="@+id/tvEasyGold"
         android:layout_marginEnd="5dp"
+        android:layout_toStartOf="@+id/tvEasyBronzeScore"
         android:text="@string/fa_trophy"
         android:textColor="@color/colorBronze"
         android:textSize="20sp" />
@@ -136,8 +148,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/tvEasyGold"
-        android:layout_marginEnd="10dp"
         android:layout_alignParentEnd="true"
+        android:layout_marginEnd="10dp"
         android:text="@string/time000000"
         android:textColor="@color/colorPrimary"
         android:textSize="14sp" />
@@ -147,9 +159,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvEasySilver"
-        android:layout_marginEnd="10dp"
         android:layout_alignBaseline="@+id/tvEasyGoldWinner"
         android:layout_alignParentEnd="true"
+        android:layout_marginEnd="10dp"
         android:text="@string/white_dove"
         android:textColor="@color/colorPrimary"
         android:textSize="16sp" />
@@ -167,12 +179,24 @@
         android:textStyle="bold" />
 
     <TextView
+        android:id="@+id/tvIntermediateYou"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/tvIntermediate"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_toEndOf="@+id/tvIntermediate"
+        android:text=""
+        android:textColor="@color/colorPrimary"
+        android:textSize="14sp" />
+
+    <TextView
         android:id="@+id/tvIntermediateGold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvIntermediate"
-        android:layout_marginTop="10dp"
         android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
         android:text="@string/fa_trophy"
         android:textColor="@color/colorGold"
         android:textSize="20sp" />
@@ -182,8 +206,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/tvIntermediateGold"
-        android:layout_toEndOf="@+id/tvIntermediateGold"
         android:layout_marginStart="5dp"
+        android:layout_toEndOf="@+id/tvIntermediateGold"
         android:text="@string/time000000"
         android:textColor="@color/colorPrimary"
         android:textSize="14sp" />
@@ -193,8 +217,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvIntermediateGold"
-        android:layout_marginTop="5dp"
         android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
         android:text="@string/white_dove"
         android:textColor="@color/colorPrimary"
         android:textSize="16sp" />
@@ -203,8 +227,8 @@
         android:id="@+id/tvIntermediateSilver"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/tvIntermediateSilverWinner"
         android:layout_alignBaseline="@+id/tvIntermediateGold"
+        android:layout_alignStart="@+id/tvIntermediateSilverWinner"
         android:text="@string/fa_trophy"
         android:textColor="@color/colorSilver"
         android:textSize="20sp" />
@@ -214,8 +238,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/tvIntermediateSilver"
-        android:layout_toEndOf="@+id/tvIntermediateSilver"
         android:layout_marginStart="5dp"
+        android:layout_toEndOf="@+id/tvIntermediateSilver"
         android:text="@string/time000000"
         android:textColor="@color/colorPrimary"
         android:textSize="14sp" />
@@ -236,9 +260,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvIntermediate"
-        android:layout_toStartOf="@+id/tvIntermediateBronzeScore"
         android:layout_alignBaseline="@+id/tvIntermediateGold"
         android:layout_marginEnd="5dp"
+        android:layout_toStartOf="@+id/tvIntermediateBronzeScore"
         android:text="@string/fa_trophy"
         android:textColor="@color/colorBronze"
         android:textSize="20sp" />
@@ -248,8 +272,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/tvIntermediateGold"
-        android:layout_marginEnd="10dp"
         android:layout_alignParentEnd="true"
+        android:layout_marginEnd="10dp"
         android:text="@string/time000000"
         android:textColor="@color/colorPrimary"
         android:textSize="14sp" />
@@ -259,9 +283,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvIntermediateSilver"
-        android:layout_marginEnd="10dp"
         android:layout_alignBaseline="@+id/tvIntermediateGoldWinner"
         android:layout_alignParentEnd="true"
+        android:layout_marginEnd="10dp"
         android:text="@string/white_dove"
         android:textColor="@color/colorPrimary"
         android:textSize="16sp" />
@@ -278,12 +302,24 @@
         android:textStyle="bold" />
 
     <TextView
+        android:id="@+id/tvExpertYou"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/tvExpert"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_toEndOf="@+id/tvExpert"
+        android:text=""
+        android:textColor="@color/colorPrimary"
+        android:textSize="14sp" />
+
+    <TextView
         android:id="@+id/tvExpertGold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvExpert"
-        android:layout_marginTop="10dp"
         android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
         android:text="@string/fa_trophy"
         android:textColor="@color/colorGold"
         android:textSize="20sp" />
@@ -293,8 +329,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/tvExpertGold"
-        android:layout_toEndOf="@+id/tvExpertGold"
         android:layout_marginStart="5dp"
+        android:layout_toEndOf="@+id/tvExpertGold"
         android:text="@string/time000000"
         android:textColor="@color/colorPrimary"
         android:textSize="14sp" />
@@ -304,8 +340,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvExpertGold"
-        android:layout_marginTop="5dp"
         android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
         android:text="@string/white_dove"
         android:textColor="@color/colorPrimary"
         android:textSize="16sp" />
@@ -314,8 +350,8 @@
         android:id="@+id/tvExpertSilver"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/tvExpertSilverWinner"
         android:layout_alignBaseline="@+id/tvExpertGold"
+        android:layout_alignStart="@+id/tvExpertSilverWinner"
         android:text="@string/fa_trophy"
         android:textColor="@color/colorSilver"
         android:textSize="20sp" />
@@ -325,8 +361,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/tvExpertSilver"
-        android:layout_toEndOf="@+id/tvExpertSilver"
         android:layout_marginStart="5dp"
+        android:layout_toEndOf="@+id/tvExpertSilver"
         android:text="@string/time000000"
         android:textColor="@color/colorPrimary"
         android:textSize="14sp" />
@@ -347,9 +383,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvExpert"
-        android:layout_toStartOf="@+id/tvExpertBronzeScore"
         android:layout_alignBaseline="@+id/tvExpertGold"
         android:layout_marginEnd="5dp"
+        android:layout_toStartOf="@+id/tvExpertBronzeScore"
         android:text="@string/fa_trophy"
         android:textColor="@color/colorBronze"
         android:textSize="20sp" />
@@ -359,8 +395,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/tvExpertGold"
-        android:layout_marginEnd="10dp"
         android:layout_alignParentEnd="true"
+        android:layout_marginEnd="10dp"
         android:text="@string/time000000"
         android:textColor="@color/colorPrimary"
         android:textSize="14sp" />
@@ -370,9 +406,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvExpertSilver"
-        android:layout_marginEnd="10dp"
         android:layout_alignBaseline="@+id/tvExpertGoldWinner"
         android:layout_alignParentEnd="true"
+        android:layout_marginEnd="10dp"
         android:text="@string/white_dove"
         android:textColor="@color/colorPrimary"
         android:textSize="16sp" />
@@ -389,12 +425,24 @@
         android:textStyle="bold" />
 
     <TextView
+        android:id="@+id/tvExtremeYou"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/tvExtreme"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="20dp"
+        android:layout_toEndOf="@+id/tvExtreme"
+        android:text=""
+        android:textColor="@color/colorPrimary"
+        android:textSize="14sp" />
+
+    <TextView
         android:id="@+id/tvExtremeGold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvExtreme"
-        android:layout_marginTop="10dp"
         android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
         android:text="@string/fa_trophy"
         android:textColor="@color/colorGold"
         android:textSize="20sp" />
@@ -404,8 +452,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/tvExtremeGold"
-        android:layout_toEndOf="@+id/tvExtremeGold"
         android:layout_marginStart="5dp"
+        android:layout_toEndOf="@+id/tvExtremeGold"
         android:text="@string/time000000"
         android:textColor="@color/colorPrimary"
         android:textSize="14sp" />
@@ -415,8 +463,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvExtremeGold"
-        android:layout_marginTop="5dp"
         android:layout_marginStart="10dp"
+        android:layout_marginTop="5dp"
         android:text="@string/white_dove"
         android:textColor="@color/colorPrimary"
         android:textSize="16sp" />
@@ -425,8 +473,8 @@
         android:id="@+id/tvExtremeSilver"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignStart="@+id/tvExtremeSilverWinner"
         android:layout_alignBaseline="@+id/tvExtremeGold"
+        android:layout_alignStart="@+id/tvExtremeSilverWinner"
         android:text="@string/fa_trophy"
         android:textColor="@color/colorSilver"
         android:textSize="20sp" />
@@ -436,8 +484,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/tvExtremeSilver"
-        android:layout_toEndOf="@+id/tvExtremeSilver"
         android:layout_marginStart="5dp"
+        android:layout_toEndOf="@+id/tvExtremeSilver"
         android:text="@string/time000000"
         android:textColor="@color/colorPrimary"
         android:textSize="14sp" />
@@ -458,9 +506,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvExtreme"
-        android:layout_toStartOf="@+id/tvExtremeBronzeScore"
         android:layout_alignBaseline="@+id/tvExtremeGold"
         android:layout_marginEnd="5dp"
+        android:layout_toStartOf="@+id/tvExtremeBronzeScore"
         android:text="@string/fa_trophy"
         android:textColor="@color/colorBronze"
         android:textSize="20sp" />
@@ -470,8 +518,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/tvExtremeGold"
-        android:layout_marginEnd="10dp"
         android:layout_alignParentEnd="true"
+        android:layout_marginEnd="10dp"
         android:text="@string/time000000"
         android:textColor="@color/colorPrimary"
         android:textSize="14sp" />
@@ -481,9 +529,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tvExtremeSilver"
-        android:layout_marginEnd="10dp"
         android:layout_alignBaseline="@+id/tvExtremeGoldWinner"
         android:layout_alignParentEnd="true"
+        android:layout_marginEnd="10dp"
         android:text="@string/white_dove"
         android:textColor="@color/colorPrimary"
         android:textSize="16sp" />

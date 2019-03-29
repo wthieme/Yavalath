@@ -15,6 +15,7 @@ import android.text.TextUtils
 import android.view.WindowManager
 import android.widget.TextView
 import android.widget.Toast
+import org.joda.time.DateTime
 import java.util.*
 
 
@@ -205,5 +206,18 @@ internal object Helper {
             @Suppress("DEPRECATION")
             view.text = Html.fromHtml(htmlTxt)
         }
+    }
+
+    fun getLastRemoveHighScoresDate(cxt: Context): DateTime {
+        val preferences = PreferenceManager.getDefaultSharedPreferences(cxt)
+        val dat = preferences.getLong("RemoveHighScoresDate", DateTime(2000, 1, 1, 0, 0).millis)
+        return DateTime(dat)
+    }
+
+    fun setLastRemoveHighScoresDate(cxt: Context, date: DateTime) {
+        val preferences = PreferenceManager.getDefaultSharedPreferences(cxt)
+        val editor = preferences.edit()
+        editor.putLong("RemoveHighScoresDate", date.millis)
+        editor.apply()
     }
 }
