@@ -629,8 +629,8 @@ class GameActivity : AppCompatActivity() {
     }
 
     private fun initReceivers() {
-        val game = GameHelper.mGame!!
-        if (game.gameMode != GameMode.HumanVsHumanInternet) {
+        val game = GameHelper.mGame
+        if (game == null || game.gameMode != GameMode.HumanVsHumanInternet) {
             return
         }
 

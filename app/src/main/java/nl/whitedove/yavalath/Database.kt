@@ -31,8 +31,6 @@ internal object Database {
         const val level = "level"
         const val playerName = "playerName"
         const val score = "score"
-        // TODO remove achievedDate
-        const val achievedDate = "achievedDate"
         const val highScoreDate = "highScoreDate"
     }
 
@@ -61,15 +59,9 @@ internal object Database {
                             val doc = document.data
                             val naam = doc[Database.PlayerNames.playerName] as String
                             val token = doc[Database.PlayerNames.playerToken] as String
-                            val country = doc[Database.PlayerNames.country] as String
-                            var device = ""
-                            if (doc[Database.PlayerNames.device] != null) {
-                                device = doc[Database.PlayerNames.device] as String
-                            }
-                            var platform = ""
-                            if (doc[Database.PlayerNames.platform] != null) {
-                                platform = doc[Database.PlayerNames.platform] as String
-                            }
+                            val country = if (doc.containsKey(Database.PlayerNames.country)) doc[Database.PlayerNames.country] as String else ""
+                            val device = if (doc.containsKey(Database.PlayerNames.device)) doc[Database.PlayerNames.device] as String else ""
+                            val platform = if (doc.containsKey(Database.PlayerNames.platform)) doc[Database.PlayerNames.platform] as String else ""
                             val lastActive = fmt.parseDateTime(doc[Database.PlayerNames.lastActive] as String)
                             players.add(PlayerInfo(naam, token, country, lastActive, device, platform))
                         }
@@ -148,7 +140,7 @@ internal object Database {
                             val doc = document.data
                             val playerName = doc[Database.HighScoreNames.playerName] as String
                             val score = doc[Database.HighScoreNames.score] as Long
-                            val achievedDate = fmt.parseDateTime(doc[Database.HighScoreNames.achievedDate] as String)
+                            val achievedDate = DateTime(doc[Database.HighScoreNames.highScoreDate] as Long)
                             highScores.add(HighScore(playerName, score, level, achievedDate))
                         }
                         mHighScoreForLevel[level.value - 1] = ArrayList()
@@ -170,7 +162,7 @@ internal object Database {
                             val doc = document.data
                             val level = GameLevel.valueOf(doc[Database.HighScoreNames.level] as String)
                             val score = doc[Database.HighScoreNames.score] as Long
-                            val achievedDate = fmt.parseDateTime(doc[Database.HighScoreNames.achievedDate] as String)
+                            val achievedDate = DateTime(doc[Database.HighScoreNames.highScoreDate] as Long)
                             highScores.add(HighScore(playerName, score, level, achievedDate))
                         }
                         mHighScoresForPlayer = ArrayList()
@@ -195,7 +187,7 @@ internal object Database {
                             val document = results.first()
                             val doc = document.data
                             val score = doc[Database.HighScoreNames.score] as Long
-                            val achievedDate = fmt.parseDateTime(doc[Database.HighScoreNames.achievedDate] as String)
+                            val achievedDate = DateTime(doc[Database.HighScoreNames.highScoreDate] as Long)
                             mHighScoreForPlayerAndLevel = HighScore(playerName, score, level, achievedDate)
                         } else {
                             mHighScoreForPlayerAndLevel = null
@@ -211,7 +203,6 @@ internal object Database {
         doc[HighScoreNames.playerName] = highScore.playerName
         doc[HighScoreNames.level] = highScore.level
         doc[HighScoreNames.score] = highScore.score
-        doc[HighScoreNames.achievedDate] = highScore.achievedDate.toString()
         doc[HighScoreNames.highScoreDate] = highScore.achievedDate.millis
         db.collection(getHighscoresCollectionName()).document().set(doc)
     }
@@ -247,18 +238,13 @@ internal object Database {
     fun removeExpiredHighScores() {
         val toDelete: ArrayList<String> = ArrayList()
         val db = FirebaseFirestore.getInstance()
-        val dtNu = DateTime.now()
+        val tooOld = DateTime.now().minusDays(7).millis
         db.collection(getHighscoresCollectionName())
+                .whereLessThan(HighScoreNames.highScoreDate, tooOld)
                 .get()
                 .addOnCompleteListener { task ->
                     for (document in task.result!!) {
-                        val doc = document.data
-                        //TODO use highScoreDate
-                        val achievedDate = fmt.parseDateTime(doc[Database.HighScoreNames.achievedDate] as String)
-
-                        if (achievedDate.isBefore(dtNu.minusDays(7))) {
-                            toDelete.add(document.id)
-                        }
+                        toDelete.add(document.id)
                     }
                     deleteOldScores(toDelete)
                 }
