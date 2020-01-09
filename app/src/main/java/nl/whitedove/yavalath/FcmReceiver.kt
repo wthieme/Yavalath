@@ -6,13 +6,13 @@ import com.google.firebase.messaging.RemoteMessage
 
 class FcmReceiver : FirebaseMessagingService() {
 
-    override fun onNewToken(s: String?) {
+    override fun onNewToken(s: String) {
         super.onNewToken(s)
-        if (s != null) Helper.setFcmToken(this, s)
+        if (!s.isBlank()) Helper.setFcmToken(this, s)
     }
 
-    override fun onMessageReceived(message: RemoteMessage?) {
-        val data = message!!.data
+    override fun onMessageReceived(message: RemoteMessage) {
+        val data = message.data
 
         if (!checkMessage(data)) return
 

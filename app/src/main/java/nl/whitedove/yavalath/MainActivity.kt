@@ -47,8 +47,8 @@ class MainActivity : AppCompatActivity() {
         val iconFont = FontManager.getTypeface(this, FontManager.FONTAWESOME_SOLID)
         FontManager.markAsIconContainer(tvMenu, iconFont)
         tvMenu.setOnClickListener { view -> menuClick(view) }
-        FontManager.markAsIconContainer(tvHighScore, iconFont)
-        tvHighScore.setOnClickListener { highScoreClick() }
+        FontManager.markAsIconContainer(btnHighScore, iconFont)
+        btnHighScore.setOnClickListener { highScoreClick() }
 
         tvrulestxt.movementMethod = LinkMovementMethod.getInstance()
         tvrulestxt.setText(clickRules, TextView.BufferType.SPANNABLE)
