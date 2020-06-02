@@ -1,7 +1,7 @@
 package nl.whitedove.yavalath
 
 import android.content.Context
-import android.preference.PreferenceManager
+import androidx.preference.PreferenceManager
 import org.joda.time.DateTime
 import org.joda.time.Period
 import java.util.*

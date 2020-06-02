@@ -7,8 +7,9 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.location.Location
 import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Build
-import android.preference.PreferenceManager
+import androidx.preference.PreferenceManager
 import androidx.core.content.ContextCompat
 import android.text.Html
 import android.text.TextUtils
@@ -28,17 +29,42 @@ internal object Helper {
     const val ONE_KM = 1000F
 
     fun log(log: String) {
-        if (Helper.DEBUG) {
+        if (DEBUG) {
             println(log)
         }
     }
 
     fun testInternet(context: Context): Boolean {
-        val result: Boolean
-        val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val netInfo = cm.activeNetworkInfo
-        result = netInfo != null && netInfo.isConnected
-        if (!result) Helper.showMessage(context, context.getString(R.string.NoInternet), ContextCompat.getColor(context, R.color.colorLightRed))
+        var result = false
+        val connectivityManager =
+                context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val networkCapabilities = connectivityManager.activeNetwork ?: return false
+            val actNw =
+                    connectivityManager.getNetworkCapabilities(networkCapabilities) ?: return false
+            result = when {
+                actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+                actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+                actNw.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> true
+                else -> false
+            }
+        } else {
+            connectivityManager.run {
+                @Suppress("DEPRECATION")
+                connectivityManager.activeNetworkInfo?.run {
+                    result = when (type) {
+                        ConnectivityManager.TYPE_WIFI -> true
+                        ConnectivityManager.TYPE_MOBILE -> true
+                        ConnectivityManager.TYPE_ETHERNET -> true
+                        else -> false
+                    }
+
+                }
+            }
+        }
+
+        if (!result) showMessage(context, context.getString(R.string.NoInternet), ContextCompat.getColor(context, R.color.colorLightRed))
         return result
     }
 
@@ -87,9 +113,7 @@ internal object Helper {
 
     fun getName1(context: Context): String {
         val preferences = PreferenceManager.getDefaultSharedPreferences(context)
-        val nick = preferences.getString("nick", "")
-        if (nick == null)
-            return ""
+        val nick = preferences.getString("nick", "") ?: return ""
         return nick
     }
 
@@ -116,7 +140,7 @@ internal object Helper {
     }
 
     fun showMessage(context: Context, melding: String, color: Int) {
-        Helper.log(melding)
+        log(melding)
         val duration = Toast.LENGTH_LONG
         val toast = Toast.makeText(context, melding, duration)
         toast.view.setBackgroundColor(color)
@@ -135,7 +159,6 @@ internal object Helper {
                 context.unregisterReceiver(receiver)
             } catch (ignored: Exception) {
             }
-
         }
     }
 

@@ -1,6 +1,8 @@
 package nl.whitedove.yavalath
 
 import okhttp3.*
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONException
 import org.json.JSONObject
 import java.io.IOException
@@ -10,26 +12,26 @@ internal object FcmSender {
 
     private const val mUrl = "https://fcm.googleapis.com/fcm/send"
     private const val mFcmKey = "key=AAAAySj3n-E:APA91bG7nqxcjHqa-VWxDXjafXYd9LW6EhNXn23Ztc6gCXyFTBW7LPBKoOXuDPSeP5flxRC9tYOT6Z_g6mvWT6pBNpNoY2QmlEVMLOKEJDEzt6XUIE83Cm0U2eZSNjvoAzXgMSJeckeP"
-    private val JSON = MediaType.parse("application/json; charset=utf-8")
+    private val JSON = "application/json; charset=utf-8".toMediaTypeOrNull()
     var mHisFcmToken = ""
     var mMyFcmToken = ""
 
     @Throws(JSONException::class)
-    private fun makePayLoad(serverToken: String, responseType: FcmNames.ResponseType, data: HashMap<*, *>?): RequestBody {
+    private fun makePayLoad(serverToken: String, responseType: FcmNames.ResponseType, data: HashMap<String, Any>): RequestBody {
         val json = JSONObject()
         json.put(FcmNames.To, serverToken)
         json.put(FcmNames.Priority, FcmNames.High)
-        val jsonData = JSONObject(data)
+        val jsonData = JSONObject(data as Map<*, *>)
         jsonData.put(FcmNames.Sender, mMyFcmToken)
         jsonData.put(FcmNames.Type, responseType.enumToString())
         json.put(FcmNames.Data, jsonData)
 
         val js = json.toString()
 
-        return FormBody.create(JSON, js)
+        return js.toRequestBody(JSON)
     }
 
-    private fun sendMessage(responseType: FcmNames.ResponseType, data: HashMap<*, *>, toToken: String) {
+    private fun sendMessage(responseType: FcmNames.ResponseType, data: HashMap<String, Any>, toToken: String) {
         var body: RequestBody? = null
         try {
             body = makePayLoad(toToken, responseType, data)
@@ -38,7 +40,6 @@ internal object FcmSender {
 
         try {
             val client = OkHttpClient()
-            assert(body != null)
             val request = Request.Builder()
                     .url(mUrl)
                     .addHeader("Authorization", mFcmKey)
@@ -55,52 +56,52 @@ internal object FcmSender {
     fun sendPing(guid: String, toToken: String) {
         val data = HashMap<String, Any>()
         data[FcmNames.UUID] = guid
-        FcmSender.sendMessage(FcmNames.ResponseType.Ping, data, toToken)
+        sendMessage(FcmNames.ResponseType.Ping, data, toToken)
     }
 
     fun sendAbandon(toToken: String) {
         val data = HashMap<String, Any>()
         data[FcmNames.UUID] = UUID.randomUUID().toString()
-        FcmSender.sendMessage(FcmNames.ResponseType.Abandon, data, toToken)
+        sendMessage(FcmNames.ResponseType.Abandon, data, toToken)
     }
 
     fun sendInvite(guid: String, toToken: String, name: String) {
         val data = HashMap<String, Any>()
         data[FcmNames.UUID] = guid
         data[FcmNames.Name] = name
-        FcmSender.sendMessage(FcmNames.ResponseType.Invite, data, toToken)
+        sendMessage(FcmNames.ResponseType.Invite, data, toToken)
     }
 
     fun sendInviteOk(guid: String, ToToken: String) {
         val data = HashMap<String, Any>()
         data[FcmNames.UUID] = guid
-        FcmSender.sendMessage(FcmNames.ResponseType.InviteOk, data, ToToken)
+        sendMessage(FcmNames.ResponseType.InviteOk, data, ToToken)
     }
 
     fun sendPong(toToken: String, pongData: String) {
         val data = HashMap<String, Any>()
         data[FcmNames.UUID] = pongData
-        FcmSender.sendMessage(FcmNames.ResponseType.Pong, data, toToken)
+        sendMessage(FcmNames.ResponseType.Pong, data, toToken)
     }
 
     fun sendInviteNok(guid: String, toToken: String) {
         val data = HashMap<String, Any>()
         data[FcmNames.UUID] = guid
-        FcmSender.sendMessage(FcmNames.ResponseType.InviteNOk, data, toToken)
+        sendMessage(FcmNames.ResponseType.InviteNOk, data, toToken)
     }
 
     fun sendMove(fieldNr: Int, toToken: String) {
         val data = HashMap<String, Any>()
         data[FcmNames.UUID] = UUID.randomUUID().toString()
         data[FcmNames.FieldNr] = fieldNr
-        FcmSender.sendMessage(FcmNames.ResponseType.Move, data, toToken)
+        sendMessage(FcmNames.ResponseType.Move, data, toToken)
     }
 
     fun sendReadyNewGame(ready: String, toToken: String) {
         val data = HashMap<String, Any>()
         data[FcmNames.UUID] = UUID.randomUUID().toString()
         data[FcmNames.Ready] = ready
-        FcmSender.sendMessage(FcmNames.ResponseType.ReadyNewGame, data, toToken)
+        sendMessage(FcmNames.ResponseType.ReadyNewGame, data, toToken)
     }
 
 }

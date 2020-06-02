@@ -60,7 +60,7 @@ internal class CustomListAdapterPlayers(private val context: Context, private va
         val loc = Locale("", player.country)
         var country = mContext.getString(R.string.CountryUnknown)
         if (player.country != "") {
-            country = loc.getDisplayCountry()
+            country = loc.displayCountry
         }
 
         holder.tvCountry!!.text = country

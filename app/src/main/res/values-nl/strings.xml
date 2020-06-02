@@ -117,5 +117,9 @@
     <string name="time000000"> </string>
     <string name="white_dove"> </string>
     <string name="youScore">U: %s</string>
+    <string name="sound">Geluid</string>
+    <string name="soundon">Geluid aan</string>
+    <string name="settings">Instellingen</string>
+
 </resources>
 

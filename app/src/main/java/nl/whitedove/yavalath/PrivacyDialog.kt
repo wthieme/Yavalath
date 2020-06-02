@@ -51,7 +51,7 @@ internal class PrivacyDialog(context: Context) : Dialog(context), View.OnClickLi
 
                 val response: Response
                 response = client.newCall(request).execute()
-                if (response.isSuccessful) privtxt = response.body()!!.string()
+                if (response.isSuccessful) privtxt = response.body!!.string()
             } catch (ignored: IOException) {
 
             }

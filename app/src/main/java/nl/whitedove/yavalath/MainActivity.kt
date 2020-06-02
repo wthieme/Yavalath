@@ -371,6 +371,13 @@ class MainActivity : AppCompatActivity() {
                     return@OnMenuItemClickListener true
                 }
 
+                R.id.itSettings -> {
+                    val intent1 = Intent()
+                    intent1.setClass(this@MainActivity, SetPreferenceActivity::class.java)
+                    startActivityForResult(intent1, 0)
+                    return@OnMenuItemClickListener true
+                }
+
                 R.id.itAbout -> {
                     showAboutDialog()
                     return@OnMenuItemClickListener true
